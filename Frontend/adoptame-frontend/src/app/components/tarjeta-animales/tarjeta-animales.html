@@ -1,0 +1,45 @@
+<div class="bg-white shadow-lg rounded-lg p-3 hover:shadow-xl">
+  <div class="relative">
+    <a [routerLink]="['/animal', animal.uuid]" [title]="'Ver detalle de ' + animal.nombre">
+      <picture class="block relative">
+        <img src="assets/img/mascotas/{{ animal.imagenPrincipal }}"
+             alt="Imagen de {{ animal.nombre }}"
+             [title]="'Imagen de ' + animal.nombre"
+             class="w-full h-48 object-cover rounded-lg"
+             loading="lazy" />
+      </picture>
+    </a>
+
+    <div class="absolute top-2 right-2 flex flex-col gap-2">
+      <button (click)="addToFavorites($event)"
+              class="px-1 pt-1 rounded-full bg-red-500 hover:bg-red-700 text-white"
+              [title]="'Añadir a favoritos'">
+        <span class="material-icons">favorite</span>
+      </button>
+
+      <button (click)="share($event)"
+              class="px-1 pt-1 rounded-full bg-customBlue hover:bg-customBlueHover text-white"
+              [title]="'Compartir'">
+        <span class="material-icons">share</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="p-4">
+    <h3 class="text-lg font-semibold text-gray-900">
+      <a [routerLink]="['/animal', animal.uuid]" [title]="'Ver detalle de ' + animal.nombre">
+        {{ animal.nombre }}
+      </a>
+    </h3>
+    <p class="capitalize">
+      {{ animal.tipo }}
+    </p>
+    <ul class="mt-2 text-sm text-gray-500">
+      <li class="inline"><strong>Edad:</strong> {{ animal.edad }} años</li>
+      <li class="inline"><strong>Género:</strong> {{ animal.genero }}</li>
+    </ul>
+    <p class="mt-2 text-gray-900 font-medium">
+      {{ animal.raza }}
+    </p>
+  </div>
+</div>

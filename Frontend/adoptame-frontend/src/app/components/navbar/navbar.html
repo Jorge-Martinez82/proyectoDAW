@@ -1,8 +1,31 @@
-<nav>
-  <h1>Adoptame</h1>
-  <ul>
-    <li><a routerLink="/">Home</a></li>
-    <li><a routerLink="/animales">Animales</a></li>
-    <li><a routerLink="/protectoras">Protectoras</a></li>
-  </ul>
-</nav>
+<header class="relative z-10 m-2">
+  <nav class="flex items-center justify-between">
+    <!-- LOGO -->
+    <a routerLink="/" class="flex items-center gap-3">
+      <img src="assets/img/logo.png" alt="logo de adoptame" class="h-10" />
+      <p class="font-montserrat font-bold">Adóptame</p>
+    </a>
+
+    <!-- MENU DESKTOP -->
+    <div class="absolute left-1/2 hidden -translate-x-1/2 transform sm:block">
+      <ul class="flex gap-6 font-roboto">
+        <li>
+          <a class="underline-offset-1 hover:underline" href="#about">Sobre nosotros</a>
+        </li>
+        <li>
+          <a class="underline-offset-1 hover:underline" routerLink="/animales">Mascotas</a>
+        </li>
+        <li>
+          <a class="underline-offset-1 hover:underline" routerLink="/protectoras">Protectoras</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- BOTON LOGIN DESKTOP -->
+    <a routerLink="/login"
+       class="hidden rounded-full border-2 border-customBlue px-6 py-2 font-roboto font-bold text-black transition duration-300 hover:bg-customBlue hover:text-white sm:block">
+      Iniciar sesión
+    </a>
+  </nav>
+</header>
+
