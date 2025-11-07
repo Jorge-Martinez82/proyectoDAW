@@ -1,4 +1,12 @@
+using AutoMapper;
+using AdoptameDAW.Models;
+using AdoptameDAW.Models.DTOs;
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
 // Add services to the container.
 
