@@ -1,9 +1,12 @@
 ﻿using AdoptameDAW.Models;
 
-namespace AdoptameDAW.Repositories.Interfaces;
-
 public interface IAnimalesRepository
 {
     Task<Animal?> GetByIdAsync(int id);
-    Task<IEnumerable<Animal>> GetAllAsync(int? protectoraId = null);
+    Task<(IEnumerable<Animal> animales, int total)> GetAllAsync(
+        int pageNumber,
+        int pageSize,
+        int? protectoraId = null,
+        string? tipo = null,
+        string? provincia = null);
 }

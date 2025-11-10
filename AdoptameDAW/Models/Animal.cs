@@ -1,6 +1,4 @@
-﻿using AdoptameDAW.Models.Enums;
-
-namespace AdoptameDAW.Models;
+﻿namespace AdoptameDAW.Models;
 
 public partial class Animal
 {
@@ -10,7 +8,7 @@ public partial class Animal
 
     public string Nombre { get; set; } = null!;
 
-    public TipoAnimal Tipo { get; set; }
+    public string Tipo { get; set; } = string.Empty;
 
     public string? Raza { get; set; }
 

@@ -1,0 +1,26 @@
+/* animales.css */
+::ng-deep .ngx-pagination {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem 0;
+}
+
+  ::ng-deep .ngx-pagination .current {
+    background-color: #your-customBlue !important;
+    color: white !important;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+  }
+
+  ::ng-deep .ngx-pagination a {
+    background-color: white;
+    color: #374151;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s;
+  }
+
+    ::ng-deep .ngx-pagination a:hover {
+      background-color: #your-customBlueHover;
+      color: white;
+    }

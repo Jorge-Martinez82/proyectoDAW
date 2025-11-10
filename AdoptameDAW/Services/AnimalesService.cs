@@ -1,5 +1,4 @@
 ﻿using AdoptameDAW.Models.DTOs;
-using AdoptameDAW.Repositories.Interfaces;
 using AutoMapper;
 
 namespace AdoptameDAW.Services;
@@ -21,9 +20,33 @@ public class AnimalesService
         return animal == null ? null : _mapper.Map<AnimalDto>(animal);
     }
 
-    public async Task<IEnumerable<AnimalDto>> GetAllAsync(int? protectoraId = null)
+    public async Task<object> GetAllAsync(
+        int pageNumber,
+        int pageSize,
+        int? protectoraId = null,
+        string? tipo = null,
+        string? provincia = null)
     {
-        var animales = await _repository.GetAllAsync(protectoraId);
-        return _mapper.Map<IEnumerable<AnimalDto>>(animales);
+
+        pageSize = pageSize > 12 ? 12 : pageSize;
+        pageNumber = pageNumber < 1 ? 1 : pageNumber;
+
+        var (animales, total) = await _repository.GetAllAsync(
+            pageNumber,
+            pageSize,
+            protectoraId,
+            tipo,
+            provincia);
+
+        var animalesDto = _mapper.Map<IEnumerable<AnimalDto>>(animales);
+
+        return new
+        {
+            data = animalesDto,
+            pageNumber,
+            pageSize,
+            totalCount = total,
+            totalPages = (int)Math.Ceiling(total / (double)pageSize)
+        };
     }
 }

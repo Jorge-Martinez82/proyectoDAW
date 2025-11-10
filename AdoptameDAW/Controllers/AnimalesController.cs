@@ -16,11 +16,17 @@ public class AnimalesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<AnimalDto>>> GetAll([FromQuery] int? protectoraId)
+    public async Task<ActionResult> GetAll(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] int? protectoraId = null,
+        [FromQuery] string? tipo = null,
+        [FromQuery] string? provincia = null)
     {
-        var animales = await _service.GetAllAsync(protectoraId);
-        return Ok(animales);
+        var result = await _service.GetAllAsync(pageNumber, pageSize, protectoraId, tipo, provincia);
+        return Ok(result);
     }
+
 
     [HttpGet("{id}")]
     public async Task<ActionResult<AnimalDto>> GetById(int id)

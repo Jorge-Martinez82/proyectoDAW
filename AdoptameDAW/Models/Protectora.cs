@@ -1,6 +1,4 @@
-﻿using AdoptameDAW.Models.Enums;
-
-namespace AdoptameDAW.Models;
+﻿namespace AdoptameDAW.Models;
 
 public partial class Protectora
 {

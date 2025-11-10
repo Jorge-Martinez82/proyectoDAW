@@ -1,8 +1,5 @@
 using AdoptameDAW.Data;
-using AdoptameDAW.Models;
-using AdoptameDAW.Models.DTOs;
 using AdoptameDAW.Repositories;
-using AdoptameDAW.Repositories.Interfaces;
 using AdoptameDAW.Services;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;

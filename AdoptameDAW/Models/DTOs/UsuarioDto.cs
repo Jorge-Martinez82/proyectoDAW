@@ -1,6 +1,4 @@
-﻿using AdoptameDAW.Models.Enums;
-
-namespace AdoptameDAW.Models.DTOs;
+﻿namespace AdoptameDAW.Models.DTOs;
 
 public class UsuarioDto
 {
@@ -8,7 +6,7 @@ public class UsuarioDto
 
     public string Email { get; set; } = null!;
 
-    public TipoUsuario TipoUsuario { get; set; }
+    public String TipoUsuario { get; set; }
 
     public DateTime CreatedAt { get; set; }
 }

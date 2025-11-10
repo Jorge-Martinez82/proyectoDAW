@@ -4,25 +4,27 @@ import { AnimalesService } from './animales.service';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { TarjetaAnimales } from '../../components/tarjeta-animales/tarjeta-animales';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @Component({
   selector: 'app-animales',
-  imports: [CommonModule, FormsModule, TarjetaAnimales],
+  imports: [CommonModule, FormsModule, TarjetaAnimales, NgxPaginationModule],
   templateUrl: './animales.html',
   styleUrl: './animales.css'
 })
 export class Animales implements OnInit {
   animales: any[] = [];
-  filteredAnimales: any[] = [];
   loading = true;
   error: string | null = null;
+
+  currentPage = 1;
+  pageSize = 12;
+  totalCount = 0;
 
   filters = {
     tipo: 'todos',
     provincia: 'todos'
   };
-
-  tiposDisponibles = ['perros', 'gatos', 'conejos', 'tortugas'];
 
   constructor(
     private animalService: AnimalesService,
@@ -30,16 +32,22 @@ export class Animales implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.cargarAnimales();
     this.obtenerFiltrosDeURL();
+    this.cargarAnimales();
   }
 
   cargarAnimales() {
     this.loading = true;
-    this.animalService.getAnimales().subscribe({
+
+    this.animalService.getAnimales(
+      this.currentPage,
+      this.pageSize,
+      this.filters.tipo,
+      this.filters.provincia
+    ).subscribe({
       next: (response) => {
-        this.animales = Array.isArray(response) ? response : response.items || [];
-        this.aplicarFiltros();
+        this.animales = response.data || [];
+        this.totalCount = response.totalCount || 0;
         this.loading = false;
       },
       error: (err) => {
@@ -54,30 +62,17 @@ export class Animales implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.filters.tipo = params['tipo'] || 'todos';
       this.filters.provincia = params['provincia'] || 'todos';
-      this.aplicarFiltros();
     });
   }
 
-  aplicarFiltros() {
-    this.filteredAnimales = this.animales.filter((animal) => {
-      const cumpleTipo = this.filters.tipo === 'todos' ||
-        this.normalizarTipo(animal.tipo) === this.normalizarTipo(this.filters.tipo);
-
-      return cumpleTipo;
-    });
-  }
-
-  normalizarTipo(tipo: any): string {
-    const tipoMap: any = {
-      'perros': 0,
-      'gatos': 1,
-      'conejos': 2,
-      'tortugas': 3
-    };
-    return tipoMap[tipo?.toString().toLowerCase()] ?? tipo;
+  onPageChange(page: number) {
+    this.currentPage = page;
+    this.cargarAnimales();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   buscar() {
-    this.aplicarFiltros();
+    this.currentPage = 1; 
+    this.cargarAnimales();
   }
 }

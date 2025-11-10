@@ -1,6 +1,4 @@
-﻿using AdoptameDAW.Models.Enums;
-
-namespace AdoptameDAW.Models;
+﻿namespace AdoptameDAW.Models;
 
 public partial class Usuario
 {
@@ -12,7 +10,7 @@ public partial class Usuario
 
     public string? PasswordHash { get; set; }
 
-    public TipoUsuario TipoUsuario { get; set; }
+    public string TipoUsuario { get; set; } = string.Empty;
 
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 
