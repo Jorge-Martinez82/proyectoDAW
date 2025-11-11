@@ -1,0 +1,62 @@
+
+  <!-- Main -->
+  <main class="flex flex-grow items-center justify-center bg-customPurple bg-[url('assets/img/huellas.png')]">
+    <section id="seccion-principal" class="flex flex-grow items-center justify-center">
+
+
+      <!-- Loading -->
+      <div *ngIf="loading" class="text-center py-8">
+        <p class="text-2xl font-bold">Cargando información del animal...</p>
+      </div>
+
+      <!-- Mensaje cuando no se encuentra el animal -->
+      <div *ngIf="!loading && animalNoEncontrado" class="w-[50%] text-center">
+        <p class="text-2xl">Animal no encontrado</p>
+      </div>
+
+      <!-- Detalle del animal -->
+      <div *ngIf="!loading && animal" class="container flex flex-col sm:flex-row items-center justify-center max-w-4xl rounded-lg bg-white shadow-lg my-10 mx-10">
+        <div class="flex h-auto w-[80%] sm:w-2/5 items-center justify-center m-5 p-4">
+          <img [src]="getImagenPath(animal.imagenPrincipal)"
+               [alt]="'Foto de ' + animal.nombre"
+               class="h-auto w-[100%] rounded-lg object-cover shadow-lg" />
+        </div>
+
+        <div class="flex w-[100%] sm:w-3/5 flex-col items-center justify-center p-4">
+          <div class="mb-5">
+            <h2 class="text-5xl font-bold">{{ animal.nombre }}</h2>
+          </div>
+
+          <div class="sm:grid sm:grid-cols-2 p-5">
+            <p class="text-lg mb-2" *ngIf="animal.edad">
+              <span class="font-semibold text-xl">Edad: </span>{{ animal.edad }} año(s)
+            </p>
+            <p class="text-lg mb-2" *ngIf="animal.genero">
+              <span class="font-semibold text-xl">Género: </span>
+              <span class="capitalize">{{ animal.genero }}</span>
+            </p>
+            <p class="text-lg mb-2" *ngIf="animal.tipo">
+              <span class="font-semibold text-xl">Tipo: </span>
+              <span class="capitalize">{{ animal.tipo }}</span>
+            </p>
+            <p class="text-lg mb-2" *ngIf="animal.raza">
+              <span class="font-semibold text-xl">Raza: </span>
+              <span class="capitalize">{{ animal.raza }}</span>
+            </p>
+            <p class="sm:col-span-2 text-lg my-2" *ngIf="animal.descripcion">
+              <span class="font-semibold text-xl">Descripción: </span>
+              <span class="normal-case">{{ animal.descripcion }}</span>
+            </p>
+          </div>
+
+          <div class="mb-2 flex items-center justify-center">
+            <a [routerLink]="['/formulario-adopcion']"
+               [queryParams]="{uuid: animal.uuid}"
+               class="rounded-full bg-customBlue px-6 py-2 text-white transition hover:bg-customBlueHover">
+              Adóptame
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>

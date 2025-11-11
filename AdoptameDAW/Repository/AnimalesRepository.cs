@@ -13,11 +13,11 @@ public class AnimalesRepository : IAnimalesRepository
         _context = context;
     }
 
-    public async Task<Animal?> GetByIdAsync(int id)
+    public async Task<Animal?> GetByIdAsync(Guid id)
     {
         return await _context.Animales
             .Include(a => a.Protectora)
-            .FirstOrDefaultAsync(a => a.Id == id);
+            .FirstOrDefaultAsync(a => a.Uuid == id);
     }
 
     public async Task<(IEnumerable<Animal> animales, int total)> GetAllAsync(

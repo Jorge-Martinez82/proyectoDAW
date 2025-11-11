@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { AnimalDto, AnimalesResponse } from '../../models/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class AnimalesService {
     tipo?: string,
     provincia?: string,
     protectoraId?: number
-  ): Observable<any> {
+  ): Observable<AnimalesResponse> {
     let params = new HttpParams()
       .set('pageNumber', pageNumber.toString())
       .set('pageSize', pageSize.toString());
@@ -33,6 +34,10 @@ export class AnimalesService {
       params = params.set('protectoraId', protectoraId.toString());
     }
 
-    return this.http.get<any>(this.apiUrl, { params });
+    return this.http.get<AnimalesResponse>(this.apiUrl, { params });
+  }
+
+  getAnimalById(uuid: string): Observable<AnimalDto> {
+    return this.http.get<AnimalDto>(`${this.apiUrl}/${uuid}`);
   }
 }

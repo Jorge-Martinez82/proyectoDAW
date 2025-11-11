@@ -42,4 +42,9 @@
       {{ animal.raza }}
     </p>
   </div>
+  <button [routerLink]="['/detalle-animal']"
+          [queryParams]="{uuid: animal.uuid}"
+          class="btn-ver-detalle">
+    Ver detalle
+  </button>
 </div>

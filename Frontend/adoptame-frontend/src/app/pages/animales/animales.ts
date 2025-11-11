@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { TarjetaAnimales } from '../../components/tarjeta-animales/tarjeta-animales';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { AnimalDto, AnimalesResponse } from '../../models/interfaces';
+
 
 @Component({
   selector: 'app-animales',
@@ -13,7 +15,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
   styleUrl: './animales.css'
 })
 export class Animales implements OnInit {
-  animales: any[] = [];
+  animales: AnimalDto[] = [];
   loading = true;
   error: string | null = null;
 
@@ -45,7 +47,7 @@ export class Animales implements OnInit {
       this.filters.tipo,
       this.filters.provincia
     ).subscribe({
-      next: (response) => {
+      next: (response: AnimalesResponse) => {
         this.animales = response.data || [];
         this.totalCount = response.totalCount || 0;
         this.loading = false;

@@ -14,7 +14,7 @@ public class AnimalesService
         _mapper = mapper;
     }
 
-    public async Task<AnimalDto?> GetByIdAsync(int id)
+    public async Task<AnimalDto?> GetByIdAsync(Guid id)
     {
         var animal = await _repository.GetByIdAsync(id);
         return animal == null ? null : _mapper.Map<AnimalDto>(animal);

@@ -28,8 +28,8 @@ public class AnimalesController : ControllerBase
     }
 
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<AnimalDto>> GetById(int id)
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<AnimalDto>> GetById(Guid id)
     {
         var animal = await _service.GetByIdAsync(id);
         if (animal == null)
@@ -37,4 +37,5 @@ public class AnimalesController : ControllerBase
 
         return Ok(animal);
     }
+
 }
