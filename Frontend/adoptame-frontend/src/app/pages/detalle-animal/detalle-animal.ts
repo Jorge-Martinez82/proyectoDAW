@@ -3,11 +3,13 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AnimalesService } from '../animales/animales.service';
 import { AnimalDto } from '../../models/interfaces';
+import { BotonVolver } from '../../components/boton-volver/boton-volver';
+
 
 @Component({
   selector: 'app-detalle-animal',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, BotonVolver],
   templateUrl: './detalle-animal.html',
   styleUrls: ['./detalle-animal.css']
 })
@@ -24,7 +26,7 @@ export class DetalleAnimal implements OnInit {
 
   ngOnInit(): void {
 
-    const uuidAnimal = this.route.snapshot.queryParamMap.get('uuid');
+    const uuidAnimal = this.route.snapshot.paramMap.get('uuid');
 
     if (uuidAnimal) {
       this.animalService.getAnimalById(uuidAnimal).subscribe({

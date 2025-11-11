@@ -1,12 +1,15 @@
+// home.component.ts
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './home.html',
-  styleUrl: './home.css'
+  styleUrls: ['./home.css']
 })
 export class Home {
   searchForm = {
@@ -14,21 +17,14 @@ export class Home {
     provincia: 'todos'
   };
 
-  onContactSubmit(event: any) {
-    event.preventDefault();
-    alert('Mensaje enviado');
-    event.target.reset();
-  }
+  constructor(private router: Router) { }
 
-  onSearchSubmit() {
-    console.log('Buscando:', this.searchForm);
-    // busqueda
-  }
-
-  toggleMenu() {
-    const menu = document.getElementById('menu');
-    if (menu) {
-      menu.classList.toggle('hidden');
-    }
+  onSearchSubmit(): void {
+    this.router.navigate(['/animales'], {
+      queryParams: {
+        tipo: this.searchForm.tipo,
+        provincia: this.searchForm.provincia
+      }
+    });
   }
 }

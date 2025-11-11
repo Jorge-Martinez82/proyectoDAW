@@ -2,11 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AnimalesService } from './animales.service';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router'; // ✅ Añade Router
 import { TarjetaAnimales } from '../../components/tarjeta-animales/tarjeta-animales';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AnimalDto, AnimalesResponse } from '../../models/interfaces';
-
 
 @Component({
   selector: 'app-animales',
@@ -30,12 +29,18 @@ export class Animales implements OnInit {
 
   constructor(
     private animalService: AnimalesService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {
-    this.obtenerFiltrosDeURL();
-    this.cargarAnimales();
+    this.route.queryParams.subscribe((params) => {
+      this.filters.tipo = params['tipo'] || 'todos';
+      this.filters.provincia = params['provincia'] || 'todos';
+      this.currentPage = Number(params['page']) || 1;
+
+      this.cargarAnimales();
+    });
   }
 
   cargarAnimales() {
@@ -60,21 +65,30 @@ export class Animales implements OnInit {
     });
   }
 
-  obtenerFiltrosDeURL() {
-    this.route.queryParams.subscribe((params) => {
-      this.filters.tipo = params['tipo'] || 'todos';
-      this.filters.provincia = params['provincia'] || 'todos';
-    });
-  }
-
   onPageChange(page: number) {
     this.currentPage = page;
-    this.cargarAnimales();
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        tipo: this.filters.tipo,
+        provincia: this.filters.provincia,
+        page: page
+      },
+      queryParamsHandling: 'merge'
+    });
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   buscar() {
-    this.currentPage = 1; 
-    this.cargarAnimales();
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        tipo: this.filters.tipo,
+        provincia: this.filters.provincia,
+        page: 1 
+      }
+    });
   }
 }

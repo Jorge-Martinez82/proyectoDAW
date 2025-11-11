@@ -9,20 +9,20 @@
       <form (ngSubmit)="onSearchSubmit()" class="mx-auto flex h-64 w-96 flex-col items-center justify-around rounded-3xl bg-black bg-opacity-75 p-10 py-3 font-roboto text-white">
         <label for="tipo" class="block text-sm font-semibold text-white">Tipo de mascota</label>
         <select id="tipo" [(ngModel)]="searchForm.tipo" name="tipo" class="w-full rounded bg-white p-2 text-gray-800">
-          <option value="todos">Perros, gatos, aves...</option>
-          <option value="conejos">🐰 Conejos</option>
-          <option value="gatos">🐱 Gatos</option>
-          <option value="perros">🐶 Perros</option>
-          <option value="tortugas">🐢 Tortugas</option>
+          <option value="todos">Todos los tipos</option>
+          <option value="Perro">🐶 Perros</option>
+          <option value="Gato">🐱 Gatos</option>
+          <option value="Roedor">🐰 Roedores</option>
+          <option value="Reptil">🐢 Reptiles</option>
         </select>
 
         <label for="provincia" class="block text-sm font-semibold text-white">Localización</label>
         <select id="provincia" [(ngModel)]="searchForm.provincia" name="provincia" class="w-full rounded bg-white p-2 text-gray-800">
           <option value="todos">Todas</option>
-          <option value="navarra">Navarra</option>
-          <option value="álava">Álava</option>
-          <option value="guipúzcoa">Guipúzcoa</option>
-          <option value="vizcaya">Vizcaya</option>
+          <option value="Navarra">Navarra</option>
+          <option value="Álava">Álava</option>
+          <option value="Guipúzcoa">Guipúzcoa</option>
+          <option value="Vizcaya">Vizcaya</option>
         </select>
 
         <button class="mt-5 w-32 rounded-full bg-customBlue p-2 text-white transition duration-300 hover:bg-customBlueHover" type="submit">
@@ -31,6 +31,7 @@
       </form>
     </div>
   </section>
+
 
   <!-- PROPOSITO -->
   <section class="h-auto px-6 py-24 w-3/4 mx-auto">
@@ -119,7 +120,7 @@
 
     <article class="flex w-full flex-col items-center p-6 md:w-1/2">
       <h2 class="text-center font-roboto text-2xl font-bold">Contáctanos</h2>
-      <form (ngSubmit)="onContactSubmit($event)" class="mx-auto flex h-64 w-full flex-col justify-around rounded-3xl font-roboto md:w-96">
+      <form class="mx-auto flex h-64 w-full flex-col justify-around rounded-3xl font-roboto md:w-96">
         <label class="font-bold" for="nombre">Nombre</label>
         <input type="text" class="w-full rounded-xl p-2 text-black" id="nombre" name="nombre" placeholder="Introduce tu nombre" maxlength="50" required />
 
