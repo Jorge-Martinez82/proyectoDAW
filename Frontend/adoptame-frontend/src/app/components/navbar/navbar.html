@@ -9,15 +9,26 @@
     <!-- MENU DESKTOP -->
     <div class="absolute left-1/2 hidden -translate-x-1/2 transform sm:block">
       <ul class="flex gap-6 font-roboto">
-
         <li>
-          <a class="underline-offset-1 hover:underline" routerLink="/animales">Mascotas</a>
+          <a routerLink="/animales"
+             routerLinkActive="border-b-2 border-customBlue text-customBlue"
+             class="pb-2 transition duration-300 hover:text-customBlue">
+            Mascotas
+          </a>
         </li>
         <li>
-          <a class="underline-offset-1 hover:underline" routerLink="/protectoras">Protectoras</a>
+          <a routerLink="/protectoras"
+             routerLinkActive="border-b-2 border-customBlue text-customBlue"
+             class="pb-2 transition duration-300 hover:text-customBlue">
+            Protectoras
+          </a>
         </li>
         <li>
-          <a class="underline-offset-1 hover:underline" href="/about">Sobre nosotros</a>
+          <a routerLink="/about"
+             routerLinkActive="border-b-2 border-customBlue text-customBlue"
+             class="pb-2 transition duration-300 hover:text-customBlue">
+            Sobre nosotros
+          </a>
         </li>
       </ul>
     </div>
@@ -29,4 +40,3 @@
     </a>
   </nav>
 </header>
-
