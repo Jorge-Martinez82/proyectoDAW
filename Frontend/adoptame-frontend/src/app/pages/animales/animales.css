@@ -1,26 +1,37 @@
-/* animales.css */
 ::ng-deep .ngx-pagination {
   display: flex;
+  justify-content: center;
   gap: 0.5rem;
   padding: 1rem 0;
 }
 
   ::ng-deep .ngx-pagination .current {
-    background-color: #your-customBlue !important;
+    background-color: #a78bce !important;
     color: white !important;
-    border-radius: 0.5rem;
+    border-radius: 0.5rem !important;
     padding: 0.5rem 1rem;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(167, 139, 206, 0.4);
   }
 
-  ::ng-deep .ngx-pagination a {
+  ::ng-deep .ngx-pagination a,
+  ::ng-deep .ngx-pagination button {
     background-color: white;
     color: #374151;
-    border-radius: 0.5rem;
+    border-radius: 0.5rem !important;
     padding: 0.5rem 1rem;
-    transition: all 0.3s;
+    text-decoration: none;
+    font-weight: 500;
   }
 
-    ::ng-deep .ngx-pagination a:hover {
-      background-color: #your-customBlueHover;
-      color: white;
+    ::ng-deep .ngx-pagination a:hover,
+    ::ng-deep .ngx-pagination button:hover {
+      background-color: #c0a5e8;
+      color: black !important;
     }
+
+  ::ng-deep .ngx-pagination .disabled {
+    color: dimgrey !important;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
