@@ -6,29 +6,9 @@
       <h1 class="mb-4 text-center font-montserrat text-4xl font-bold text-black">
         Adopta y transforma vidas
       </h1>
-      <form (ngSubmit)="onSearchSubmit()" class="mx-auto flex h-64 w-96 flex-col items-center justify-around rounded-3xl bg-black bg-opacity-75 p-10 py-3 font-roboto text-white">
-        <label for="tipo" class="block text-sm font-semibold text-white">Tipo de mascota</label>
-        <select id="tipo" [(ngModel)]="searchForm.tipo" name="tipo" class="w-full rounded bg-white p-2 text-gray-800">
-          <option value="todos">Todos los tipos</option>
-          <option value="Perro">🐶 Perros</option>
-          <option value="Gato">🐱 Gatos</option>
-          <option value="Roedor">🐰 Roedores</option>
-          <option value="Reptil">🐢 Reptiles</option>
-        </select>
+      <app-formulario-busqueda [modo]="'home'" (busquedaRealizada)="buscar($event)">
+      </app-formulario-busqueda>
 
-        <label for="provincia" class="block text-sm font-semibold text-white">Localización</label>
-        <select id="provincia" [(ngModel)]="searchForm.provincia" name="provincia" class="w-full rounded bg-white p-2 text-gray-800">
-          <option value="todos">Todas</option>
-          <option value="Navarra">Navarra</option>
-          <option value="Álava">Álava</option>
-          <option value="Guipúzcoa">Guipúzcoa</option>
-          <option value="Vizcaya">Vizcaya</option>
-        </select>
-
-        <button class="mt-5 w-32 rounded-full bg-customBlue p-2 text-white transition duration-300 hover:bg-customBlueHover" type="submit">
-          Buscar
-        </button>
-      </form>
     </div>
   </section>
 

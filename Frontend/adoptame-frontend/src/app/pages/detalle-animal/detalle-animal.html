@@ -1,24 +1,21 @@
+<main class="flex flex-grow items-center justify-center bg-customPurple bg-[url('assets/img/huellas.png')]">
+  <section id="seccion-principal" class="flex flex-col flex-grow items-center justify-center">
 
-  <!-- Main -->
-  <main class="flex flex-grow items-center justify-center bg-customPurple bg-[url('assets/img/huellas.png')]">
-    <section id="seccion-principal" class="flex flex-grow items-center justify-center">
+    <div *ngIf="loading" class="text-center py-8">
+      <p class="text-2xl font-bold">Cargando información del animal...</p>
+    </div>
 
+    <div *ngIf="!loading && animalNoEncontrado" class="w-[50%] text-center">
+      <p class="text-2xl">Animal no encontrado</p>
+    </div>
 
-      <!-- Loading -->
-      <div *ngIf="loading" class="text-center py-8">
-        <p class="text-2xl font-bold">Cargando información del animal...</p>
-      </div>
+    <div *ngIf="!loading && animal" class="flex flex-col items-start max-w-4xl w-full px-10 my-10">
 
-      <!-- Mensaje cuando no se encuentra el animal -->
-      <div *ngIf="!loading && animalNoEncontrado" class="w-[50%] text-center">
-        <p class="text-2xl">Animal no encontrado</p>
-      </div>
-
-      <div>
+      <div class="mb-4">
         <app-boton-volver></app-boton-volver>
       </div>
-      <!-- Detalle del animal -->
-      <div *ngIf="!loading && animal" class="container flex flex-col sm:flex-row items-center justify-center max-w-4xl rounded-lg bg-white shadow-lg my-10 mx-10">
+
+      <div class="container flex flex-col sm:flex-row items-center justify-center w-full rounded-lg bg-white shadow-lg">
 
         <div class="flex h-auto w-[80%] sm:w-2/5 items-center justify-center m-5 p-4">
           <img [src]="getImagenPath(animal.imagenPrincipal)"
@@ -62,5 +59,7 @@
           </div>
         </div>
       </div>
-    </section>
-  </main>
+    </div>
+
+  </section>
+</main>

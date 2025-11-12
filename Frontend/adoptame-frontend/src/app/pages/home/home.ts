@@ -1,30 +1,24 @@
-// home.component.ts
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormularioBusqueda, FiltrosBusqueda } from '../../components/formulario-busqueda/formulario-busqueda';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormularioBusqueda],
   templateUrl: './home.html',
   styleUrls: ['./home.css']
 })
 export class Home {
-  searchForm = {
-    tipo: 'todos',
-    provincia: 'todos'
-  };
-
   constructor(private router: Router) { }
 
-  onSearchSubmit(): void {
+  buscar(filtros: FiltrosBusqueda): void {
     this.router.navigate(['/animales'], {
       queryParams: {
-        tipo: this.searchForm.tipo,
-        provincia: this.searchForm.provincia
+        tipo: filtros.tipo !== 'todos' ? filtros.tipo : null,
+        provincia: filtros.provincia !== 'todos' ? filtros.provincia : null
       }
     });
   }
 }
+

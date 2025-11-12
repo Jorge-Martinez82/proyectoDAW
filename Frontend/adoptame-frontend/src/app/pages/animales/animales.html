@@ -4,53 +4,23 @@
     <div class="absolute inset-0 bg-[url('assets/img/gato-mascotas.webp')] bg-cover bg-center opacity-30"></div>
 
     <div class="relative flex w-[100%] max-w-2xl rounded-3xl bg-black bg-opacity-70 p-6">
-      <div class="flex w-full flex-col gap-4 md:flex-row">
-        <div class="w-full">
-          <label for="tipo" class="mb-2 block text-sm font-semibold text-white">
-            Tipo de mascota
-          </label>
-          <select [(ngModel)]="filters.tipo" id="tipo" class="w-full rounded p-2">
-            <option value="todos">Todos los tipos</option>
-            <option value="Perro">🐶 Perros</option>
-            <option value="Gato">🐱 Gatos</option>
-            <option value="Roedor">🐰 Roedores</option>
-            <option value="Reptil">🐢 Reptiles</option>
-          </select>
-        </div>
-
-        <div class="w-full">
-          <label for="provincia" class="mb-2 block text-sm font-semibold text-white">
-            Localización
-          </label>
-          <select [(ngModel)]="filters.provincia" id="provincia" class="w-full rounded p-2">
-            <option value="todos">Todas</option>
-            <option value="Navarra">Navarra</option>
-            <option value="Álava">Álava</option>
-            <option value="Guipúzcoa">Guipúzcoa</option>
-            <option value="Vizcaya">Vizcaya</option>
-          </select>
-        </div>
-
-        <div class="self-end">
-          <button (click)="buscar()" class="rounded-full bg-customBlue px-6 py-2 font-semibold text-white hover:bg-customBlueHover">
-            Buscar
-          </button>
-        </div>
+      <div class="w-full">
+        <app-formulario-busqueda [modo]="'animales'"
+                                 (busquedaRealizada)="buscar($event)">
+        </app-formulario-busqueda>
       </div>
     </div>
   </section>
-
 
   <!-- RESULTADOS -->
   <section class="relative rounded-lg bg-customPurple p-10">
     <div class="absolute inset-0 rounded-lg bg-[url('assets/img/huellas.png')] bg-cover bg-center opacity-80"></div>
 
     <div class="relative w-full lg:w-3/4 mx-auto">
-      <div *ngIf="loading" class="text-center py-8">
-        <p class="text-lg font-bold">Cargando animales...</p>
-      </div>
+      
+      <app-spinner *ngIf="loading"></app-spinner>
 
-      <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+      <div *ngIf="error && !loading" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
         <p>{{ error }}</p>
       </div>
 
@@ -60,25 +30,27 @@
         </h2>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <app-tarjeta-animales *ngFor="let animal of animales | paginate: {
+          <app-tarjeta-animales 
+            *ngFor="let animal of animales | paginate: {
               itemsPerPage: pageSize,
               currentPage: currentPage,
               totalItems: totalCount
             }"
-                                [animal]="animal">
+            [animal]="animal">
           </app-tarjeta-animales>
         </div>
 
         <div *ngIf="animales.length === 0" class="text-center py-8">
-          <p class="text-lg font-bold">No hay animales disponibles</p>
+          <p class="text-lg font-bold">No se encontraron animales con los filtros seleccionados</p>
         </div>
 
-        <!-- PAGINACIÓN -->
-        <pagination-controls (pageChange)="onPageChange($event)"
-                             previousLabel="Anterior"
-                             nextLabel="Siguiente"
-                             [responsive]="true"
-                             class="flex justify-center mt-8">
+        <pagination-controls 
+          *ngIf="animales.length > 0"
+          (pageChange)="onPageChange($event)"
+          previousLabel="Anterior"
+          nextLabel="Siguiente"
+          [responsive]="true"
+          class="flex justify-center mt-8">
         </pagination-controls>
       </div>
     </div>

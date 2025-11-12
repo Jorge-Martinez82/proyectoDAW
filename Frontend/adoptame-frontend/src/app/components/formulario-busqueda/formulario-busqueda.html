@@ -1,0 +1,78 @@
+<!-- MODO HOME -->
+<form *ngIf="modo === 'home'"
+      (ngSubmit)="buscar()"
+      class="mx-auto flex h-64 w-96 flex-col items-center justify-around rounded-3xl bg-black bg-opacity-75 p-10 py-3 font-roboto text-white">
+
+  <label for="tipo-home" class="block text-sm font-semibold text-white">
+    Tipo de mascota
+  </label>
+  <select id="tipo-home"
+          [(ngModel)]="filtros.tipo"
+          name="tipo"
+          class="w-full rounded bg-white p-2 text-gray-800">
+    <option value="todos">Todos los tipos</option>
+    <option value="Perro">🐶 Perros</option>
+    <option value="Gato">🐱 Gatos</option>
+    <option value="Roedor">🐰 Roedores</option>
+    <option value="Reptil">🐢 Reptiles</option>
+  </select>
+
+  <label for="provincia-home" class="block text-sm font-semibold text-white">
+    Localización
+  </label>
+  <select id="provincia-home"
+          [(ngModel)]="filtros.provincia"
+          name="provincia"
+          class="w-full rounded bg-white p-2 text-gray-800">
+    <option value="todos">Todas</option>
+    <option value="Navarra">Navarra</option>
+    <option value="Álava">Álava</option>
+    <option value="Guipúzcoa">Guipúzcoa</option>
+    <option value="Vizcaya">Vizcaya</option>
+  </select>
+
+  <app-boton-principal></app-boton-principal>
+</form>
+
+<!-- MODO ANIMALES -->
+<form *ngIf="modo === 'animales'"
+      (ngSubmit)="buscar()"
+      class="flex w-full items-end gap-4">
+
+  <div class="flex-1">
+    <label for="tipo-animales" class="mb-2 block text-sm font-semibold text-white">
+      Tipo de mascota
+    </label>
+    <select [(ngModel)]="filtros.tipo"
+            id="tipo-animales"
+            name="tipo"
+            class="w-full rounded p-2 text-gray-800">
+      <option value="todos">Todos los tipos</option>
+      <option value="Perro">🐶 Perros</option>
+      <option value="Gato">🐱 Gatos</option>
+      <option value="Roedor">🐰 Roedores</option>
+      <option value="Reptil">🐢 Reptiles</option>
+    </select>
+  </div>
+
+  <div class="flex-1">
+    <label for="provincia-animales" class="mb-2 block text-sm font-semibold text-white">
+      Localización
+    </label>
+    <select [(ngModel)]="filtros.provincia"
+            id="provincia-animales"
+            name="provincia"
+            class="w-full rounded p-2 text-gray-800">
+      <option value="todos">Todas</option>
+      <option value="Navarra">Navarra</option>
+      <option value="Álava">Álava</option>
+      <option value="Guipúzcoa">Guipúzcoa</option>
+      <option value="Vizcaya">Vizcaya</option>
+    </select>
+  </div>
+
+  <div class="flex-shrink-0">
+    <app-boton-principal></app-boton-principal>
+  </div>
+</form>
+
