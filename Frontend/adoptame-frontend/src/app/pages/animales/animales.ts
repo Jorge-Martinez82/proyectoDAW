@@ -51,7 +51,7 @@ export class Animales implements OnInit {
       provincia
     )
       .pipe(
-        delay(1500) 
+        delay(1000) 
       )
       .subscribe({
         next: (response: AnimalesResponse) => {

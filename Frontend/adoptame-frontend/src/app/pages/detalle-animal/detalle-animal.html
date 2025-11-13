@@ -1,12 +1,14 @@
 <main class="flex flex-grow items-center justify-center bg-customPurple bg-[url('assets/img/huellas.png')]">
   <section id="seccion-principal" class="flex flex-col flex-grow items-center justify-center">
 
-    <div *ngIf="loading" class="text-center py-8">
-      <p class="text-2xl font-bold">Cargando información del animal...</p>
-    </div>
+    <app-spinner *ngIf="loading"></app-spinner>
 
-    <div *ngIf="!loading && animalNoEncontrado" class="w-[50%] text-center">
-      <p class="text-2xl">Animal no encontrado</p>
+    <div *ngIf="!loading && animalNoEncontrado" class="w-[50%] text-center bg-white rounded-lg shadow-lg p-8">
+      <p class="text-2xl font-bold text-red-600">Animal no encontrado</p>
+      <p class="text-gray-600 mt-2">Lo sentimos, no pudimos encontrar la información de este animal.</p>
+      <div class="mt-6">
+        <app-boton-volver></app-boton-volver>
+      </div>
     </div>
 
     <div *ngIf="!loading && animal" class="flex flex-col items-start max-w-4xl w-full px-10 my-10">
@@ -18,7 +20,7 @@
       <div class="container flex flex-col sm:flex-row items-center justify-center w-full rounded-lg bg-white shadow-lg">
 
         <div class="flex h-auto w-[80%] sm:w-2/5 items-center justify-center m-5 p-4">
-          <img [src]="getImagenPath(animal.imagenPrincipal)"
+          <img [src]=" animal.imagenPrincipal "
                [alt]="'Foto de ' + animal.nombre"
                class="h-auto w-[100%] rounded-lg object-cover shadow-lg" />
         </div>
@@ -51,11 +53,11 @@
           </div>
 
           <div class="mb-2 flex items-center justify-center">
-            <a [routerLink]="['/formulario-adopcion']"
-               [queryParams]="{uuid: animal.uuid}"
-               class="rounded-full bg-customBlue px-6 py-2 text-white transition hover:bg-customBlueHover">
-              Adóptame
-            </a>
+            <app-boton-principal [tipo]="'link'"
+                                 [texto]="'Adóptame'"
+                                 [ruta]="'/formulario-adopcion'"
+                                 [queryParams]="{uuid: animal.uuid}">
+            </app-boton-principal>
           </div>
         </div>
       </div>

@@ -4,12 +4,15 @@ import { CommonModule } from '@angular/common';
 import { AnimalesService } from '../animales/animales.service';
 import { AnimalDto } from '../../models/interfaces';
 import { BotonVolver } from '../../components/boton-volver/boton-volver';
+import { Spinner } from '../../components/spinner/spinner';
+import { delay } from 'rxjs/operators';
+import { BotonPrincipal } from '../../components/boton-principal/boton-principal';
 
 
 @Component({
   selector: 'app-detalle-animal',
   standalone: true,
-  imports: [CommonModule, RouterLink, BotonVolver],
+  imports: [CommonModule, RouterLink, BotonVolver, Spinner, BotonPrincipal],
   templateUrl: './detalle-animal.html',
   styleUrls: ['./detalle-animal.css']
 })
@@ -29,7 +32,11 @@ export class DetalleAnimal implements OnInit {
     const uuidAnimal = this.route.snapshot.paramMap.get('uuid');
 
     if (uuidAnimal) {
-      this.animalService.getAnimalById(uuidAnimal).subscribe({
+      this.animalService.getAnimalById(uuidAnimal)
+        .pipe(
+          delay(1000)
+        )
+        .subscribe({
         next: (response) => {
           this.animal = response;
           this.loading = false;
@@ -49,13 +56,4 @@ export class DetalleAnimal implements OnInit {
   toggleMenu(): void {
     this.menuAbierto = !this.menuAbierto;
   }
-
-  getImagenPath(imagen: string | null): string {
-    if (!imagen) {
-      return 'assets/img/default-animal.png';
-    }
-    return `assets/img/mascotas/${imagen}`;
-  }
-
-
 }

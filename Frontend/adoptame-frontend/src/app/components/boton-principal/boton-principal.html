@@ -1,6 +1,14 @@
-<button type="submit"
+<a *ngIf="tipo === 'link' && ruta"
+   [routerLink]="[ruta]"
+   [queryParams]="queryParams"
+   class="inline-block rounded-lg bg-customBlue px-6 py-2 text-center text-sm font-semibold text-white transition duration-300 hover:bg-customBlueHover disabled:opacity-50 disabled:cursor-not-allowed">
+  {{ texto }}
+</a>
+
+<button *ngIf="tipo !== 'link'"
+        [type]="tipo"
         [disabled]="disabled"
-        class="rounded-lg bg-customBlue px-6 py-1.5 text-sm font-semibold text-white transition duration-300 hover:bg-customBlueHover disabled:opacity-50 disabled:cursor-not-allowed">
+        class="rounded-lg bg-customBlue px-6 py-2 text-sm font-semibold text-white transition duration-300 hover:bg-customBlueHover disabled:opacity-50 disabled:cursor-not-allowed">
   {{ texto }}
 </button>
 
