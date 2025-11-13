@@ -21,6 +21,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<AnimalesService>();
 builder.Services.AddScoped<IAnimalesRepository, AnimalesRepository>();
 
+builder.Services.AddScoped<IProtectorasRepository, ProtectorasRepository>();
+builder.Services.AddScoped<ProtectorasService>();
+
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
