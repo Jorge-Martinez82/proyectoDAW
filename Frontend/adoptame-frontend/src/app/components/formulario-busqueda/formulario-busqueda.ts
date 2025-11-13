@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { BotonPrincipal } from '../boton-principal/boton-principal';
 
 export interface FiltrosBusqueda {
-  tipo: string;
+  tipo?: string; 
   provincia: string;
 }
 
@@ -16,7 +16,7 @@ export interface FiltrosBusqueda {
   styleUrls: ['./formulario-busqueda.css']
 })
 export class FormularioBusqueda {
-  @Input() modo: 'home' | 'animales' = 'home';
+  @Input() modo: 'home' | 'animales' | 'protectoras' = 'home';
   @Output() busquedaRealizada = new EventEmitter<FiltrosBusqueda>();
 
   filtros: FiltrosBusqueda = {
@@ -24,7 +24,18 @@ export class FormularioBusqueda {
     provincia: 'todos'
   };
 
+  provincias = ['Álava', 'Gipuzkoa', 'Bizkaia', 'Navarra'];
+  tipos = ['Perro', 'Gato', 'Roedor', 'Reptil'];
+
   buscar(): void {
-    this.busquedaRealizada.emit(this.filtros);
+    const resultado: FiltrosBusqueda = {
+      provincia: this.filtros.provincia
+    };
+
+    if (this.modo !== 'protectoras') {
+      resultado.tipo = this.filtros.tipo;
+    }
+
+    this.busquedaRealizada.emit(resultado);
   }
 }

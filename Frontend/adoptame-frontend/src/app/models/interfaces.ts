@@ -17,3 +17,23 @@ export interface AnimalesResponse {
   pageNumber: number;
   pageSize: number;
 }
+
+export interface ProtectoraDto {
+  uuid: string;
+  nombre: string;
+  direccion: string | null;
+  telefono: string | null;
+  provincia: string | null;
+  email: string | null;
+  imagen: string | null;
+  userId: number;
+  createdAt: string;
+}
+
+export interface ProtectorasResponse {
+  data: ProtectoraDto[];
+  pageNumber: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+}

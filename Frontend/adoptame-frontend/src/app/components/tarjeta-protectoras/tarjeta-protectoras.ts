@@ -3,12 +3,11 @@ import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-tarjeta-animales',
+  selector: 'app-tarjeta-protectora',
   imports: [CommonModule, RouterLink],
-  templateUrl: './tarjeta-animales.html',
-  styleUrl: './tarjeta-animales.css'
+  templateUrl: './tarjeta-protectoras.html',
+  styleUrl: './tarjeta-protectoras.css'
 })
-export class TarjetaAnimales {
-  @Input() animal: any;
+export class TarjetaProtectoras {
+  @Input() protectora: any;
 }
-
