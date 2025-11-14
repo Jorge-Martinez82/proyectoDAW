@@ -23,7 +23,7 @@ public class AnimalesRepository : IAnimalesRepository
     public async Task<(IEnumerable<Animal> animales, int total)> GetAllAsync(
         int pageNumber,
         int pageSize,
-        int? protectoraId = null,
+        Guid? protectoraUuid = null,
         string? tipo = null,
         string? provincia = null)
     {
@@ -31,8 +31,8 @@ public class AnimalesRepository : IAnimalesRepository
             .Include(a => a.Protectora)
             .AsNoTracking();
 
-        if (protectoraId.HasValue)
-            query = query.Where(a => a.ProtectoraId == protectoraId.Value);
+        if (protectoraUuid.HasValue)
+            query = query.Where(a => a.Protectora.Uuid == protectoraUuid.Value);
         if (!string.IsNullOrEmpty(tipo))
         {
             query = query.Where(a => a.Tipo.ToLower() == tipo.ToLower());

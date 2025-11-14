@@ -16,7 +16,7 @@ export class AnimalesService {
     pageSize: number = 12,
     tipo?: string,
     provincia?: string,
-    protectoraId?: number
+    protectoraUuid?: string | null
   ): Observable<AnimalesResponse> {
     let params = new HttpParams()
       .set('pageNumber', pageNumber.toString())
@@ -30,8 +30,8 @@ export class AnimalesService {
       params = params.set('provincia', provincia);
     }
 
-    if (protectoraId) {
-      params = params.set('protectoraId', protectoraId.toString());
+    if (protectoraUuid) {
+      params = params.set('protectoraUuid', protectoraUuid); 
     }
 
     return this.http.get<AnimalesResponse>(this.apiUrl, { params });

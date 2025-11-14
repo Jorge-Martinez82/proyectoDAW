@@ -6,7 +6,7 @@ public interface IAnimalesRepository
     Task<(IEnumerable<Animal> animales, int total)> GetAllAsync(
         int pageNumber,
         int pageSize,
-        int? protectoraId = null,
+        Guid? protectoraUuid = null,
         string? tipo = null,
         string? provincia = null);
 }

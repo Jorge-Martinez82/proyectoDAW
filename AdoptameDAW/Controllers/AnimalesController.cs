@@ -19,11 +19,11 @@ public class AnimalesController : ControllerBase
     public async Task<ActionResult> GetAll(
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10,
-        [FromQuery] int? protectoraId = null,
+        [FromQuery] Guid? protectoraUuid = null,
         [FromQuery] string? tipo = null,
         [FromQuery] string? provincia = null)
     {
-        var result = await _service.GetAllAsync(pageNumber, pageSize, protectoraId, tipo, provincia);
+        var result = await _service.GetAllAsync(pageNumber, pageSize, protectoraUuid, tipo, provincia);
         return Ok(result);
     }
 

@@ -23,7 +23,7 @@ public class AnimalesService
     public async Task<object> GetAllAsync(
         int pageNumber,
         int pageSize,
-        int? protectoraId = null,
+        Guid? protectoraUuid = null,
         string? tipo = null,
         string? provincia = null)
     {
@@ -34,7 +34,7 @@ public class AnimalesService
         var (animales, total) = await _repository.GetAllAsync(
             pageNumber,
             pageSize,
-            protectoraId,
+            protectoraUuid,
             tipo,
             provincia);
 

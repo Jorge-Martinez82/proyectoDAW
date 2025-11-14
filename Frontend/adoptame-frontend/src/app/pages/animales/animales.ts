@@ -7,7 +7,7 @@ import { TarjetaAnimales } from '../../components/tarjeta-animales/tarjeta-anima
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AnimalDto, AnimalesResponse } from '../../models/interfaces';
 import { FormularioBusqueda, FiltrosBusqueda } from '../../components/formulario-busqueda/formulario-busqueda';
-import { delay } from 'rxjs/operators'; // ✅ Importa delay
+import { delay } from 'rxjs/operators';
 import { Spinner } from '../../components/spinner/spinner';
 
 @Component({
@@ -35,24 +35,28 @@ export class Animales implements OnInit {
     this.route.queryParams.subscribe((params) => {
       const tipo = params['tipo'] || 'todos';
       const provincia = params['provincia'] || 'todos';
+      const protectoraUuid = params['protectoraUuid'] || null;
       this.currentPage = Number(params['page']) || 1;
 
-      this.cargarAnimales(tipo, provincia);
+      this.cargarAnimales(tipo, provincia, protectoraUuid);
     });
   }
 
-  cargarAnimales(tipo: string = 'todos', provincia: string = 'todos') {
+  cargarAnimales(
+    tipo: string = 'todos',
+    provincia: string = 'todos',
+    protectoraUuid: string | null = null
+  ) {
     this.loading = true;
 
     this.animalService.getAnimales(
       this.currentPage,
       this.pageSize,
       tipo,
-      provincia
+      provincia,
+      protectoraUuid
     )
-      .pipe(
-        delay(1000) 
-      )
+      .pipe(delay(1000))
       .subscribe({
         next: (response: AnimalesResponse) => {
           this.animales = response.data || [];
@@ -69,7 +73,6 @@ export class Animales implements OnInit {
 
   onPageChange(page: number) {
     this.currentPage = page;
-
     const currentFilters = this.route.snapshot.queryParams;
 
     this.router.navigate([], {
@@ -77,6 +80,7 @@ export class Animales implements OnInit {
       queryParams: {
         tipo: currentFilters['tipo'] || 'todos',
         provincia: currentFilters['provincia'] || 'todos',
+        protectoraUuid: currentFilters['protectoraUuid'] || null,
         page: page
       },
       queryParamsHandling: 'merge'
@@ -86,13 +90,17 @@ export class Animales implements OnInit {
   }
 
   buscar(filtros: FiltrosBusqueda) {
+    const currentFilters = this.route.snapshot.queryParams;
+
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
         tipo: filtros.tipo !== 'todos' ? filtros.tipo : null,
         provincia: filtros.provincia !== 'todos' ? filtros.provincia : null,
+        protectoraUuid: currentFilters['protectoraUuid'] || null,
         page: 1
       }
     });
   }
+
 }
