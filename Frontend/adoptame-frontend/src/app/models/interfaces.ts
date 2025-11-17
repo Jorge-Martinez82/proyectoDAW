@@ -37,3 +37,14 @@ export interface ProtectorasResponse {
   totalCount: number;
   totalPages: number;
 }
+export interface SolicitudAdopcion {
+  nombre: string;
+  apellidos: string;
+  dni: string;
+  direccion: string;
+  localidad: string;
+  codigoPostal: string;
+  provincia: string;
+  mayorEdad: boolean;
+  animalUuid: string;
+}
