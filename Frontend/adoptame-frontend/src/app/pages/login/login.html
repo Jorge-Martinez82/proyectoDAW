@@ -1,0 +1,67 @@
+<main class="flex flex-grow items-center justify-center bg-customPurple bg-[url('assets/img/huellas.png')]">
+  <section class="flex flex-col flex-grow items-center justify-center">
+
+    <div class="flex flex-col items-center justify-center">
+      <form [formGroup]="loginForm"
+            (ngSubmit)="onSubmit()"
+            class="mx-2 flex flex-col items-center justify-around rounded-3xl bg-black bg-opacity-75 p-8 py-4 font-roboto text-white min-w-[320px]">
+        <h2 class="text-2xl font-bold mb-4">Iniciar Sesión</h2>
+
+        <div class="my-2 w-full">
+          <label for="email" class="text-sm font-medium text-white">
+            Correo electrónico *
+          </label>
+          <input type="email"
+                 id="email"
+                 formControlName="email"
+                 class="w-full rounded-3xl bg-white py-2 px-4 m-1 text-gray-800"
+                 placeholder="Introduce tu correo"
+                 autocomplete="email"
+                 [class.border-2]="campoInvalido('email')"
+                 [class.border-red-500]="campoInvalido('email')" />
+          <small *ngIf="campoInvalido('email')" class="block mt-1 pl-4 text-red-300">
+            Por favor, introduce un email válido
+          </small>
+        </div>
+
+        <div class="my-2 w-full">
+          <label for="password" class="text-sm font-medium text-white">Contraseña *</label>
+          <input type="password"
+                 id="password"
+                 formControlName="password"
+                 class="w-full rounded-3xl bg-white py-2 px-4 m-1 text-gray-800"
+                 placeholder="Introduce tu contraseña"
+                 minlength="8"
+                 [class.border-2]="campoInvalido('password')"
+                 [class.border-red-500]="campoInvalido('password')" />
+          <small *ngIf="campoInvalido('password')" class="block mt-1 pl-4 text-red-300">
+            La contraseña debe tener al menos 8 caracteres
+          </small>
+        </div>
+
+        <div *ngIf="errorMessage" class="my-2 w-full bg-red-500 bg-opacity-20 border border-red-500 rounded-lg p-3">
+          <p class="text-red-200 text-sm text-center">{{ errorMessage }}</p>
+        </div>
+
+        <small class="m-1 text-center text-gray-300">
+          No introducir datos reales<br>
+          Usa: prueba@prueba.com / 12345678
+        </small>
+
+        <div class="my-4 flex gap-4 flex-col sm:flex-row w-full">
+          <app-boton-principal [tipo]="'submit'"
+                               [texto]="loading ? 'Iniciando...' : 'Iniciar sesión'"
+                               [disabled]="loading || loginForm.invalid"
+                               class="w-full sm:w-auto">
+          </app-boton-principal>
+
+          <a routerLink="/registro"
+             class="flex items-center justify-center rounded-full border-2 border-customBlue bg-transparent px-6 py-2 text-white transition duration-300 hover:bg-customBlueHover w-full sm:w-auto text-center">
+            Registrarse
+          </a>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+

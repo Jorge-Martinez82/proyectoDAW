@@ -48,3 +48,21 @@ export interface SolicitudAdopcion {
   mayorEdad: boolean;
   animalUuid: string;
 }
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  token: string;
+  usuario: UsuarioDto;
+}
+
+export interface UsuarioDto {
+  uuid: string;
+  email: string;
+  nombre: string;
+  rol: 'Protectora' | 'Adoptante';
+  protectoraId?: number;
+}

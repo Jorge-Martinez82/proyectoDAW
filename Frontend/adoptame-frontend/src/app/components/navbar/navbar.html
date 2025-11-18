@@ -1,12 +1,10 @@
 <header class="relative z-10 m-2">
   <nav class="flex items-center justify-between">
-    <!-- LOGO -->
     <a routerLink="/" class="flex items-center gap-3">
       <img src="assets/img/logo.png" alt="logo de adoptame" class="h-10" />
       <p class="font-montserrat font-bold">Adóptame</p>
     </a>
 
-    <!-- MENU DESKTOP -->
     <div class="absolute left-1/2 hidden -translate-x-1/2 transform sm:block">
       <ul class="flex gap-6 font-roboto">
         <li>
@@ -33,10 +31,22 @@
       </ul>
     </div>
 
-    <!-- BOTON LOGIN DESKTOP -->
-    <a routerLink="/login"
-       class="hidden rounded-lg border-2 border-customBlue px-4 py-1 font-roboto font-bold text-black transition duration-300 hover:bg-customBlue hover:text-white sm:block">
-      Iniciar sesión
-    </a>
+    <div class="hidden sm:block">
+      <a *ngIf="!authService.isLoggedIn()"
+         routerLink="/login"
+         class="rounded-lg border-2 border-customBlue px-4 py-1 font-roboto font-bold text-black transition duration-300 hover:bg-customBlue hover:text-white">
+        Iniciar sesión
+      </a>
+
+      <div *ngIf="authService.isLoggedIn()" class="flex items-center gap-4">
+        <span class="font-roboto text-sm font-semibold text-gray-700">
+          {{ authService.getCurrentUser()?.email }}
+        </span>
+        <button (click)="logout()"
+                class="rounded-lg border-2 border-red-500 px-4 py-1 font-roboto font-bold text-red-500 transition duration-300 hover:bg-red-500 hover:text-white">
+          Cerrar sesión
+        </button>
+      </div>
+    </div>
   </nav>
 </header>
