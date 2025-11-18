@@ -6,6 +6,7 @@ import { About } from './pages/about/about';
 import { DetalleAnimal } from './pages/detalle-animal/detalle-animal';
 import { FormularioAdopcion } from './pages/formulario-adopcion/formulario-adopcion';
 import { Login } from './pages/login/login';
+import { Registro } from './pages/registro/registro';
 import { authGuard } from './guards/auth-guard';
 
 
@@ -17,6 +18,7 @@ export const routes: Routes = [
   { path: 'protectoras', component: Protectoras },
   { path: 'about', component: About },
   { path: 'login', component: Login },
+  { path: 'registro', component: Registro },
   
   { 
     path: 'formulario-adopcion', 
