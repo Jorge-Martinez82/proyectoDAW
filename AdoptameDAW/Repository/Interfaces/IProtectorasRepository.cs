@@ -4,11 +4,11 @@ namespace AdoptameDAW.Repositories;
 
 public interface IProtectorasRepository
 {
-    Task<Protectora?> GetByIdAsync(Guid id);
-    Task<(IEnumerable<Protectora> protectoras, int total)> GetAllAsync(
+    Task<Protectora?> ProtectorasRepositoryGetById(Guid id);
+    Task<(IEnumerable<Protectora> protectoras, int total)> ProtectorasRepositoryGetAll(
         int pageNumber,
         int pageSize,
         string? provincia = null);
-    Task<Protectora> CreateAsync(Protectora protectora);
+    Task<Protectora> ProtectorasRepositoryCreate(Protectora protectora);
 
 }

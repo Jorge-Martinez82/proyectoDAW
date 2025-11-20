@@ -39,9 +39,9 @@
       </a>
 
       <div *ngIf="authService.isLoggedIn()" class="flex items-center gap-4">
-        <span class="font-roboto text-sm font-semibold text-gray-700">
+        <a routerLink="/perfil" class="font-roboto text-sm font-semibold text-gray-700 cursor-pointer">
           {{ authService.getCurrentUser()?.email }}
-        </span>
+        </a>
         <button (click)="logout()"
                 class="rounded-lg border-2 border-red-500 px-4 py-1 font-roboto font-bold text-red-500 transition duration-300 hover:bg-red-500 hover:text-white">
           Cerrar sesión

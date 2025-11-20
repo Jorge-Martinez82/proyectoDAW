@@ -16,22 +16,22 @@ public class AnimalesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult> GetAll(
+    public async Task<ActionResult> AnimalesControllerGetAll(
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10,
         [FromQuery] Guid? protectoraUuid = null,
         [FromQuery] string? tipo = null,
         [FromQuery] string? provincia = null)
     {
-        var result = await _service.GetAllAsync(pageNumber, pageSize, protectoraUuid, tipo, provincia);
+        var result = await _service.AnimalesServiceGetAll(pageNumber, pageSize, protectoraUuid, tipo, provincia);
         return Ok(result);
     }
 
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<AnimalDto>> GetById(Guid id)
+    public async Task<ActionResult<AnimalDto>> AnimalesControllerGetById(Guid id)
     {
-        var animal = await _service.GetByIdAsync(id);
+        var animal = await _service.AnimalesServiceGetById(id);
         if (animal == null)
             return NotFound(new { mensaje = "Animal no encontrado" });
 

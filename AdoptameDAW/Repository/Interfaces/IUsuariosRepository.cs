@@ -4,8 +4,8 @@ namespace AdoptameDAW.Repositories;
 
 public interface IUsuariosRepository
 {
-    Task<Usuario?> GetByEmailAsync(string email);
-    Task<Usuario?> GetByIdAsync(Guid uuid);
-    Task<Usuario> CreateAsync(Usuario usuario);
+    Task<Usuario?> UsuariosRepositoryGetByEmail(string email);
+    Task<Usuario?> UsuariosRepositoryGetById(Guid uuid);
+    Task<Usuario> UsuariosRepositoryCreate(Usuario usuario);
 }
 

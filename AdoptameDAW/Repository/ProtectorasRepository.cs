@@ -13,7 +13,7 @@ public class ProtectorasRepository : IProtectorasRepository
         _context = context;
     }
 
-    public async Task<Protectora?> GetByIdAsync(Guid id)
+    public async Task<Protectora?> ProtectorasRepositoryGetById(Guid id)
     {
         return await _context.Protectoras
             .Include(p => p.User)
@@ -21,7 +21,7 @@ public class ProtectorasRepository : IProtectorasRepository
             .FirstOrDefaultAsync(p => p.Uuid == id);
     }
 
-    public async Task<(IEnumerable<Protectora> protectoras, int total)> GetAllAsync(
+    public async Task<(IEnumerable<Protectora> protectoras, int total)> ProtectorasRepositoryGetAll(
         int pageNumber,
         int pageSize,
         string? provincia = null)
@@ -46,7 +46,7 @@ public class ProtectorasRepository : IProtectorasRepository
         return (protectoras, total);
     }
 
-    public async Task<Protectora> CreateAsync(Protectora protectora)
+    public async Task<Protectora> ProtectorasRepositoryCreate(Protectora protectora)
     {
         protectora.Uuid = Guid.NewGuid();
         protectora.CreatedAt = DateTime.UtcNow;

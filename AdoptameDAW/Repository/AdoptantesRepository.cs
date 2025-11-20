@@ -13,7 +13,7 @@ namespace AdoptameDAW.Repository
             _context = context;
         }
 
-        public async Task<Adoptante> CreateAsync(Adoptante adoptante)
+        public async Task<Adoptante> AdoptantesRepositoryCreate(Adoptante adoptante)
         {
             adoptante.Uuid = Guid.NewGuid();
 

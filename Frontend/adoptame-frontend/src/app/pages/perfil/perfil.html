@@ -1,0 +1,64 @@
+<main>
+  <section id="perfil" class="flex h-auto flex-col items-center justify-center bg-customPurple bg-[url('/assets/img/huellas.png')] bg-cover bg-center px-6 py-24 md:flex-row">
+
+    <div class="w-full max-w-6xl bg-white rounded-lg shadow-lg mx-4">
+      <div class="flex justify-between px-8 pt-8 rounded-lg border-customBlue bg-gray-200">
+        <button (click)="seleccionarPestana('datosPersonales')"
+                class="font-bold text-customBlue text-lg md:text-xl pb-3 transition border-b-4"
+                [class.border-customBlue]="pestanaSeleccionada === 'datosPersonales'"
+                [class.text-customBlue]="pestanaSeleccionada === 'datosPersonales'"
+                [class.text-gray-500]="pestanaSeleccionada !== 'datosPersonales'">
+          Datos personales
+        </button>
+        <button (click)="seleccionarPestana('solicitudes')"
+                class="font-bold text-lg md:text-xl pb-3 transition border-b-4"
+                [class.border-customBlue]="pestanaSeleccionada === 'solicitudes'"
+                [class.text-customBlue]="pestanaSeleccionada === 'solicitudes'"
+                [class.text-gray-500]="pestanaSeleccionada !== 'solicitudes'">
+          Solicitudes
+        </button>
+      </div>
+
+      <div class="p-8 min-h-[500px] flex flex-col justify-start">
+        <ng-container *ngIf="pestanaSeleccionada === 'datosPersonales' && usuario">
+          <div class="grid grid-cols-1 gap-4">
+            <div>
+              <label for="nombre" class="text-xl block mb-2">Nombre:</label>
+              <input type="text" name="nombre" class="w-full bg-gray-200 rounded-lg border-2 border-black px-4 py-2" [value]="usuario?.nombre" />
+            </div>
+            <div>
+              <label for="apellidos" class="text-xl block mb-2">Apellidos:</label>
+              <input type="text" name="apellidos" class="w-full bg-gray-200 rounded-lg border-2 border-black px-4 py-2" [value]="usuario?.apellidos" />
+            </div>
+            <div>
+              <label for="ciudad" class="text-xl block mb-2">Ciudad:</label>
+              <input type="text" name="ciudad" class="w-full bg-gray-200 rounded-lg border-2 border-black px-4 py-2" [value]="usuario?.ciudad" />
+            </div>
+            <div>
+              <label for="provincia" class="text-xl block mb-2">Provincia:</label>
+              <input type="text" name="provincia" class="w-full bg-gray-200 rounded-lg border-2 border-black px-4 py-2" [value]="usuario?.provincia" />
+            </div>
+            <div>
+              <label for="correo" class="text-xl block mb-2">Correo electrónico:</label>
+              <input type="email" name="correo" class="w-full bg-gray-200 rounded-lg border-2 border-black px-4 py-2" [value]="usuario?.correo" />
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="pestanaSeleccionada === 'solicitudes'">
+          <div class="text-center">
+            <p class="text-lg font-semibold mt-8">Opciones de configuración</p>
+            <p class="mt-4 text-gray-600">Aquí se mostrarán las opciones de configuración...</p>
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="flex justify-center pb-8 border-t border-gray-100">
+        <button class="mt-6 px-6 py-2 bg-customBlue hover:bg-customBlueHover rounded-full text-white text-lg transition"
+                (click)="actualizarDatos()">
+          Actualizar
+        </button>
+      </div>
+    </div>
+    </section>
+</main>

@@ -2,8 +2,8 @@
 
 public interface IAnimalesRepository
 {
-    Task<Animal?> GetByIdAsync(Guid id);
-    Task<(IEnumerable<Animal> animales, int total)> GetAllAsync(
+    Task<Animal?> AnimalesRepositoryGetById(Guid id);
+    Task<(IEnumerable<Animal> animales, int total)> AnimalesRepositoryGetAll(
         int pageNumber,
         int pageSize,
         Guid? protectoraUuid = null,

@@ -16,19 +16,19 @@ public class ProtectorasController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult> GetAll(
+    public async Task<ActionResult> ProtectorasControllerGetAll(
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10,
         [FromQuery] string? provincia = null)
     {
-        var result = await _service.GetAllAsync(pageNumber, pageSize, provincia);
+        var result = await _service.ProtectorasServiceGetAll(pageNumber, pageSize, provincia);
         return Ok(result);
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<ProtectoraDto>> GetById(Guid id)
+    public async Task<ActionResult<ProtectoraDto>> ProtectorasControllerGetById(Guid id)
     {
-        var protectora = await _service.GetByIdAsync(id);
+        var protectora = await _service.ProtectorasServiceGetById(id);
         if (protectora == null)
             return NotFound(new { mensaje = "Protectora no encontrada" });
 

@@ -17,12 +17,12 @@ public class UsuariosController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<LoginResponseDto>> Login([FromBody] LoginRequest request)
+    public async Task<ActionResult<LoginResponseDto>> UsuariosControllerLogin([FromBody] LoginRequest request)
     {
         if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
             return BadRequest(new { mensaje = "Email y contraseña son requeridos" });
 
-        var result = await _service.LoginAsync(request);
+        var result = await _service.UsuariosServiceLogin(request);
 
         if (result == null)
             return Unauthorized(new { mensaje = "Credenciales incorrectas" });
@@ -31,7 +31,7 @@ public class UsuariosController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult<object>> Register([FromBody] RegistroRequestDto request)
+    public async Task<ActionResult<object>> UsuariosControllerRegistro([FromBody] RegistroRequestDto request)
     {
         if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
             return BadRequest(new { mensaje = "Email y contraseña son requeridos" });
@@ -41,7 +41,7 @@ public class UsuariosController : ControllerBase
 
         try
         {
-            var usuario = await _service.RegistroAsync(request);
+            var usuario = await _service.UsuariosServiceRegistro(request);
 
             if (usuario == null)
                 return Conflict(new { mensaje = "El email ya está registrado" });

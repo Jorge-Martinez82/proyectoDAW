@@ -8,6 +8,7 @@ import { FormularioAdopcion } from './pages/formulario-adopcion/formulario-adopc
 import { Login } from './pages/login/login';
 import { Registro } from './pages/registro/registro';
 import { authGuard } from './guards/auth-guard';
+import { Perfil } from './pages/perfil/perfil';
 
 
 export const routes: Routes = [
@@ -19,6 +20,8 @@ export const routes: Routes = [
   { path: 'about', component: About },
   { path: 'login', component: Login },
   { path: 'registro', component: Registro },
+  { path: 'perfil', component: Perfil },
+
   
   { 
     path: 'formulario-adopcion', 

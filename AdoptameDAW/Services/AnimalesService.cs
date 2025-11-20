@@ -14,13 +14,13 @@ public class AnimalesService
         _mapper = mapper;
     }
 
-    public async Task<AnimalDto?> GetByIdAsync(Guid id)
+    public async Task<AnimalDto?> AnimalesServiceGetById(Guid id)
     {
-        var animal = await _repository.GetByIdAsync(id);
+        var animal = await _repository.AnimalesRepositoryGetById(id);
         return animal == null ? null : _mapper.Map<AnimalDto>(animal);
     }
 
-    public async Task<object> GetAllAsync(
+    public async Task<object> AnimalesServiceGetAll(
         int pageNumber,
         int pageSize,
         Guid? protectoraUuid = null,
@@ -31,7 +31,7 @@ public class AnimalesService
         pageSize = pageSize > 12 ? 12 : pageSize;
         pageNumber = pageNumber < 1 ? 1 : pageNumber;
 
-        var (animales, total) = await _repository.GetAllAsync(
+        var (animales, total) = await _repository.AnimalesRepositoryGetAll(
             pageNumber,
             pageSize,
             protectoraUuid,

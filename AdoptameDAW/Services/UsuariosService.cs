@@ -37,9 +37,9 @@ public class UsuariosService
     }
 
 
-    public async Task<LoginResponseDto?> LoginAsync(LoginRequest request)
+    public async Task<LoginResponseDto?> UsuariosServiceLogin(LoginRequest request)
     {
-        var usuario = await _repository.GetByEmailAsync(request.Email);
+        var usuario = await _repository.UsuariosRepositoryGetByEmail(request.Email);
 
         if (usuario == null)
             return null;
@@ -57,9 +57,9 @@ public class UsuariosService
         };
     }
 
-    public async Task<object?> RegistroAsync(RegistroRequestDto request)
+    public async Task<object?> UsuariosServiceRegistro(RegistroRequestDto request)
     {
-        var existingUser = await _repository.GetByEmailAsync(request.Email);
+        var existingUser = await _repository.UsuariosRepositoryGetByEmail(request.Email);
         if (existingUser != null)
             return null;
 
@@ -76,7 +76,7 @@ public class UsuariosService
                 TipoUsuario = request.TipoUsuario
             };
 
-            await _repository.CreateAsync(usuario);
+            await _repository.UsuariosRepositoryCreate(usuario);
             await _context.SaveChangesAsync();
 
             if (request.TipoUsuario == "Adoptante")
@@ -94,7 +94,7 @@ public class UsuariosService
                     UserId = usuario.Id 
                 };
 
-                await _adoptantesRepository.CreateAsync(adoptante);
+                await _adoptantesRepository.AdoptantesRepositoryCreate(adoptante);
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
@@ -112,7 +112,7 @@ public class UsuariosService
                     UserId = usuario.Id 
                 };
 
-                await _protectorasRepository.CreateAsync(protectora);
+                await _protectorasRepository.ProtectorasRepositoryCreate(protectora);
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
