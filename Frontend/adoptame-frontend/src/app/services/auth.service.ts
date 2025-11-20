@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, BehaviorSubject, tap } from 'rxjs';
-import { LoginRequest, LoginResponse, UsuarioDto } from '../models/interfaces';
+import { LoginRequest, LoginResponse, RegistroRequest, UsuarioDto } from '../models/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,6 @@ export class AuthService {
 
   private apiUrl = 'https://localhost:7165/api/Usuarios';
   private currentUserSubject = new BehaviorSubject<UsuarioDto | null>(this.getUserFromStorage());
-
   public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor() { }
@@ -27,6 +26,10 @@ export class AuthService {
           this.currentUserSubject.next(response.usuario);
         })
       );
+  }
+
+  registro(data: RegistroRequest): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, data);
   }
 
   logout(): void {

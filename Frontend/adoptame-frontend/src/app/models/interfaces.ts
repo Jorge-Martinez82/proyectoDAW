@@ -66,3 +66,18 @@ export interface UsuarioDto {
   rol: 'Protectora' | 'Adoptante';
   protectoraId?: number;
 }
+
+export interface RegistroRequest {
+  email: string;
+  password: string;
+  tipoUsuario: string;
+  nombre?: string;
+  apellidos?: string;
+  direccion?: string;
+  codigoPostal?: string;
+  poblacion?: string;
+  provincia?: string;
+  telefono?: string;
+  nombreProtectora?: string;
+}
+

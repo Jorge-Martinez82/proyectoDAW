@@ -8,83 +8,150 @@
             class="mx-2 flex flex-col items-center justify-around rounded-3xl bg-black bg-opacity-75 p-8 py-4 font-roboto text-white w-full min-w-[320px]">
         <h2 class="text-2xl font-bold mb-4">Registro</h2>
 
-        <!-- CAMPO NOMBRE -->
-        <div class="w-full mb-2">
-          <label for="nombre" class="text-sm font-medium text-white">Nombre</label>
-          <input type="text"
-                 id="nombre"
-                 formControlName="nombre"
-                 class="w-full rounded-lg bg-white py-2 px-4 text-gray-800 mt-1"
-                 placeholder="Introduce tu nombre"
-                 [class.border-red-500]="campoInvalido('nombre')" />
-          <small *ngIf="campoInvalido('nombre')" class="text-red-300 text-xs mt-1 block">
-            Nombre inválido (solo letras y espacios)
-          </small>
+        <div *ngIf="errorMessage" class="w-full mb-3 p-3 bg-red-500 text-white rounded-lg text-sm">
+          {{ errorMessage }}
         </div>
 
-        <!-- CAMPO APELLIDOS -->
-        <div class="w-full mb-2">
-          <label for="apellidos" class="text-sm font-medium text-white">Apellidos</label>
-          <input type="text"
-                 id="apellidos"
-                 formControlName="apellidos"
-                 class="w-full rounded-lg bg-white py-2 px-4 text-gray-800 mt-1"
-                 placeholder="Introduce tus apellidos"
-                 [class.border-red-500]="campoInvalido('apellidos')" />
+        <div class="flex gap-4 w-full mb-2">
+          <div class="flex-1">
+            <label for="email" class="text-sm font-medium text-white">Correo electrónico</label>
+            <input type="email"
+                   id="email"
+                   formControlName="email"
+                   class="w-full rounded-lg bg-white py-2 px-4 text-gray-800 mt-1"
+                   placeholder="Introduce tu correo electrónico"
+                   [class.border-red-500]="campoInvalido('email')" />
+            <small *ngIf="campoInvalido('email')" class="text-red-300 text-xs mt-1 block">
+              Correo inválido
+            </small>
+          </div>
+          <div class="flex-1">
+            <label for="password" class="text-sm font-medium text-white">Contraseña</label>
+            <input type="password"
+                   id="password"
+                   formControlName="password"
+                   class="w-full rounded-lg bg-white py-2 px-4 text-gray-800 mt-1"
+                   placeholder="Contraseña"
+                   [class.border-red-500]="campoInvalido('password')" />
+            <small *ngIf="campoInvalido('password')" class="text-red-300 text-xs mt-1 block">
+              Necesario mayúscula, minúscula, símbolo, número y 8 carácteres.
+            </small>
+          </div>
         </div>
 
-        <!-- CAMPO EMAIL -->
-        <div class="w-full mb-2">
-          <label for="email" class="text-sm font-medium text-white">Correo electrónico</label>
-          <input type="email"
-                 id="email"
-                 formControlName="email"
-                 class="w-full rounded-lg bg-white py-2 px-4 text-gray-800 mt-1"
-                 placeholder="Introduce tu correo electrónico"
-                 [class.border-red-500]="campoInvalido('email')" />
-          <small *ngIf="campoInvalido('email')" class="text-red-300 text-xs mt-1 block">
-            Correo inválido
-          </small>
-        </div>
-
-        <!-- CAMPO PASSWORD -->
-        <div class="w-full mb-2">
-          <label for="password" class="text-sm font-medium text-white">Contraseña</label>
-          <input type="password"
-                 id="password"
-                 formControlName="password"
-                 class="w-full rounded-lg bg-white py-2 px-4 text-gray-800 mt-1"
-                 placeholder="Introduce tu contraseña"
-                 [class.border-red-500]="campoInvalido('password')" />
-          <small *ngIf="campoInvalido('password')" class="text-red-300 text-xs mt-1 block">
-            Mínimo 8 caracteres: 1 mayúscula, 1 minúscula, 1 número y 1 símbolo.
-          </small>
-        </div>
-
-        <!-- RADIOS TIPO USUARIO -->
         <div class="w-full mt-2 mb-4">
           <div class="flex gap-4 justify-center">
             <label class="flex items-center cursor-pointer">
               <input type="radio"
-                     formControlName="tipo_usuario"
-                     value="adoptante"
+                     formControlName="tipoUsuario"
+                     value="Adoptante"
                      class="mr-2 accent-customBlue size-4" />
               Soy adoptante
             </label>
             <label class="flex items-center cursor-pointer">
               <input type="radio"
-                     formControlName="tipo_usuario"
-                     value="protectora"
+                     formControlName="tipoUsuario"
+                     value="Protectora"
                      class="mr-2 accent-customBlue size-4" />
               Soy protectora
             </label>
           </div>
-          <small *ngIf="campoInvalido('tipo_usuario')" class="text-red-300 text-xs text-center block mt-1">
+          <small *ngIf="campoInvalido('tipoUsuario')" class="text-red-300 text-xs text-center block mt-1">
             Selecciona una opción
           </small>
         </div>
 
-        <!-- BOTÓN -->
+        <ng-container *ngIf="esAdoptante">
+          <div class="flex gap-4 w-full mb-2">
+            <div class="flex-1">
+              <label for="nombre" class="text-sm font-medium text-white">Nombre *</label>
+              <input type="text"
+                     id="nombre"
+                     formControlName="nombre"
+                     class="w-full rounded-lg bg-white py-2 px-4 text-gray-800 mt-1"
+                     placeholder="Nombre"
+                     [class.border-red-500]="campoInvalido('nombre')" />
+              <small *ngIf="campoInvalido('nombre')" class="text-red-300 text-xs mt-1 block">
+                Nombre inválido
+              </small>
+            </div>
+            <div class="flex-1">
+              <label for="apellidos" class="text-sm font-medium text-white">Apellidos *</label>
+              <input type="text"
+                     id="apellidos"
+                     formControlName="apellidos"
+                     class="w-full rounded-lg bg-white py-2 px-4 text-gray-800 mt-1"
+                     placeholder="Apellidos"
+                     [class.border-red-500]="campoInvalido('apellidos')" />
+              <small *ngIf="campoInvalido('apellidos')" class="text-red-300 text-xs mt-1 block">
+                Apellidos inválidos
+              </small>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="esProtectora">
+          <div class="w-full mb-2">
+            <label for="nombreProtectora" class="text-sm font-medium text-white">Nombre de la protectora *</label>
+            <input type="text"
+                   id="nombreProtectora"
+                   formControlName="nombreProtectora"
+                   class="w-full rounded-lg bg-white py-2 px-4 text-gray-800 mt-1"
+                   placeholder="Nombre de la protectora"
+                   [class.border-red-500]="campoInvalido('nombreProtectora')" />
+            <small *ngIf="campoInvalido('nombreProtectora')" class="text-red-300 text-xs mt-1 block">
+              Obligatorio
+            </small>
+          </div>
+        </ng-container>
+
+        <div class="flex gap-4 w-full mb-2">
+          <div class="flex-1">
+            <label for="direccion" class="text-sm font-medium text-white">Dirección</label>
+            <input type="text"
+                   id="direccion"
+                   formControlName="direccion"
+                   class="w-full rounded-lg bg-white py-2 px-4 text-gray-800 mt-1"
+                   placeholder="Dirección" />
+          </div>
+          <div class="flex-1">
+            <label for="codigoPostal" class="text-sm font-medium text-white">Código postal</label>
+            <input type="text"
+                   id="codigoPostal"
+                   formControlName="codigoPostal"
+                   class="w-full rounded-lg bg-white py-2 px-4 text-gray-800 mt-1"
+                   placeholder="Código postal" />
+          </div>
+        </div>
+
+        <div class="flex gap-4 w-full mb-2">
+          <div class="flex-1">
+            <label for="poblacion" class="text-sm font-medium text-white">Población</label>
+            <input type="text"
+                   id="poblacion"
+                   formControlName="poblacion"
+                   class="w-full rounded-lg bg-white py-2 px-4 text-gray-800 mt-1"
+                   placeholder="Población" />
+          </div>
+          <div class="flex-1">
+            <label for="provincia" class="text-sm font-medium text-white">Provincia</label>
+            <input type="text"
+                   id="provincia"
+                   formControlName="provincia"
+                   class="w-full rounded-lg bg-white py-2 px-4 text-gray-800 mt-1"
+                   placeholder="Provincia" />
+          </div>
+        </div>
+
+        <div class="w-full mb-2">
+          <label for="telefono" class="text-sm font-medium text-white">Teléfono</label>
+          <input type="text"
+                 id="telefono"
+                 formControlName="telefono"
+                 class="w-full rounded-lg bg-white py-2 px-4 text-gray-800 mt-1"
+                 placeholder="Teléfono" />
+        </div>
+
         <div class="w-full flex justify-center mt-2">
           <app-boton-principal [tipo]="'submit'"
                                [texto]="loading ? 'Registrando...' : 'Registrarse'"
@@ -92,8 +159,11 @@
                                class="w-full sm:w-auto">
           </app-boton-principal>
         </div>
+
+        <p class="mt-4 text-sm text-white">
+          ¿Ya tienes cuenta? <a routerLink="/login" class="text-customBlue hover:underline">Inicia sesión</a>
+        </p>
       </form>
     </div>
-
   </section>
 </main>
