@@ -13,6 +13,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<Animal> Animales { get; set; } = null!;
     public DbSet<Protectora> Protectoras { get; set; } = null!;
     public DbSet<Usuario> Usuarios { get; set; } = null!;
+    public DbSet<Adoptante> Adoptantes { get; set; } = null!;
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -67,5 +69,18 @@ public class ApplicationDbContext : DbContext
             .HasOne(p => p.User)
             .WithMany(u => u.Protectoras)
             .HasForeignKey(p => p.UserId);
+        modelBuilder.Entity<Adoptante>()
+            .ToTable("Adoptantes")
+            .HasKey(a => a.Id);
+
+        modelBuilder.Entity<Adoptante>()
+            .Property(a => a.UserId)
+            .HasColumnName("UserId");
+
+        modelBuilder.Entity<Adoptante>()
+            .HasOne(a => a.Usuario)
+            .WithMany(u => u.Adoptantes)
+            .HasForeignKey(a => a.UserId);
+
     }
 }

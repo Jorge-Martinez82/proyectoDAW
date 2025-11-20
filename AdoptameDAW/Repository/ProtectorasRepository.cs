@@ -46,5 +46,12 @@ public class ProtectorasRepository : IProtectorasRepository
         return (protectoras, total);
     }
 
-   
+    public async Task<Protectora> CreateAsync(Protectora protectora)
+    {
+        protectora.Uuid = Guid.NewGuid();
+        protectora.CreatedAt = DateTime.UtcNow;
+
+        await _context.Protectoras.AddAsync(protectora);
+        return protectora;
+    }
 }

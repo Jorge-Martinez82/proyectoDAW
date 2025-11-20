@@ -1,16 +1,22 @@
-using AdoptameDAW.Data;
+﻿using AdoptameDAW.Data;
 using AdoptameDAW.Repositories;
+using AdoptameDAW.Repository;
 using AdoptameDAW.Services;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using AdoptameDAW.Mappings;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+
 
 
 // DbContext
@@ -29,6 +35,9 @@ builder.Services.AddScoped<ProtectorasService>();
 
 builder.Services.AddScoped<IUsuariosRepository, UsuariosRepository>();
 builder.Services.AddScoped<UsuariosService>();
+
+builder.Services.AddScoped<IAdoptantesRepository, AdoptantesRepository>();
+
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = Encoding.ASCII.GetBytes(jwtSettings["SecretKey"]!);

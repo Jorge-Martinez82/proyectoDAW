@@ -9,4 +9,6 @@ public interface IProtectorasRepository
         int pageNumber,
         int pageSize,
         string? provincia = null);
+    Task<Protectora> CreateAsync(Protectora protectora);
+
 }

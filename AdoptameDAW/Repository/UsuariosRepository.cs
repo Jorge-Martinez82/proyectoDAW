@@ -31,7 +31,6 @@ public class UsuariosRepository : IUsuariosRepository
         usuario.CreatedAt = DateTime.UtcNow;
 
         await _context.Usuarios.AddAsync(usuario);
-        await _context.SaveChangesAsync();
 
         return usuario;
     }

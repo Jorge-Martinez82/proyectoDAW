@@ -31,7 +31,7 @@ public class UsuariosController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult<UsuarioDto>> Register([FromBody] RegistroRequestDto request)
+    public async Task<ActionResult<object>> Register([FromBody] RegistroRequestDto request)
     {
         if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
             return BadRequest(new { mensaje = "Email y contraseña son requeridos" });
@@ -41,16 +41,17 @@ public class UsuariosController : ControllerBase
 
         try
         {
-            var usuario = await _service.RegisterAsync(request);
+            var usuario = await _service.RegistroAsync(request);
 
             if (usuario == null)
                 return Conflict(new { mensaje = "El email ya está registrado" });
 
-            return CreatedAtAction(nameof(Register), new { id = usuario.Uuid }, usuario);
+            return Ok(usuario);
         }
         catch (ArgumentException ex)
         {
             return BadRequest(new { mensaje = ex.Message });
         }
     }
+
 }

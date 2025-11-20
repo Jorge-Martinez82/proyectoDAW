@@ -8,9 +8,9 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-
         CreateMap<Animal, AnimalDto>().ReverseMap();
         CreateMap<Protectora, ProtectoraDto>().ReverseMap();
         CreateMap<Usuario, UsuarioDto>().ReverseMap();
+        CreateMap<Adoptante, AdoptanteDto>().ReverseMap();
     }
 }

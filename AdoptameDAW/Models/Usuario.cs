@@ -15,4 +15,6 @@ public partial class Usuario
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 
     public ICollection<Protectora> Protectoras { get; set; } = new List<Protectora>();
+
+    public ICollection<Adoptante> Adoptantes { get; set; } = new List<Adoptante>();
 }
