@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProtectorasService } from './protectoras.service';
+import { ProtectorasService } from '../../services/protectoras.service';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TarjetaProtectoras } from '../../components/tarjeta-protectoras/tarjeta-protectoras';

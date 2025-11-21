@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BotonPrincipal } from '../../components/boton-principal/boton-principal';
 import { AuthService } from '../../services/auth.service';
-import { ProtectorasService } from '../protectoras/protectoras.service';
+import { ProtectorasService } from '../../services/protectoras.service';
 
 @Component({
   selector: 'app-perfil',
