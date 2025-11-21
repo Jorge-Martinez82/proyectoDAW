@@ -20,45 +20,90 @@
       </div>
 
       <div class="p-8 min-h-[500px] flex flex-col justify-start">
-        <ng-container *ngIf="pestanaSeleccionada === 'datosPersonales' && usuario">
-          <div class="grid grid-cols-1 gap-4">
-            <div>
-              <label for="nombre" class="text-xl block mb-2">Nombre:</label>
-              <input type="text" name="nombre" class="w-full bg-gray-200 rounded-lg border-2 border-black px-4 py-2" [value]="usuario?.nombre" />
+        <ng-container *ngIf="pestanaSeleccionada === 'datosPersonales'">
+          <form [formGroup]="form" (ngSubmit)="actualizarDatos()" class="grid grid-cols-1 gap-4">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="nombre" class="text-xl block mb-2">Nombre:</label>
+                <input id="nombre" type="text" formControlName="nombre" class="w-full bg-gray-200 rounded-lg border-2 px-4 py-2"
+                       [class.border-red-500]="campoInvalido('nombre')" />
+                <small *ngIf="campoInvalido('nombre')" class="text-red-500">Nombre requerido</small>
+              </div>
+              <div>
+                <label for="apellidos" class="text-xl block mb-2">Apellidos:</label>
+                <input id="apellidos" type="text" formControlName="apellidos" class="w-full bg-gray-200 rounded-lg border-2 px-4 py-2"
+                       [class.border-red-500]="campoInvalido('apellidos')" />
+                <small *ngIf="campoInvalido('apellidos')" class="text-red-500">Apellidos requeridos</small>
+              </div>
             </div>
-            <div>
-              <label for="apellidos" class="text-xl block mb-2">Apellidos:</label>
-              <input type="text" name="apellidos" class="w-full bg-gray-200 rounded-lg border-2 border-black px-4 py-2" [value]="usuario?.apellidos" />
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="direccion" class="text-xl block mb-2">Dirección:</label>
+                <input id="direccion" type="text" formControlName="direccion" class="w-full bg-gray-200 rounded-lg border-2 px-4 py-2"
+                       [class.border-red-500]="campoInvalido('direccion')" />
+                <small *ngIf="campoInvalido('direccion')" class="text-red-500">Dirección requerida</small>
+              </div>
+              <div>
+                <label for="codigoPostal" class="text-xl block mb-2">Código Postal:</label>
+                <input id="codigoPostal" type="text" formControlName="codigoPostal" class="w-full bg-gray-200 rounded-lg border-2 px-4 py-2"
+                       [class.border-red-500]="campoInvalido('codigoPostal')" />
+                <small *ngIf="campoInvalido('codigoPostal')" class="text-red-500">Formato inválido (5 dígitos)</small>
+              </div>
             </div>
-            <div>
-              <label for="ciudad" class="text-xl block mb-2">Ciudad:</label>
-              <input type="text" name="ciudad" class="w-full bg-gray-200 rounded-lg border-2 border-black px-4 py-2" [value]="usuario?.direccion" />
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="poblacion" class="text-xl block mb-2">Población:</label>
+                <input id="poblacion" type="text" formControlName="poblacion" class="w-full bg-gray-200 rounded-lg border-2 px-4 py-2"
+                       [class.border-red-500]="campoInvalido('poblacion')" />
+                <small *ngIf="campoInvalido('poblacion')" class="text-red-500">Población requerida</small>
+              </div>
+              <div>
+                <label for="provincia" class="text-xl block mb-2">Provincia:</label>
+                <input id="provincia" type="text" formControlName="provincia" class="w-full bg-gray-200 rounded-lg border-2 px-4 py-2"
+                       [class.border-red-500]="campoInvalido('provincia')" />
+                <small *ngIf="campoInvalido('provincia')" class="text-red-500">Provincia requerida</small>
+              </div>
             </div>
-            <div>
-              <label for="provincia" class="text-xl block mb-2">Provincia:</label>
-              <input type="text" name="provincia" class="w-full bg-gray-200 rounded-lg border-2 border-black px-4 py-2" [value]="usuario?.provincia" />
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="telefono" class="text-xl block mb-2">Teléfono:</label>
+                <input id="telefono" type="text" formControlName="telefono" class="w-full bg-gray-200 rounded-lg border-2 px-4 py-2"
+                       [class.border-red-500]="campoInvalido('telefono')" />
+                <small *ngIf="campoInvalido('telefono')" class="text-red-500">Teléfono inválido</small>
+              </div>
+              <div>
+                <label for="email" class="text-xl block mb-2">Correo electrónico:</label>
+                <input id="email" type="email" formControlName="email" class="w-full bg-gray-200 rounded-lg border-2 px-4 py-2"
+                       [class.border-red-500]="campoInvalido('email')" />
+                <small *ngIf="campoInvalido('email')" class="text-red-500">Email inválido</small>
+              </div>
             </div>
-            <div>
-              <label for="correo" class="text-xl block mb-2">Correo electrónico:</label>
-              <input type="email" name="correo" class="w-full bg-gray-200 rounded-lg border-2 border-black px-4 py-2" [value]="usuario?.email" />
+            <div class="w-full flex justify-center pt-4 border-t border-gray-100">
+              <app-boton-principal [tipo]="'submit'"
+                                   [texto]="guardando ? 'Guardando...' : 'Actualizar'"
+                                   [disabled]="guardando || form.invalid"
+                                   class="w-full sm:w-auto mt-6">
+              </app-boton-principal>
             </div>
-          </div>
+
+          </form>
+
         </ng-container>
 
         <ng-container *ngIf="pestanaSeleccionada === 'solicitudes'">
           <div class="text-center">
-            <p class="text-lg font-semibold mt-8">Opciones de configuración</p>
-            <p class="mt-4 text-gray-600">Aquí se mostrarán las opciones de configuración...</p>
+            <p class="text-lg font-semibold mt-8">Solicitudes</p>
+            <p class="mt-4 text-gray-600">Aquí se mostrarán las solicitudes de adopción (pendiente de implementación).</p>
           </div>
         </ng-container>
-      </div>
 
-      <div class="flex justify-center pb-8 border-t border-gray-100">
-        <button class="mt-6 px-6 py-2 bg-customBlue hover:bg-customBlueHover rounded-full text-white text-lg transition"
-                (click)="actualizarDatos()">
-          Actualizar
-        </button>
+        <div *ngIf="cargando" class="text-center mt-6">Cargando...</div>
+        <div *ngIf="error" class="text-center mt-6 text-red-600">{{ error }}</div>
       </div>
     </div>
-    </section>
+  </section>
 </main>
