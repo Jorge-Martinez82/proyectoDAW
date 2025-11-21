@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AnimalesService } from '../animales/animales.service';
+import { AnimalesService } from '../../services/animales.service';
 import { AnimalDto } from '../../models/interfaces';
 import { BotonVolver } from '../../components/boton-volver/boton-volver';
 import { Spinner } from '../../components/spinner/spinner';

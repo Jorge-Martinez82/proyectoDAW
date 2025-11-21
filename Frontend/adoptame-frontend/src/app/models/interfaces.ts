@@ -81,3 +81,14 @@ export interface RegistroRequest {
   nombreProtectora?: string;
 }
 
+export interface AdoptanteDto {
+  uuid: string;
+  nombre: string;
+  apellidos: string;
+  direccion: string;
+  codigoPostal: string;
+  poblacion: string;
+  provincia: string;
+  telefono: string;
+  email: string;
+}

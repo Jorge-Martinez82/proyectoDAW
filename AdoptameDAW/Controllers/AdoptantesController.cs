@@ -2,6 +2,7 @@ using AdoptameDAW.Models.DTOs;
 using AdoptameDAW.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace AdoptameDAW.Controllers;
@@ -29,13 +30,13 @@ public class AdoptantesController : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<AdoptanteDto>> AdoptantesControllerGetById(Guid id)
     {
-        var adoptante = await _service.AdoptantesServiceGetById(id);
+        var adoptante = await _service.AdoptantesServiceGetByUuid(id);
         if (adoptante == null)
             return NotFound(new { mensaje = "Adoptante no encontrado" });
         return Ok(adoptante);
     }
 
-    [Authorize] 
+    [Authorize]
     [HttpGet("me")]
     public async Task<ActionResult<AdoptanteDto>> AdoptantesControllerGetMe()
     {
@@ -43,13 +44,15 @@ public class AdoptantesController : ControllerBase
         if (userIdClaim == null)
             return Unauthorized();
 
-        if (!Guid.TryParse(userIdClaim.Value, out Guid userId))
+        if (!Guid.TryParse(userIdClaim.Value, out Guid userUuid))
             return Unauthorized();
 
-        var adoptante = await _service.AdoptantesServiceGetById(userId);
+        var adoptante = await _service.AdoptantesServiceGetByUuid(userUuid);
         if (adoptante == null)
             return NotFound(new { mensaje = "Adoptante no encontrado" });
 
         return Ok(adoptante);
     }
+
+
 }

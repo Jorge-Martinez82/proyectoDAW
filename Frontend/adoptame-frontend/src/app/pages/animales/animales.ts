@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AnimalesService } from './animales.service';
+import { AnimalesService } from '../../services/animales.service';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TarjetaAnimales } from '../../components/tarjeta-animales/tarjeta-animales';

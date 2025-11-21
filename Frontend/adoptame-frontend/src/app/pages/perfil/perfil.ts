@@ -1,46 +1,52 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { AdoptantesService } from '../../services/perfil.service';
+import { AdoptanteDto } from '../../models/interfaces';
 import { CommonModule } from '@angular/common';
-
-interface Usuario {
-  nombre: string;
-  apellidos: string;
-  ciudad: string;
-  provincia: string;
-  correo: string;
-  tipo: 'adoptante' | 'protectora';
-}
-
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil.html',
+  standalone: true,
   imports: [CommonModule]
 })
 export class Perfil implements OnInit {
-
   pestanaSeleccionada: string = 'datosPersonales';
-  usuario: Usuario | null = null;
+  usuario: AdoptanteDto | null = null;
+  cargando: boolean = false;
+  error: string | null = null;
 
-  constructor(private router: Router) { }
+  constructor(private adoptantesService: AdoptantesService) { }
 
   ngOnInit(): void {
+    this.cargarPerfil();
+  }
 
-    this.usuario = {
-      nombre: 'Juan',
-      apellidos: 'Martínez',
-      ciudad: 'Bilbao',
-      provincia: 'Bizkaia',
-      correo: 'juanmartinez@example.com',
-      tipo: 'adoptante'  
-    };
+  cargarPerfil() {
+    this.cargando = true;
+    this.adoptantesService.getPerfil().subscribe({
+      next: (datos) => {
+        this.usuario = datos;
+        this.cargando = false;
+      },
+      error: (err) => {
+        this.error = 'No se pudo cargar el perfil.';
+        this.cargando = false;
+      }
+    });
   }
 
   seleccionarPestana(pestana: string): void {
-
     this.pestanaSeleccionada = pestana;
   }
 
   actualizarDatos(): void {
-    alert('Datos actualizados (simulado)');
+    if (this.usuario) {
+      this.adoptantesService.actualizarPerfil(this.usuario).subscribe({
+        next: (actualizado) => {
+          alert('Datos actualizados correctamente');
+          this.usuario = actualizado;
+        },
+        error: () => alert('Error al actualizar los datos')
+      });
+    }
   }
 }

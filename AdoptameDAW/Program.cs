@@ -37,6 +37,8 @@ builder.Services.AddScoped<IUsuariosRepository, UsuariosRepository>();
 builder.Services.AddScoped<UsuariosService>();
 
 builder.Services.AddScoped<IAdoptantesRepository, AdoptantesRepository>();
+builder.Services.AddScoped<AdoptantesService>();
+
 
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");

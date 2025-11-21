@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { AnimalesService } from '../animales/animales.service';
+import { AnimalesService } from '../../services/animales.service';
 import { AnimalDto } from '../../models/interfaces';
 import { BotonVolver } from '../../components/boton-volver/boton-volver';
 import { BotonPrincipal } from '../../components/boton-principal/boton-principal';
