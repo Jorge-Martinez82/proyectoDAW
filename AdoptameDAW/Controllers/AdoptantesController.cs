@@ -2,7 +2,6 @@ using AdoptameDAW.Models.DTOs;
 using AdoptameDAW.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace AdoptameDAW.Controllers;
@@ -19,18 +18,18 @@ public class AdoptantesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult> AdoptantesControllerGetAll(
+    public async Task<ActionResult> GetAll(
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await _service.AdoptantesServiceGetAll(pageNumber, pageSize);
+        var result = await _service.GetAllAsync(pageNumber, pageSize);
         return Ok(result);
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<AdoptanteDto>> AdoptantesControllerGetById(Guid id)
+    public async Task<ActionResult<AdoptanteDto>> GetByAdoptanteUuid(Guid id)
     {
-        var adoptante = await _service.AdoptantesServiceGetByUuid(id);
+        var adoptante = await _service.GetByAdoptanteUuidAsync(id);
         if (adoptante == null)
             return NotFound(new { mensaje = "Adoptante no encontrado" });
         return Ok(adoptante);
@@ -38,21 +37,43 @@ public class AdoptantesController : ControllerBase
 
     [Authorize]
     [HttpGet("me")]
-    public async Task<ActionResult<AdoptanteDto>> AdoptantesControllerGetMe()
+    public async Task<ActionResult<AdoptanteDto>> GetMe()
     {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier) ?? User.FindFirst("sub");
-        if (userIdClaim == null)
+        var userUuid = GetUserUuidFromToken();
+        if (userUuid == null)
             return Unauthorized();
 
-        if (!Guid.TryParse(userIdClaim.Value, out Guid userUuid))
-            return Unauthorized();
-
-        var adoptante = await _service.AdoptantesServiceGetByUuid(userUuid);
+        var adoptante = await _service.GetByUsuarioUuidAsync(userUuid.Value);
         if (adoptante == null)
             return NotFound(new { mensaje = "Adoptante no encontrado" });
 
         return Ok(adoptante);
     }
 
+    [Authorize]
+    [HttpPut("me")]
+    public async Task<ActionResult> UpdateMe([FromBody] AdoptanteDto dto)
+    {
+        var userUuid = GetUserUuidFromToken();
+        if (userUuid == null)
+            return Unauthorized();
 
+        var existing = await _service.GetByUsuarioUuidAsync(userUuid.Value);
+        if (existing == null)
+            return NotFound(new { mensaje = "Adoptante no encontrado" });
+
+        var ok = await _service.UpdateAsync(existing.Uuid, dto);
+        if (!ok)
+            return BadRequest(new { mensaje = "No se pudo actualizar el adoptante" });
+
+        var actualizado = await _service.GetByAdoptanteUuidAsync(existing.Uuid);
+        return Ok(actualizado);
+    }
+
+    private Guid? GetUserUuidFromToken()
+    {
+        var userIdToken = User.FindFirst(ClaimTypes.NameIdentifier) ?? User.FindFirst("sub");
+        if (userIdToken == null) return null;
+        return Guid.TryParse(userIdToken.Value, out var guid) ? guid : null;
+    }
 }

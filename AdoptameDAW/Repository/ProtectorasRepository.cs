@@ -13,18 +13,16 @@ public class ProtectorasRepository : IProtectorasRepository
         _context = context;
     }
 
-    public async Task<Protectora?> ProtectorasRepositoryGetById(Guid id)
+    public async Task<Protectora?> GetByUuidAsync(Guid uuid)
     {
         return await _context.Protectoras
             .Include(p => p.User)
             .Include(p => p.Animales)
-            .FirstOrDefaultAsync(p => p.Uuid == id);
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.Uuid == uuid);
     }
 
-    public async Task<(IEnumerable<Protectora> protectoras, int total)> ProtectorasRepositoryGetAll(
-        int pageNumber,
-        int pageSize,
-        string? provincia = null)
+    public async Task<(IEnumerable<Protectora> protectoras, int total)> GetAllAsync(int pageNumber, int pageSize, string? provincia = null)
     {
         var query = _context.Protectoras
             .Include(p => p.User)
@@ -32,7 +30,7 @@ public class ProtectorasRepository : IProtectorasRepository
 
         if (!string.IsNullOrEmpty(provincia))
         {
-            query = query.Where(p => p.Provincia.ToLower() == provincia.ToLower());
+            query = query.Where(p => p.Provincia != null && p.Provincia.ToLower() == provincia.ToLower());
         }
 
         var total = await query.CountAsync();
@@ -46,12 +44,12 @@ public class ProtectorasRepository : IProtectorasRepository
         return (protectoras, total);
     }
 
-    public async Task<Protectora> ProtectorasRepositoryCreate(Protectora protectora)
+    public async Task<Protectora> CreateAsync(Protectora protectora)
     {
         protectora.Uuid = Guid.NewGuid();
         protectora.CreatedAt = DateTime.UtcNow;
-
         await _context.Protectoras.AddAsync(protectora);
+        await _context.SaveChangesAsync();
         return protectora;
     }
 }

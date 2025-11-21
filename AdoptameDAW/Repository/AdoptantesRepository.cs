@@ -14,25 +14,36 @@ namespace AdoptameDAW.Repository
             _context = context;
         }
 
-        public async Task<Adoptante?> AdoptantesRepositoryGetByUuid(Guid id)
+        public async Task<Adoptante?> GetByUuidAsync(Guid adoptanteUuid)
         {
             return await _context.Adoptantes
                 .Include(a => a.Usuario)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(a => a.Uuid == id);
+                .FirstOrDefaultAsync(a => a.Uuid == adoptanteUuid);
         }
 
-        public async Task<Adoptante?> AdoptantesRepositoryGetById(int userId)
+        public async Task<Adoptante?> GetByIdAsync(int id)
         {
             return await _context.Adoptantes
                 .Include(a => a.Usuario)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(a => a.UserId == userId);
+                .FirstOrDefaultAsync(a => a.Id == id);
         }
 
-        public async Task<(IEnumerable<Adoptante> adoptantes, int total)> AdoptantesRepositoryGetAll(
-            int pageNumber,
-            int pageSize)
+        public async Task<Adoptante?> GetByUsuarioUuidAsync(Guid usuarioUuid)
+        {
+            var usuario = await _context.Usuarios
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Uuid == usuarioUuid);
+            if (usuario == null) return null;
+
+            return await _context.Adoptantes
+                .Include(a => a.Usuario)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(a => a.UserId == usuario.Id);
+        }
+
+        public async Task<(IEnumerable<Adoptante> adoptantes, int total)> GetAllAsync(int pageNumber, int pageSize)
         {
             var query = _context.Adoptantes
                 .Include(a => a.Usuario)
@@ -49,23 +60,19 @@ namespace AdoptameDAW.Repository
             return (adoptantes, total);
         }
 
-        public async Task<Adoptante> AdoptantesRepositoryCreate(Adoptante adoptante)
+        public async Task<Adoptante> CreateAsync(Adoptante adoptante)
         {
             adoptante.Uuid = Guid.NewGuid();
             adoptante.CreatedAt = DateTime.UtcNow;
-
             await _context.Adoptantes.AddAsync(adoptante);
-
-            return adoptante; 
+            await _context.SaveChangesAsync();
+            return adoptante;
         }
 
-        public async Task<bool> AdoptantesRepositoryUpdate(Adoptante adoptante)
+        public async Task<bool> UpdateAsync(Adoptante adoptante)
         {
-            var entidad = await _context.Adoptantes
-                .FirstOrDefaultAsync(a => a.Uuid == adoptante.Uuid);
-
-            if (entidad == null)
-                return false;
+            var entidad = await _context.Adoptantes.FirstOrDefaultAsync(a => a.Uuid == adoptante.Uuid);
+            if (entidad == null) return false;
 
             entidad.Nombre = adoptante.Nombre;
             entidad.Apellidos = adoptante.Apellidos;
@@ -77,8 +84,8 @@ namespace AdoptameDAW.Repository
             entidad.Email = adoptante.Email;
 
             _context.Adoptantes.Update(entidad);
-
-            return true;
+            var cambios = await _context.SaveChangesAsync();
+            return cambios > 0;
         }
     }
 }

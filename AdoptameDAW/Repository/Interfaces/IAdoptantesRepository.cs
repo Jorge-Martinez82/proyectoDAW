@@ -4,11 +4,10 @@ namespace AdoptameDAW.Repositories;
 
 public interface IAdoptantesRepository
 {
-    Task<Adoptante?> AdoptantesRepositoryGetByUuid(Guid id);
-    Task<Adoptante?> AdoptantesRepositoryGetById(int id);
-    Task<(IEnumerable<Adoptante> adoptantes, int total)> AdoptantesRepositoryGetAll(
-        int pageNumber,
-        int pageSize);
-    Task<Adoptante> AdoptantesRepositoryCreate(Adoptante adoptante);
-    Task<bool> AdoptantesRepositoryUpdate(Adoptante adoptante);
+    Task<Adoptante?> GetByUuidAsync(Guid adoptanteUuid);
+    Task<Adoptante?> GetByIdAsync(int id);
+    Task<Adoptante?> GetByUsuarioUuidAsync(Guid usuarioUuid);
+    Task<(IEnumerable<Adoptante> adoptantes, int total)> GetAllAsync(int pageNumber, int pageSize);
+    Task<Adoptante> CreateAsync(Adoptante adoptante);
+    Task<bool> UpdateAsync(Adoptante adoptante);
 }

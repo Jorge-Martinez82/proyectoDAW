@@ -1,5 +1,4 @@
-﻿using AdoptameDAW.Data;
-using AdoptameDAW.Models;
+﻿using AdoptameDAW.Models;
 using AdoptameDAW.Models.DTOs;
 using AdoptameDAW.Repositories;
 using AutoMapper;
@@ -13,39 +12,31 @@ namespace AdoptameDAW.Services;
 
 public class UsuariosService
 {
-    private readonly IUsuariosRepository _repository;
+    private readonly IUsuariosRepository _usuariosRepository;
     private readonly IAdoptantesRepository _adoptantesRepository;
     private readonly IProtectorasRepository _protectorasRepository;
-    private readonly ApplicationDbContext _context;
     private readonly IMapper _mapper;
     private readonly IConfiguration _configuration;
 
     public UsuariosService(
-        IUsuariosRepository repository,
+        IUsuariosRepository usuariosRepository,
         IAdoptantesRepository adoptantesRepository,
         IProtectorasRepository protectorasRepository,
-        ApplicationDbContext context,
         IMapper mapper,
         IConfiguration configuration)
     {
-        _repository = repository;
+        _usuariosRepository = usuariosRepository;
         _adoptantesRepository = adoptantesRepository;
         _protectorasRepository = protectorasRepository;
-        _context = context;
         _mapper = mapper;
         _configuration = configuration;
     }
 
-
-    public async Task<LoginResponseDto?> UsuariosServiceLogin(LoginRequest request)
+    public async Task<LoginResponseDto?> LoginAsync(LoginRequest request)
     {
-        var usuario = await _repository.UsuariosRepositoryGetByEmail(request.Email);
-
-        if (usuario == null)
-            return null;
-
-        if (!BCrypt.Net.BCrypt.EnhancedVerify(request.Password, usuario.PasswordHash))
-            return null;
+        var usuario = await _usuariosRepository.GetByEmailAsync(request.Email);
+        if (usuario == null) return null;
+        if (!BCrypt.Net.BCrypt.EnhancedVerify(request.Password, usuario.PasswordHash)) return null;
 
         var token = GenerateJwtToken(usuario);
         var usuarioDto = _mapper.Map<UsuarioDto>(usuario);
@@ -57,79 +48,54 @@ public class UsuariosService
         };
     }
 
-    public async Task<object?> UsuariosServiceRegistro(RegistroRequestDto request)
+    public async Task<object?> RegisterAsync(RegistroRequestDto request)
     {
-        var existingUser = await _repository.UsuariosRepositoryGetByEmail(request.Email);
-        if (existingUser != null)
-            return null;
+        var existingUser = await _usuariosRepository.GetByEmailAsync(request.Email);
+        if (existingUser != null) return null;
 
         if (request.TipoUsuario != "Protectora" && request.TipoUsuario != "Adoptante")
             throw new ArgumentException("Tipo de usuario inválido");
 
-        using var transaction = await _context.Database.BeginTransactionAsync();
-        try
+        var usuario = new Usuario
         {
-            var usuario = new Usuario
+            Email = request.Email,
+            PasswordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Password, 13),
+            TipoUsuario = request.TipoUsuario
+        };
+        await _usuariosRepository.CreateAsync(usuario);
+
+        if (request.TipoUsuario == "Adoptante")
+        {
+            var adoptante = new Adoptante
             {
+                Nombre = request.Nombre!,
+                Apellidos = request.Apellidos!,
+                Direccion = request.Direccion ?? string.Empty,
+                CodigoPostal = request.CodigoPostal ?? string.Empty,
+                Poblacion = request.Poblacion ?? string.Empty,
+                Provincia = request.Provincia ?? string.Empty,
+                Telefono = request.Telefono ?? string.Empty,
                 Email = request.Email,
-                PasswordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Password, 13),
-                TipoUsuario = request.TipoUsuario
+                UserId = usuario.Id
             };
-
-            await _repository.UsuariosRepositoryCreate(usuario);
-            await _context.SaveChangesAsync();
-
-            if (request.TipoUsuario == "Adoptante")
-            {
-                var adoptante = new Adoptante
-                {
-                    Nombre = request.Nombre!,
-                    Apellidos = request.Apellidos!,
-                    Direccion = request.Direccion,
-                    CodigoPostal = request.CodigoPostal,
-                    Poblacion = request.Poblacion,
-                    Provincia = request.Provincia,
-                    Telefono = request.Telefono,
-                    Email = request.Email,
-                    UserId = usuario.Id 
-                };
-
-                await _adoptantesRepository.AdoptantesRepositoryCreate(adoptante);
-                await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
-
-                return _mapper.Map<AdoptanteDto>(adoptante);
-            }
-            else
-            {
-                var protectora = new Protectora
-                {
-                    Nombre = request.NombreProtectora!,
-                    Direccion = request.Direccion,
-                    Telefono = request.Telefono,
-                    Provincia = request.Provincia,
-                    Email = request.Email,
-                    UserId = usuario.Id 
-                };
-
-                await _protectorasRepository.ProtectorasRepositoryCreate(protectora);
-                await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
-
-                return _mapper.Map<ProtectoraDto>(protectora);
-            }
+            await _adoptantesRepository.CreateAsync(adoptante);
+            return _mapper.Map<AdoptanteDto>(adoptante);
         }
-        catch (Exception)
+        else
         {
-            if (_context.Database.CurrentTransaction != null)
+            var protectora = new Protectora
             {
-                await _context.Database.CurrentTransaction.RollbackAsync();
-            }
-            throw;
+                Nombre = request.NombreProtectora!,
+                Direccion = request.Direccion,
+                Telefono = request.Telefono,
+                Provincia = request.Provincia,
+                Email = request.Email,
+                UserId = usuario.Id
+            };
+            await _protectorasRepository.CreateAsync(protectora);
+            return _mapper.Map<ProtectoraDto>(protectora);
         }
     }
-
-
 
     private string GenerateJwtToken(Usuario usuario)
     {

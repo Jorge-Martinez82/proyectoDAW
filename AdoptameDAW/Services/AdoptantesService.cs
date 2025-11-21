@@ -1,9 +1,7 @@
-using AdoptameDAW.Data; 
 using AdoptameDAW.Models;
 using AdoptameDAW.Models.DTOs;
 using AdoptameDAW.Repositories;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 
 namespace AdoptameDAW.Services
 {
@@ -11,39 +9,31 @@ namespace AdoptameDAW.Services
     {
         private readonly IAdoptantesRepository _repository;
         private readonly IMapper _mapper;
-        private readonly ApplicationDbContext _context;
 
-        public AdoptantesService(IAdoptantesRepository repository, IMapper mapper, ApplicationDbContext context)
+        public AdoptantesService(IAdoptantesRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
-            _context = context;
         }
 
-        public async Task<AdoptanteDto?> AdoptantesServiceGetByUuid(Guid userUuid)
+        public async Task<AdoptanteDto?> GetByUsuarioUuidAsync(Guid usuarioUuid)
         {
-            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Uuid == userUuid);
-            if (usuario == null)
-                return null;
-
-            var adoptante = await _repository.AdoptantesRepositoryGetById(usuario.Id);
-            if (adoptante == null)
-                return null;
-
-            return _mapper.Map<AdoptanteDto>(adoptante);
+            var adoptante = await _repository.GetByUsuarioUuidAsync(usuarioUuid);
+            return adoptante == null ? null : _mapper.Map<AdoptanteDto>(adoptante);
         }
 
+        public async Task<AdoptanteDto?> GetByAdoptanteUuidAsync(Guid adoptanteUuid)
+        {
+            var adoptante = await _repository.GetByUuidAsync(adoptanteUuid);
+            return adoptante == null ? null : _mapper.Map<AdoptanteDto>(adoptante);
+        }
 
-
-        public async Task<object> AdoptantesServiceGetAll(int pageNumber, int pageSize)
+        public async Task<object> GetAllAsync(int pageNumber, int pageSize)
         {
             pageSize = pageSize > 12 ? 12 : pageSize;
             pageNumber = pageNumber < 1 ? 1 : pageNumber;
 
-            var (adoptantes, total) = await _repository.AdoptantesRepositoryGetAll(
-                pageNumber,
-                pageSize);
-
+            var (adoptantes, total) = await _repository.GetAllAsync(pageNumber, pageSize);
             var adoptantesDto = _mapper.Map<IEnumerable<AdoptanteDto>>(adoptantes);
 
             return new
@@ -56,24 +46,19 @@ namespace AdoptameDAW.Services
             };
         }
 
-        public async Task<bool> AdoptantesServiceUpdate(Guid id, AdoptanteDto dto)
+        public async Task<bool> UpdateAsync(Guid adoptanteUuid, AdoptanteDto dto)
         {
-            var entidad = await _repository.AdoptantesRepositoryGetByUuid(id);
-            if (entidad == null)
-                return false;
+            var entidad = await _repository.GetByUuidAsync(adoptanteUuid);
+            if (entidad == null) return false;
 
             _mapper.Map(dto, entidad);
-            var ok = await _repository.AdoptantesRepositoryUpdate(entidad);
-            await _context.SaveChangesAsync();
-
-            return ok;
+            return await _repository.UpdateAsync(entidad);
         }
 
-        public async Task<AdoptanteDto> AdoptantesServiceCreate(AdoptanteDto dto)
+        public async Task<AdoptanteDto> CreateAsync(AdoptanteDto dto)
         {
             var entidad = _mapper.Map<Adoptante>(dto);
-            var creado = await _repository.AdoptantesRepositoryCreate(entidad);
-            await _context.SaveChangesAsync();
+            var creado = await _repository.CreateAsync(entidad);
             return _mapper.Map<AdoptanteDto>(creado);
         }
     }

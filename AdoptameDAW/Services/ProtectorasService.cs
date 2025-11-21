@@ -16,25 +16,18 @@ public class ProtectorasService
         _mapper = mapper;
     }
 
-    public async Task<ProtectoraDto?> ProtectorasServiceGetById(Guid id)
+    public async Task<ProtectoraDto?> GetByUuidAsync(Guid uuid)
     {
-        var protectora = await _repository.ProtectorasRepositoryGetById(id);
+        var protectora = await _repository.GetByUuidAsync(uuid);
         return protectora == null ? null : _mapper.Map<ProtectoraDto>(protectora);
     }
 
-    public async Task<object> ProtectorasServiceGetAll(
-        int pageNumber,
-        int pageSize,
-        string? provincia = null)
+    public async Task<object> GetAllAsync(int pageNumber, int pageSize, string? provincia = null)
     {
         pageSize = pageSize > 12 ? 12 : pageSize;
         pageNumber = pageNumber < 1 ? 1 : pageNumber;
 
-        var (protectoras, total) = await _repository.ProtectorasRepositoryGetAll(
-            pageNumber,
-            pageSize,
-            provincia);
-
+        var (protectoras, total) = await _repository.GetAllAsync(pageNumber, pageSize, provincia);
         var protectorasDto = _mapper.Map<IEnumerable<ProtectoraDto>>(protectoras);
 
         return new
@@ -46,6 +39,4 @@ public class ProtectorasService
             totalPages = (int)Math.Ceiling(total / (double)pageSize)
         };
     }
-
-    
 }
