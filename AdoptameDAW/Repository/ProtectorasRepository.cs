@@ -52,4 +52,35 @@ public class ProtectorasRepository : IProtectorasRepository
         await _context.SaveChangesAsync();
         return protectora;
     }
+
+    public async Task<Protectora?> GetByUsuarioUuidAsync(Guid usuarioUuid)
+    {
+        var usuario = await _context.Usuarios
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Uuid == usuarioUuid);
+        if (usuario == null) return null;
+
+        return await _context.Protectoras
+            .Include(p => p.User)
+            .Include(p => p.Animales)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.UserId == usuario.Id);
+    }
+
+    public async Task<bool> UpdateAsync(Protectora protectora)
+    {
+        var entidad = await _context.Protectoras.FirstOrDefaultAsync(p => p.Uuid == protectora.Uuid);
+        if (entidad == null) return false;
+
+        entidad.Nombre = protectora.Nombre;
+        entidad.Direccion = protectora.Direccion;
+        entidad.Telefono = protectora.Telefono;
+        entidad.Provincia = protectora.Provincia;
+        entidad.Email = protectora.Email;
+        entidad.Imagen = protectora.Imagen;
+
+        _context.Protectoras.Update(entidad);
+        var cambios = await _context.SaveChangesAsync();
+        return cambios > 0;
+    }
 }

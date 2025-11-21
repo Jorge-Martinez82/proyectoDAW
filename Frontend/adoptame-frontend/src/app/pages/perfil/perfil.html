@@ -1,29 +1,25 @@
 <main>
   <section id="perfil" class="flex h-auto flex-col items-center justify-center bg-customPurple bg-[url('/assets/img/huellas.png')] bg-cover bg-center px-6 py-24 md:flex-row">
-
     <div class="w-full max-w-6xl bg-white rounded-lg shadow-lg mx-4">
       <div class="flex justify-between px-8 pt-8 rounded-lg border-customBlue bg-gray-200">
         <button (click)="seleccionarPestana('datosPersonales')"
                 class="font-bold text-customBlue text-lg md:text-xl pb-3 transition border-b-4"
-                [class.border-customBlue]="pestanaSeleccionada === 'datosPersonales'"
-                [class.text-customBlue]="pestanaSeleccionada === 'datosPersonales'"
-                [class.text-gray-500]="pestanaSeleccionada !== 'datosPersonales'">
+                [class.border-customBlue]="pestanaSeleccionada === 'datosPersonales'">
           Datos personales
         </button>
         <button (click)="seleccionarPestana('solicitudes')"
                 class="font-bold text-lg md:text-xl pb-3 transition border-b-4"
-                [class.border-customBlue]="pestanaSeleccionada === 'solicitudes'"
-                [class.text-customBlue]="pestanaSeleccionada === 'solicitudes'"
-                [class.text-gray-500]="pestanaSeleccionada !== 'solicitudes'">
+                [class.border-customBlue]="pestanaSeleccionada === 'solicitudes'">
           Solicitudes
         </button>
       </div>
 
       <div class="p-8 min-h-[500px] flex flex-col justify-start">
-        <ng-container *ngIf="pestanaSeleccionada === 'datosPersonales'">
-          <form [formGroup]="form" (ngSubmit)="actualizarDatos()" class="grid grid-cols-1 gap-4">
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <ng-container *ngIf="pestanaSeleccionada === 'datosPersonales'">
+          <form [formGroup]="form" (ngSubmit)="actualizarDatos()" class="grid grid-cols-1 gap-6">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" *ngIf="rol === 'Adoptante'">
               <div>
                 <label for="nombre" class="text-xl block mb-2">Nombre:</label>
                 <input id="nombre" type="text" formControlName="nombre" class="w-full bg-gray-200 rounded-lg border-2 px-4 py-2"
@@ -38,34 +34,40 @@
               </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label for="direccion" class="text-xl block mb-2">Dirección:</label>
-                <input id="direccion" type="text" formControlName="direccion" class="w-full bg-gray-200 rounded-lg border-2 px-4 py-2"
-                       [class.border-red-500]="campoInvalido('direccion')" />
-                <small *ngIf="campoInvalido('direccion')" class="text-red-500">Dirección requerida</small>
-              </div>
+            <div *ngIf="rol === 'Protectora'">
+              <label for="nombre" class="text-xl block mb-2">Nombre de la protectora:</label>
+              <input id="nombre" type="text" formControlName="nombre" class="w-full bg-gray-200 rounded-lg border-2 px-4 py-2"
+                     [class.border-red-500]="campoInvalido('nombre')" />
+              <small *ngIf="campoInvalido('nombre')" class="text-red-500">Nombre requerido</small>
+            </div>
+
+            <div>
+              <label for="direccion" class="text-xl block mb-2">Dirección:</label>
+              <input id="direccion" type="text" formControlName="direccion" class="w-full bg-gray-200 rounded-lg border-2 px-4 py-2"
+                     [class.border-red-500]="campoInvalido('direccion')" />
+              <small *ngIf="campoInvalido('direccion')" class="text-red-500">Dirección requerida</small>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" *ngIf="rol === 'Adoptante'">
               <div>
                 <label for="codigoPostal" class="text-xl block mb-2">Código Postal:</label>
                 <input id="codigoPostal" type="text" formControlName="codigoPostal" class="w-full bg-gray-200 rounded-lg border-2 px-4 py-2"
                        [class.border-red-500]="campoInvalido('codigoPostal')" />
-                <small *ngIf="campoInvalido('codigoPostal')" class="text-red-500">Formato inválido (5 dígitos)</small>
+                <small *ngIf="campoInvalido('codigoPostal')" class="text-red-500">Formato inválido</small>
               </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label for="poblacion" class="text-xl block mb-2">Población:</label>
                 <input id="poblacion" type="text" formControlName="poblacion" class="w-full bg-gray-200 rounded-lg border-2 px-4 py-2"
                        [class.border-red-500]="campoInvalido('poblacion')" />
                 <small *ngIf="campoInvalido('poblacion')" class="text-red-500">Población requerida</small>
               </div>
-              <div>
-                <label for="provincia" class="text-xl block mb-2">Provincia:</label>
-                <input id="provincia" type="text" formControlName="provincia" class="w-full bg-gray-200 rounded-lg border-2 px-4 py-2"
-                       [class.border-red-500]="campoInvalido('provincia')" />
-                <small *ngIf="campoInvalido('provincia')" class="text-red-500">Provincia requerida</small>
-              </div>
+            </div>
+
+            <div>
+              <label for="provincia" class="text-xl block mb-2">Provincia:</label>
+              <input id="provincia" type="text" formControlName="provincia" class="w-full bg-gray-200 rounded-lg border-2 px-4 py-2"
+                     [class.border-red-500]="campoInvalido('provincia')" />
+              <small *ngIf="campoInvalido('provincia')" class="text-red-500">Provincia requerida</small>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -82,6 +84,7 @@
                 <small *ngIf="campoInvalido('email')" class="text-red-500">Email inválido</small>
               </div>
             </div>
+
             <div class="w-full flex justify-center pt-4 border-t border-gray-100">
               <app-boton-principal [tipo]="'submit'"
                                    [texto]="guardando ? 'Guardando...' : 'Actualizar'"
@@ -91,7 +94,6 @@
             </div>
 
           </form>
-
         </ng-container>
 
         <ng-container *ngIf="pestanaSeleccionada === 'solicitudes'">

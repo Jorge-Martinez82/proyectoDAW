@@ -10,4 +10,6 @@ public interface IProtectorasRepository
         int pageSize,
         string? provincia = null);
     Task<Protectora> CreateAsync(Protectora protectora);
+    Task<Protectora?> GetByUsuarioUuidAsync(Guid usuarioUuid);
+    Task<bool> UpdateAsync(Protectora protectora);
 }

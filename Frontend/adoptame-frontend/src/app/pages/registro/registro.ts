@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { BotonPrincipal } from '../../components/boton-principal/boton-principal';
@@ -19,8 +19,8 @@ export class Registro {
   private fb = inject(FormBuilder);
 
   registroForm: FormGroup;
-  errorMessage: string = '';
-  loading: boolean = false;
+  errorMessage = '';
+  loading = false;
 
   constructor() {
     this.registroForm = this.fb.group({
@@ -30,14 +30,17 @@ export class Registro {
         Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$/)
       ]],
       tipoUsuario: ['', Validators.required],
-      nombre: ['', [Validators.required, Validators.pattern('[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]{1,25}')]],
-      apellidos: ['', [Validators.required, Validators.pattern('[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]{1,50}')]],
-      direccion: ['', Validators.required],
-      codigoPostal: ['', Validators.required],
-      poblacion: ['', Validators.required],
-      provincia: ['', Validators.required],
-      telefono: ['', Validators.required],
-      nombreProtectora: ['', []]
+
+      nombre: [''],
+      apellidos: [''],
+      codigoPostal: [''],
+      poblacion: [''],
+ 
+      direccion: [''],
+      provincia: [''],
+      telefono: [''],
+ 
+      nombreProtectora: ['']
     });
 
     this.registroForm.get('tipoUsuario')?.valueChanges.subscribe(tipo => {
@@ -45,86 +48,104 @@ export class Registro {
     });
   }
 
-  actualizarValidaciones(tipo: string): void {
-    const nombreControl = this.registroForm.get('nombre');
-    const apellidosControl = this.registroForm.get('apellidos');
-    const nombreProtectoraControl = this.registroForm.get('nombreProtectora');
+  get esAdoptante(): boolean {
+    return this.registroForm.get('tipoUsuario')?.value === 'Adoptante';
+  }
+  get esProtectora(): boolean {
+    return this.registroForm.get('tipoUsuario')?.value === 'Protectora';
+  }
 
-    nombreControl?.clearValidators();
-    apellidosControl?.clearValidators();
-    nombreProtectoraControl?.clearValidators();
+  private setValidators(ctrl: AbstractControl | null, validators: any[] = []): void {
+    if (!ctrl) return;
+    ctrl.setValidators(validators);
+    ctrl.updateValueAndValidity({ emitEvent: false });
+  }
+
+  private limpiarCamposNoAplicables(): void {
+    if (this.esProtectora) {
+      ['nombre', 'apellidos', 'codigoPostal', 'poblacion'].forEach(c => {
+        const ctrl = this.registroForm.get(c);
+        if (ctrl) {
+          ctrl.setValue('');
+          ctrl.markAsPristine();
+          ctrl.markAsUntouched();
+        }
+      });
+    } else if (this.esAdoptante) {
+      const protectoraCtrl = this.registroForm.get('nombreProtectora');
+      if (protectoraCtrl) {
+        protectoraCtrl.setValue('');
+        protectoraCtrl.markAsPristine();
+        protectoraCtrl.markAsUntouched();
+      }
+    }
+  }
+
+  actualizarValidaciones(tipo: string): void {
+
+    this.setValidators(this.registroForm.get('direccion'), [Validators.required]);
+    this.setValidators(this.registroForm.get('provincia'), [Validators.required]);
+    this.setValidators(this.registroForm.get('telefono'), [Validators.required]);
 
     if (tipo === 'Adoptante') {
-      nombreControl?.setValidators([Validators.required, Validators.pattern('[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]{1,25}')]);
-      apellidosControl?.setValidators([Validators.required, Validators.pattern('[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]{1,50}')]);
-      nombreProtectoraControl?.setValidators([]);
+      this.setValidators(this.registroForm.get('nombre'), [Validators.required, Validators.pattern('[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]{1,25}')]);
+      this.setValidators(this.registroForm.get('apellidos'), [Validators.required, Validators.pattern('[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]{1,50}')]);
+      this.setValidators(this.registroForm.get('codigoPostal'), []);
+      this.setValidators(this.registroForm.get('poblacion'), []);
+      this.setValidators(this.registroForm.get('nombreProtectora'), []);
     } else if (tipo === 'Protectora') {
-      nombreProtectoraControl?.setValidators([Validators.required]);
-      nombreControl?.setValidators([]);
-      apellidosControl?.setValidators([]);
+      this.setValidators(this.registroForm.get('nombreProtectora'), [Validators.required]);
+
+      this.setValidators(this.registroForm.get('nombre'), []);
+      this.setValidators(this.registroForm.get('apellidos'), []);
+      this.setValidators(this.registroForm.get('codigoPostal'), []);
+      this.setValidators(this.registroForm.get('poblacion'), []);
     }
 
-    nombreControl?.updateValueAndValidity();
-    apellidosControl?.updateValueAndValidity();
-    nombreProtectoraControl?.updateValueAndValidity();
+    this.limpiarCamposNoAplicables();
   }
 
   onSubmit(): void {
-    if (this.registroForm.valid) {
-      this.loading = true;
-      this.errorMessage = '';
-
-      const payload: RegistroRequest = this.crearPayload();
-
-      this.authService.registro(payload).subscribe({
-        next: () => {
-          this.router.navigateByUrl('/login');
-        },
-        error: err => {
-          this.loading = false;
-          this.errorMessage = err.error?.message || 'Error al registrar. El email puede estar en uso.';
-        },
-        complete: () => {
-          this.loading = false;
-        }
-      });
-    } else {
+    if (this.registroForm.invalid) {
       this.registroForm.markAllAsTouched();
+      return;
     }
-  }
+    this.loading = true;
+    this.errorMessage = '';
 
-  crearPayload(): RegistroRequest {
     const v = this.registroForm.value;
-    const data: RegistroRequest = {
+    const payload: RegistroRequest = {
       email: v.email,
       password: v.password,
       tipoUsuario: v.tipoUsuario,
-      direccion: v.direccion,
-      codigoPostal: v.codigoPostal,
-      poblacion: v.poblacion,
-      provincia: v.provincia,
-      telefono: v.telefono
+      direccion: v.direccion || '',
+      codigoPostal: this.esAdoptante ? v.codigoPostal || '' : undefined,
+      poblacion: this.esAdoptante ? v.poblacion || '' : undefined,
+      provincia: v.provincia || '',
+      telefono: v.telefono || ''
     };
-    if (v.tipoUsuario === 'Adoptante') {
-      data.nombre = v.nombre;
-      data.apellidos = v.apellidos;
+
+    if (this.esAdoptante) {
+      payload.nombre = v.nombre;
+      payload.apellidos = v.apellidos;
+    } else if (this.esProtectora) {
+      payload.nombreProtectora = v.nombreProtectora;
     }
-    if (v.tipoUsuario === 'Protectora') {
-      data.nombreProtectora = v.nombreProtectora;
-    }
-    return data;
+
+    this.authService.registro(payload).subscribe({
+      next: () => {
+        this.loading = false;
+        this.router.navigateByUrl('/login');
+      },
+      error: err => {
+        this.loading = false;
+        this.errorMessage = err.error?.mensaje || 'Error al registrar. El email puede estar en uso.';
+      }
+    });
   }
 
   campoInvalido(campo: string): boolean {
     const control = this.registroForm.get(campo);
     return !!(control && control.invalid && control.touched);
-  }
-
-  get esAdoptante(): boolean {
-    return this.registroForm.get('tipoUsuario')?.value === 'Adoptante';
-  }
-
-  get esProtectora(): boolean {
-    return this.registroForm.get('tipoUsuario')?.value === 'Protectora';
   }
 }

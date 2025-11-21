@@ -1,6 +1,8 @@
 ﻿using AdoptameDAW.Models.DTOs;
 using AdoptameDAW.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AdoptameDAW.Controllers;
 
@@ -33,5 +35,40 @@ public class ProtectorasController : ControllerBase
             return NotFound(new { mensaje = "Protectora no encontrada" });
 
         return Ok(protectora);
+    }
+
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<ActionResult<ProtectoraDto>> GetMe()
+    {
+        var userIdToken = User.FindFirst(ClaimTypes.NameIdentifier) ?? User.FindFirst("sub");
+        if (userIdToken == null) return Unauthorized();
+        if (!Guid.TryParse(userIdToken.Value, out var userUuid)) return Unauthorized();
+
+        var protectora = await _service.GetByUsuarioUuidAsync(userUuid);
+        if (protectora == null)
+            return NotFound(new { mensaje = "Protectora no encontrada" });
+
+        return Ok(protectora);
+    }
+
+    [Authorize]
+    [HttpPut("me")]
+    public async Task<ActionResult> UpdateMe([FromBody] ProtectoraDto dto)
+    {
+        var userIdToken = User.FindFirst(ClaimTypes.NameIdentifier) ?? User.FindFirst("sub");
+        if (userIdToken == null) return Unauthorized();
+        if (!Guid.TryParse(userIdToken.Value, out var userUuid)) return Unauthorized();
+
+        var existing = await _service.GetByUsuarioUuidAsync(userUuid);
+        if (existing == null)
+            return NotFound(new { mensaje = "Protectora no encontrada" });
+
+        var ok = await _service.UpdateAsync(existing.Uuid, dto);
+        if (!ok)
+            return BadRequest(new { mensaje = "No se pudo actualizar la protectora" });
+
+        var actualizado = await _service.GetByUuidAsync(existing.Uuid);
+        return Ok(actualizado);
     }
 }

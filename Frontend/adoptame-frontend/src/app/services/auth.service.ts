@@ -52,8 +52,9 @@ export class AuthService {
   }
 
   getUserRole(): 'Protectora' | 'Adoptante' | null {
-    const user = this.getCurrentUser();
-    return user ? user.rol : null;
+    const user: any = this.getCurrentUser();
+    if (!user) return null;
+    return user.rol || user.tipoUsuario || null;
   }
 
   private getUserFromStorage(): UsuarioDto | null {

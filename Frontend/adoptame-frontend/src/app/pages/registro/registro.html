@@ -115,6 +115,17 @@
                    placeholder="Dirección" />
           </div>
           <div class="flex-1">
+            <label for="provincia" class="text-sm font-medium text-white">Provincia</label>
+            <input type="text"
+                   id="provincia"
+                   formControlName="provincia"
+                   class="w-full rounded-lg bg-white py-2 px-4 text-gray-800 mt-1"
+                   placeholder="Provincia" />
+          </div>
+        </div>
+
+        <div class="flex gap-4 w-full mb-2" *ngIf="esAdoptante">
+          <div class="flex-1">
             <label for="codigoPostal" class="text-sm font-medium text-white">Código postal</label>
             <input type="text"
                    id="codigoPostal"
@@ -122,9 +133,6 @@
                    class="w-full rounded-lg bg-white py-2 px-4 text-gray-800 mt-1"
                    placeholder="Código postal" />
           </div>
-        </div>
-
-        <div class="flex gap-4 w-full mb-2">
           <div class="flex-1">
             <label for="poblacion" class="text-sm font-medium text-white">Población</label>
             <input type="text"
@@ -132,14 +140,6 @@
                    formControlName="poblacion"
                    class="w-full rounded-lg bg-white py-2 px-4 text-gray-800 mt-1"
                    placeholder="Población" />
-          </div>
-          <div class="flex-1">
-            <label for="provincia" class="text-sm font-medium text-white">Provincia</label>
-            <input type="text"
-                   id="provincia"
-                   formControlName="provincia"
-                   class="w-full rounded-lg bg-white py-2 px-4 text-gray-800 mt-1"
-                   placeholder="Provincia" />
           </div>
         </div>
 

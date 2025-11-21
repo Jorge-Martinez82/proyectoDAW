@@ -30,4 +30,12 @@ export class ProtectorasService {
   getProtectoraById(uuid: string): Observable<ProtectoraDto> {
     return this.http.get<ProtectoraDto>(`${this.apiUrl}/${uuid}`);
   }
+
+  getPerfilProtectora(): Observable<ProtectoraDto> {
+    return this.http.get<ProtectoraDto>(`${this.apiUrl}/me`);
+  }
+
+  updateProtectora(datos: ProtectoraDto): Observable<ProtectoraDto> {
+    return this.http.put<ProtectoraDto>(`${this.apiUrl}/me`, datos);
+  }
 }

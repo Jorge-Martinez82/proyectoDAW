@@ -35,7 +35,6 @@ export class Login {
 
       this.authService.login(this.loginForm.value).subscribe({
         next: (response) => {
-          console.log('Login exitoso:', response);
           this.loading = false;
 
           const returnUrl = localStorage.getItem('returnUrl') || '/';
@@ -43,7 +42,6 @@ export class Login {
           this.router.navigateByUrl(returnUrl);
         },
         error: (error) => {
-          console.error('Error en login:', error);
           this.loading = false;
 
           if (error.status === 401) {

@@ -39,4 +39,19 @@ public class ProtectorasService
             totalPages = (int)Math.Ceiling(total / (double)pageSize)
         };
     }
+
+    public async Task<ProtectoraDto?> GetByUsuarioUuidAsync(Guid usuarioUuid)
+    {
+        var protectora = await _repository.GetByUsuarioUuidAsync(usuarioUuid);
+        return protectora == null ? null : _mapper.Map<ProtectoraDto>(protectora);
+    }
+
+    public async Task<bool> UpdateAsync(Guid protectoraUuid, ProtectoraDto dto)
+    {
+        var entidad = await _repository.GetByUuidAsync(protectoraUuid);
+        if (entidad == null) return false;
+
+        _mapper.Map(dto, entidad);
+        return await _repository.UpdateAsync(entidad);
+    }
 }
