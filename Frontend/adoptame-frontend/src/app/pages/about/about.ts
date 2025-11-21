@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
+import { BotonPrincipal } from '../../components/boton-principal/boton-principal';
+
 
 @Component({
   selector: 'app-about',
-  imports: [],
+  imports: [BotonPrincipal],
   templateUrl: './about.html',
   styleUrl: './about.css',
 })

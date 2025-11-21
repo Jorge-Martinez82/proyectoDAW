@@ -5,7 +5,7 @@
     <div class="absolute inset-0 bg-[url('assets/img/fondo_about.webp')] bg-cover bg-center opacity-30"></div>
   </section>
 
-  <section id="about" class="flex h-auto flex-col items-center justify-center bg-customPurple bg-[url('/assets/img/huellas.png')] bg-cover bg-center px-6 py-24 md:flex-row">
+  <section id="about" class="flex h-auto flex-col items-center justify-center bg-customPurple bg-[url('/assets/img/huellas.png')] bg-cover bg-center px-6 py-12 md:flex-row">
     <article class="flex w-full flex-col items-center p-6 md:w-1/2">
       <h2 class="text-center font-roboto text-2xl font-bold">Sobre nosotros</h2>
       <ul class="list-disc space-y-6 pl-10 pt-6 font-roboto font-bold">
@@ -20,14 +20,16 @@
       <h2 class="text-center font-roboto text-2xl font-bold">Contáctanos</h2>
       <form (ngSubmit)="onContactSubmit($event)" class="mx-auto flex h-64 w-full flex-col justify-around rounded-3xl font-roboto md:w-96">
         <label class="font-bold" for="nombre">Nombre</label>
-        <input type="text" class="w-full rounded-xl p-2 text-black" id="nombre" name="nombre" placeholder="Introduce tu nombre" maxlength="50" required />
+        <input type="text" class="w-full rounded-lg p-2 text-black" id="nombre" name="nombre" placeholder="Introduce tu nombre" maxlength="50" required />
 
         <label class="font-bold" for="mensaje">Mensaje</label>
-        <textarea class="w-full rounded-xl p-2 text-black h-15" id="mensaje" name="mensaje" placeholder="Escribe tu mensaje" maxlength="500" required></textarea>
+        <textarea class="w-full rounded-lg p-2 text-black h-15" id="mensaje" name="mensaje" placeholder="Escribe tu mensaje" maxlength="500" required></textarea>
 
-        <button class="self-center mt-5 w-32 rounded-full bg-customBlue p-2 text-white transition duration-300 hover:bg-customBlueHover" type="submit">
-          Enviar
-        </button>
+        <app-boton-principal [tipo]="'button'"
+                             [texto]="'Enviar'"
+                             [disabled]="false"
+                             class="text-center">
+        </app-boton-principal>
       </form>
     </article>
   </section>

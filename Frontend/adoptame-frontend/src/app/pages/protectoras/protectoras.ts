@@ -22,7 +22,7 @@ export class Protectoras implements OnInit {
   error: string | null = null;
 
   currentPage = 1;
-  pageSize = 12;
+  pageSize = 6;
   totalCount = 0;
 
   constructor(

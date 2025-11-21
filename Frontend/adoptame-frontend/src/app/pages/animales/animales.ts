@@ -75,14 +75,19 @@ export class Animales implements OnInit {
     this.currentPage = page;
     const currentFilters = this.route.snapshot.queryParams;
 
+    const queryParams: any = {
+      tipo: currentFilters['tipo'] || 'todos',
+      provincia: currentFilters['provincia'] || 'todos',
+      page: page
+    };
+
+    if (currentFilters['protectoraUuid']) {
+      queryParams.protectoraUuid = currentFilters['protectoraUuid'];
+    }
+
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: {
-        tipo: currentFilters['tipo'] || 'todos',
-        provincia: currentFilters['provincia'] || 'todos',
-        protectoraUuid: currentFilters['protectoraUuid'] || null,
-        page: page
-      },
+      queryParams,
       queryParamsHandling: 'merge'
     });
 
@@ -92,15 +97,20 @@ export class Animales implements OnInit {
   buscar(filtros: FiltrosBusqueda) {
     const currentFilters = this.route.snapshot.queryParams;
 
+    const queryParams: any = {
+      tipo: filtros.tipo !== 'todos' ? filtros.tipo : null,
+      provincia: filtros.provincia !== 'todos' ? filtros.provincia : null,
+      page: 1
+    };
+
+    const isGlobalSearch = filtros.tipo === 'todos' && filtros.provincia === 'todos';
+    if (!isGlobalSearch && currentFilters['protectoraUuid']) {
+      queryParams.protectoraUuid = currentFilters['protectoraUuid'];
+    }
+
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: {
-        tipo: filtros.tipo !== 'todos' ? filtros.tipo : null,
-        provincia: filtros.provincia !== 'todos' ? filtros.provincia : null,
-        protectoraUuid: currentFilters['protectoraUuid'] || null,
-        page: 1
-      }
+      queryParams
     });
   }
-
 }
