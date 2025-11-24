@@ -97,9 +97,34 @@
         </ng-container>
 
         <ng-container *ngIf="pestanaSeleccionada === 'solicitudes'">
-          <div class="text-center">
-            <p class="text-lg font-semibold mt-8">Solicitudes</p>
-            <p class="mt-4 text-gray-600">Aquí se mostrarán las solicitudes de adopción (pendiente de implementación).</p>
+          <div *ngIf="rol === 'Adoptante'" class="flex flex-col">
+            <h3 class="text-2xl font-semibold mb-4">Mis solicitudes de adopción</h3>
+            <div *ngIf="solicitudesCargando" class="text-gray-600">Cargando solicitudes...</div>
+            <div *ngIf="!solicitudesCargando && solicitudes.length === 0" class="text-gray-600">No tienes solicitudes todavía.</div>
+            <ul *ngIf="!solicitudesCargando && solicitudes.length > 0" class="space-y-3">
+              <li *ngFor="let s of solicitudes" class="p-4 border rounded-lg shadow-sm bg-gray-50 flex flex-col gap-4">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <div class="flex-1 min-w-0">
+                    <p class="font-semibold truncate">{{ s.animal?.nombre || 'Animal' }}</p>
+                    <p class="text-sm text-gray-600">
+                      Estado: <span [ngClass]="{
+                        'text-yellow-600': s.estado === 'pendiente',
+                        'text-green-600': s.estado === 'aceptada',
+                        'text-red-600': s.estado === 'rechazada'
+                      }">{{ s.estado }}</span>
+                    </p>
+                    <p class="text-sm mt-1" *ngIf="s.comentario">Comentario: {{ s.comentario }}</p>
+                    <p class="text-xs text-gray-400 mt-1">Fecha: {{ s.createdAt | date:'short' }}</p>
+                  </div>
+                  <div class="flex-shrink-0 flex justify-center md:justify-end">
+                    <img *ngIf="s.animal?.imagenPrincipal" [src]="s.animal?.imagenPrincipal" alt="{{ s.animal?.nombre }}" class="w-24 h-24 object-cover rounded-md border" />
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div *ngIf="rol !== 'Adoptante'" class="text-gray-600">
+            (Pendiente implementación vista para protectoras)
           </div>
         </ng-container>
 

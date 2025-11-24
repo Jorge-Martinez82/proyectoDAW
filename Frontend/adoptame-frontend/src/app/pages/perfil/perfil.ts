@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { AdoptantesService } from '../../services/perfil.service';
-import { AdoptanteDto, ProtectoraDto } from '../../models/interfaces';
+import { AdoptanteDto, ProtectoraDto, SolicitudDto, AnimalDto } from '../../models/interfaces';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BotonPrincipal } from '../../components/boton-principal/boton-principal';
 import { AuthService } from '../../services/auth.service';
 import { ProtectorasService } from '../../services/protectoras.service';
+import { ActivatedRoute } from '@angular/router';
+import { SolicitudesService } from '../../services/solicitudes.service';
+import { AnimalesService } from '../../services/animales.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-perfil',
@@ -24,17 +28,35 @@ export class Perfil implements OnInit {
   form!: FormGroup;
   guardando = false;
 
+  solicitudes: (SolicitudDto & { animal?: AnimalDto })[] = [];
+  solicitudesCargando = false;
+
   constructor(
     private adoptantesService: AdoptantesService,
     private protectorasService: ProtectorasService,
     private authService: AuthService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private solicitudesService: SolicitudesService,
+    private animalesService: AnimalesService
   ) { }
 
   ngOnInit(): void {
     this.rol = this.authService.getUserRole();
     this.inicializarFormulario();
+    const tab = this.route.snapshot.queryParamMap.get('tab');
+    if (tab === 'solicitudes') {
+      this.pestanaSeleccionada = 'solicitudes';
+    }
+    this.route.queryParamMap.subscribe(params => {
+      const t = params.get('tab');
+      if (t && t !== this.pestanaSeleccionada) {
+        this.pestanaSeleccionada = t;
+        if (t === 'solicitudes') this.cargarSolicitudes();
+      }
+    });
     this.cargarPerfil();
+    if (this.pestanaSeleccionada === 'solicitudes') this.cargarSolicitudes();
   }
 
   inicializarFormulario(): void {
@@ -68,7 +90,7 @@ export class Perfil implements OnInit {
           });
           this.cargando = false;
         },
-        error: (err) => {
+        error: () => {
           this.error = 'No se pudo cargar el perfil de adoptante.';
           this.cargando = false;
         }
@@ -102,6 +124,36 @@ export class Perfil implements OnInit {
     }
   }
 
+  cargarSolicitudes() {
+    if (this.rol !== 'Adoptante') return;
+    this.solicitudesCargando = true;
+    this.solicitudesService.getSolicitudesAdoptante().subscribe({
+      next: (res) => {
+        const base = (res.data || []) as SolicitudDto[];
+        this.solicitudes = base.map(s => ({ ...s }));
+        const uniqueUuids = [...new Set(base.map(b => b.animalUuid))];
+        if (uniqueUuids.length === 0) {
+          this.solicitudesCargando = false;
+          return;
+        }
+        forkJoin(uniqueUuids.map(u => this.animalesService.getAnimalById(u))).subscribe({
+          next: (animals) => {
+            const map = new Map<string, AnimalDto>(animals.map(a => [a.uuid, a]));
+            this.solicitudes = this.solicitudes.map(s => ({ ...s, animal: map.get(s.animalUuid) }));
+            this.solicitudesCargando = false;
+          },
+          error: () => {
+            this.solicitudesCargando = false;
+          }
+        });
+      },
+      error: () => {
+        this.solicitudes = [];
+        this.solicitudesCargando = false;
+      }
+    });
+  }
+
   campoInvalido(campo: string): boolean {
     const c = this.form.get(campo);
     return !!(c && c.invalid && (c.dirty || c.touched));
@@ -109,6 +161,7 @@ export class Perfil implements OnInit {
 
   seleccionarPestana(pestana: string): void {
     this.pestanaSeleccionada = pestana;
+    if (pestana === 'solicitudes') this.cargarSolicitudes();
   }
 
   actualizarDatos(): void {
@@ -136,7 +189,7 @@ export class Perfil implements OnInit {
           this.guardando = false;
           alert('Perfil de adoptante actualizado.');
         },
-        error: (err) => {
+        error: () => {
           this.guardando = false;
           alert('Error al actualizar adoptante.');
         }

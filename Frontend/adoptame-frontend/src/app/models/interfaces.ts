@@ -49,6 +49,21 @@ export interface SolicitudAdopcion {
   animalUuid: string;
 }
 
+export interface SolicitudDto {
+  id: number;
+  animalUuid: string;
+  usuarioAdoptanteUuid: string;
+  usuarioProtectoraUuid: string;
+  comentario: string | null;
+  estado: string;
+  createdAt: string;
+}
+
+export interface CrearSolicitudRequest {
+  animalUuid: string;
+  comentario: string;
+}
+
 export interface LoginRequest {
   email: string;
   password: string;

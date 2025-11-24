@@ -32,19 +32,21 @@
         <div class="my-2 w-full">
           <label for="comentario" class="font-medium text-white self-start">Comentario</label>
           <textarea id="comentario"
-                    class="w-full pl-4 rounded-lg bg-white p-2 text-gray-800 resize-none"
+                    formControlName="comentario"
+                    class="w-full pl-4 rounded-lg bg-white p-2 text-gray-800 resize-none focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    [class.border-red-500]="campoInvalido('comentario')"
                     placeholder="Escribe aquí tu motivo para adoptar"
                     rows="5"></textarea>
-          <small class="block mt-1 pl-4 text-gray-300">
-            Tus datos personales ya están asociados a la solicitud.
-            Puedes añadir información adicional sobre tu interés en adoptar.
+          <small class="block mt-1 pl-1 text-gray-300">
+            Tus datos personales ya están asociados a la solicitud. Añade información adicional sobre tu interés en adoptar.
           </small>
+          <div *ngIf="campoInvalido('comentario')" class="text-red-400 text-sm mt-1 pl-1">El comentario es obligatorio (máx 500 caracteres).</div>
         </div>
 
         <div class="mt-5">
           <app-boton-principal [tipo]="'submit'"
-                               [texto]="'Enviar solicitud'"
-                               [disabled]="formulario.invalid">
+                               [texto]="enviando ? 'Enviando...' : 'Enviar solicitud'"
+                               [disabled]="formulario.invalid || enviando">
           </app-boton-principal>
         </div>
       </form>
