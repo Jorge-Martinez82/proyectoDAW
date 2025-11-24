@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Location } from '@angular/common';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-boton-volver',
@@ -11,10 +12,15 @@ import { CommonModule } from '@angular/common';
 })
 export class BotonVolver {
   @Input() texto: string = 'Volver';
+  @Input() ruta?: string; 
 
-  constructor(private location: Location) { }
+  constructor(private location: Location, private router: Router) { }
 
   volver(): void {
-    this.location.back();
+    if (this.ruta) {
+      this.router.navigateByUrl(this.ruta);
+    } else {
+      this.location.back();
+    }
   }
 }

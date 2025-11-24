@@ -24,7 +24,7 @@ export class FormularioBusqueda {
     provincia: 'todos'
   };
 
-  provincias = ['Álava', 'Gipuzkoa', 'Bizkaia', 'Navarra'];
+  provincias = ['Álava', 'Guipúzcoa', 'Vizcaya', 'Navarra'];
   tipos = ['Perro', 'Gato', 'Roedor', 'Reptil'];
 
   buscar(): void {
