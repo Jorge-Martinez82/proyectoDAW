@@ -12,5 +12,9 @@ public class MappingProfile : Profile
         CreateMap<Protectora, ProtectoraDto>().ReverseMap();
         CreateMap<Usuario, UsuarioDto>().ReverseMap();
         CreateMap<Adoptante, AdoptanteDto>().ReverseMap();
+        CreateMap<Solicitud, SolicitudDto>()
+            .ForMember(d => d.AnimalUuid, o => o.MapFrom(s => s.Animal.Uuid))
+            .ForMember(d => d.UsuarioAdoptanteUuid, o => o.MapFrom(s => s.UsuarioAdoptante.Uuid))
+            .ForMember(d => d.UsuarioProtectoraUuid, o => o.MapFrom(s => s.UsuarioProtectora.Uuid));
     }
 }

@@ -14,7 +14,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Protectora> Protectoras { get; set; } = null!;
     public DbSet<Usuario> Usuarios { get; set; } = null!;
     public DbSet<Adoptante> Adoptantes { get; set; } = null!;
-
+    public DbSet<Solicitud> Solicitudes { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -82,5 +82,57 @@ public class ApplicationDbContext : DbContext
             .WithMany(u => u.Adoptantes)
             .HasForeignKey(a => a.UserId);
 
+        modelBuilder.Entity<Solicitud>()
+            .ToTable("Solicitudes")
+            .HasKey(s => s.Id);
+
+        modelBuilder.Entity<Solicitud>()
+            .Property(s => s.UsuarioAdoptanteId)
+            .HasColumnName("usuario_adoptante_id")
+            .IsRequired();
+
+        modelBuilder.Entity<Solicitud>()
+            .Property(s => s.UsuarioProtectoraId)
+            .HasColumnName("usuario_protectora_id")
+            .IsRequired();
+
+        modelBuilder.Entity<Solicitud>()
+            .Property(s => s.AnimalId)
+            .HasColumnName("animal_id")
+            .IsRequired();
+
+        modelBuilder.Entity<Solicitud>()
+            .Property(s => s.Estado)
+            .HasColumnName("estado")
+            .IsRequired()
+            .HasMaxLength(15);
+
+        modelBuilder.Entity<Solicitud>()
+            .Property(s => s.CreatedAt)
+            .HasColumnName("CreatedAt")
+            .IsRequired();
+
+        modelBuilder.Entity<Solicitud>()
+            .Property(s => s.Comentario)
+            .HasColumnName("comentario")
+            .HasMaxLength(500);
+
+        modelBuilder.Entity<Solicitud>()
+            .HasOne(s => s.UsuarioAdoptante)
+            .WithMany() // sin colección en Usuario
+            .HasForeignKey(s => s.UsuarioAdoptanteId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Solicitud>()
+            .HasOne(s => s.UsuarioProtectora)
+            .WithMany() // sin colección en Usuario
+            .HasForeignKey(s => s.UsuarioProtectoraId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Solicitud>()
+            .HasOne(s => s.Animal)
+            .WithMany()
+            .HasForeignKey(s => s.AnimalId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

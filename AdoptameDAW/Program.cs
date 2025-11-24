@@ -5,7 +5,6 @@ using AdoptameDAW.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using AdoptameDAW.Mappings;
@@ -38,6 +37,9 @@ builder.Services.AddScoped<UsuariosService>();
 
 builder.Services.AddScoped<IAdoptantesRepository, AdoptantesRepository>();
 builder.Services.AddScoped<AdoptantesService>();
+
+builder.Services.AddScoped<ISolicitudesRepository, SolicitudesRepository>();
+builder.Services.AddScoped<SolicitudesService>();
 
 
 
@@ -94,6 +96,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowAngular");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
