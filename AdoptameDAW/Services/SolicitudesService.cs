@@ -5,6 +5,7 @@ using AutoMapper;
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AdoptameDAW.Services
 {
@@ -14,6 +15,7 @@ namespace AdoptameDAW.Services
         private readonly IAnimalesRepository _animalesRepository;
         private readonly IUsuariosRepository _usuariosRepository;
         private readonly IProtectorasRepository _protectorasRepository;
+        private readonly IAdoptantesRepository _adoptantesRepository;
         private readonly IMapper _mapper;
 
         public SolicitudesService(
@@ -21,12 +23,14 @@ namespace AdoptameDAW.Services
             IAnimalesRepository animalesRepository,
             IUsuariosRepository usuariosRepository,
             IProtectorasRepository protectorasRepository,
+            IAdoptantesRepository adoptantesRepository,
             IMapper mapper)
         {
             _solicitudesRepository = solicitudesRepository;
             _animalesRepository = animalesRepository;
             _usuariosRepository = usuariosRepository;
             _protectorasRepository = protectorasRepository;
+            _adoptantesRepository = adoptantesRepository;
             _mapper = mapper;
         }
 
@@ -53,7 +57,16 @@ namespace AdoptameDAW.Services
             };
 
             var creada = await _solicitudesRepository.CreateAsync(entidad);
-            return _mapper.Map<SolicitudDto>(creada);
+            var dto = _mapper.Map<SolicitudDto>(creada);
+            var adoptantePerfil = await _adoptantesRepository.GetByUsuarioUuidAsync(usuarioAdoptanteUuid);
+            if (adoptantePerfil != null)
+            {
+                dto.AdoptanteNombre = adoptantePerfil.Nombre;
+                dto.AdoptanteApellidos = adoptantePerfil.Apellidos;
+                dto.AdoptanteTelefono = adoptantePerfil.Telefono;
+                dto.AdoptanteEmail = adoptantePerfil.Email;
+            }
+            return dto;
         }
 
         public async Task<object> GetByAdoptanteAsync(Guid usuarioUuid, int pageNumber, int pageSize)
@@ -62,7 +75,19 @@ namespace AdoptameDAW.Services
             pageNumber = pageNumber < 1 ? 1 : pageNumber;
 
             var (solicitudes, total) = await _solicitudesRepository.GetByAdoptanteAsync(usuarioUuid, pageNumber, pageSize);
-            var dtos = _mapper.Map<IEnumerable<SolicitudDto>>(solicitudes);
+            var dtos = _mapper.Map<List<SolicitudDto>>(solicitudes);
+
+            var adoptantePerfil = await _adoptantesRepository.GetByUsuarioUuidAsync(usuarioUuid);
+            if (adoptantePerfil != null)
+            {
+                foreach (var d in dtos)
+                {
+                    d.AdoptanteNombre = adoptantePerfil.Nombre;
+                    d.AdoptanteApellidos = adoptantePerfil.Apellidos;
+                    d.AdoptanteTelefono = adoptantePerfil.Telefono;
+                    d.AdoptanteEmail = adoptantePerfil.Email;
+                }
+            }
 
             return new
             {
@@ -80,7 +105,25 @@ namespace AdoptameDAW.Services
             pageNumber = pageNumber < 1 ? 1 : pageNumber;
 
             var (solicitudes, total) = await _solicitudesRepository.GetByProtectoraAsync(usuarioUuid, pageNumber, pageSize);
-            var dtos = _mapper.Map<IEnumerable<SolicitudDto>>(solicitudes);
+            var dtos = _mapper.Map<List<SolicitudDto>>(solicitudes);
+
+            var adoptantesUuids = dtos.Select(d => d.UsuarioAdoptanteUuid).Distinct().ToList();
+            var cache = new Dictionary<Guid, Adoptante?>();
+            foreach (var au in adoptantesUuids)
+            {
+                var perf = await _adoptantesRepository.GetByUsuarioUuidAsync(au);
+                cache[au] = perf;
+            }
+            foreach (var d in dtos)
+            {
+                if (cache.TryGetValue(d.UsuarioAdoptanteUuid, out var perf) && perf != null)
+                {
+                    d.AdoptanteNombre = perf.Nombre;
+                    d.AdoptanteApellidos = perf.Apellidos;
+                    d.AdoptanteTelefono = perf.Telefono;
+                    d.AdoptanteEmail = perf.Email;
+                }
+            }
 
             return new
             {

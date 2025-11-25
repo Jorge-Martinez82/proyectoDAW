@@ -12,27 +12,24 @@ export class SolicitudesService {
 
   constructor(private http: HttpClient, private auth: AuthService) {}
 
-  crearSolicitud(data: CrearSolicitudRequest): Observable<SolicitudDto> {
+  private authHeaders(): HttpHeaders | undefined {
     const token = this.auth.getToken();
-    const headers = token ? new HttpHeaders({ 'Authorization': `Bearer ${token}` }) : undefined;
-    return this.http.post<SolicitudDto>(this.apiUrl, data, { headers });
+    return token ? new HttpHeaders({ 'Authorization': `Bearer ${token}` }) : undefined;
+  }
+
+  crearSolicitud(data: CrearSolicitudRequest): Observable<SolicitudDto> {
+    return this.http.post<SolicitudDto>(this.apiUrl, data, { headers: this.authHeaders() });
   }
 
   getSolicitudesAdoptante(pageNumber: number = 1, pageSize: number = 10): Observable<any> {
-    const token = this.auth.getToken();
-    const headers = token ? new HttpHeaders({ 'Authorization': `Bearer ${token}` }) : undefined;
-    return this.http.get<any>(`${this.apiUrl}/adoptante?pageNumber=${pageNumber}&pageSize=${pageSize}`, { headers });
+    return this.http.get<any>(`${this.apiUrl}/adoptante?pageNumber=${pageNumber}&pageSize=${pageSize}`, { headers: this.authHeaders() });
   }
 
   getSolicitudesProtectora(pageNumber: number = 1, pageSize: number = 10): Observable<any> {
-    const token = this.auth.getToken();
-    const headers = token ? new HttpHeaders({ 'Authorization': `Bearer ${token}` }) : undefined;
-    return this.http.get<any>(`${this.apiUrl}/protectora?pageNumber=${pageNumber}&pageSize=${pageSize}`, { headers });
+    return this.http.get<any>(`${this.apiUrl}/protectora?pageNumber=${pageNumber}&pageSize=${pageSize}`, { headers: this.authHeaders() });
   }
 
   actualizarEstado(id: number, estado: string): Observable<void> {
-    const token = this.auth.getToken();
-    const headers = token ? new HttpHeaders({ 'Authorization': `Bearer ${token}` }) : undefined;
-    return this.http.put<void>(`${this.apiUrl}/${id}/estado`, { estado }, { headers });
+    return this.http.put<void>(`${this.apiUrl}/${id}/estado`, { estado }, { headers: this.authHeaders() });
   }
 }

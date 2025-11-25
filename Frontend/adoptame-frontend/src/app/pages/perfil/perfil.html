@@ -100,7 +100,8 @@
           <div *ngIf="rol === 'Adoptante'" class="flex flex-col">
             <h3 class="text-2xl font-semibold mb-4">Mis solicitudes de adopción</h3>
             <div *ngIf="solicitudesCargando" class="text-gray-600">Cargando solicitudes...</div>
-            <div *ngIf="!solicitudesCargando && solicitudes.length === 0" class="text-gray-600">No tienes solicitudes todavía.</div>
+            <div *ngIf="solicitudesError" class="text-red-600">{{ solicitudesError }}</div>
+            <div *ngIf="!solicitudesCargando && solicitudes.length === 0 && !solicitudesError" class="text-gray-600">No tienes solicitudes todavía.</div>
             <ul *ngIf="!solicitudesCargando && solicitudes.length > 0" class="space-y-3">
               <li *ngFor="let s of solicitudes" class="p-4 border rounded-lg shadow-sm bg-gray-50 flex flex-col gap-4">
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -110,7 +111,8 @@
                       Estado: <span [ngClass]="{
                         'text-yellow-600': s.estado === 'pendiente',
                         'text-green-600': s.estado === 'aceptada',
-                        'text-red-600': s.estado === 'rechazada'
+                        'text-red-600': s.estado === 'rechazada',
+                        'text-gray-600': s.estado === 'actualizando'
                       }">{{ s.estado }}</span>
                     </p>
                     <p class="text-sm mt-1" *ngIf="s.comentario">Comentario: {{ s.comentario }}</p>
@@ -123,8 +125,44 @@
               </li>
             </ul>
           </div>
-          <div *ngIf="rol !== 'Adoptante'" class="text-gray-600">
-            (Pendiente implementación vista para protectoras)
+
+          <div *ngIf="rol === 'Protectora'" class="flex flex-col">
+            <h3 class="text-2xl font-semibold mb-4">Solicitudes recibidas</h3>
+            <div *ngIf="solicitudesCargando" class="text-gray-600">Cargando solicitudes...</div>
+            <div *ngIf="solicitudesError" class="text-red-600">{{ solicitudesError }}</div>
+            <div *ngIf="!solicitudesCargando && solicitudes.length === 0 && !solicitudesError" class="text-gray-600">No hay solicitudes recibidas.</div>
+            <ul *ngIf="!solicitudesCargando && solicitudes.length > 0" class="space-y-3">
+              <li *ngFor="let s of solicitudes" class="p-4 border rounded-lg shadow-sm bg-gray-50 flex flex-col gap-4">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <div class="flex-1 min-w-0">
+                    <p class="font-semibold truncate">{{ s.animal?.nombre || 'Animal' }}</p>
+                    <p class="text-sm text-gray-600">
+                      Estado: <span [ngClass]="{
+                        'text-yellow-600': s.estado === 'pendiente',
+                        'text-green-600': s.estado === 'aceptada',
+                        'text-red-600': s.estado === 'rechazada',
+                        'text-gray-600': s.estado === 'actualizando'
+                      }">{{ s.estado }}</span>
+                    </p>
+                    <p class="text-sm mt-1" *ngIf="s.comentario">Comentario: {{ s.comentario }}</p>
+                    <p class="text-xs text-gray-400 mt-1">Fecha: {{ s.createdAt | date:'short' }}</p>
+                    <div class="mt-2 text-sm text-gray-700" *ngIf="s.adoptanteEmail">
+                      <p><span class="font-semibold">Adoptante:</span> {{ s.adoptanteNombre }} {{ s.adoptanteApellidos }}</p>
+                      <p><span class="font-semibold">Email:</span> {{ s.adoptanteEmail }}</p>
+                      <p *ngIf="s.adoptanteTelefono"><span class="font-semibold">Teléfono:</span> {{ s.adoptanteTelefono }}</p>
+                    </div>
+                  </div>
+                  <div class="flex-shrink-0 flex justify-center md:justify-end">
+                    <img *ngIf="s.animal?.imagenPrincipal" [src]="s.animal?.imagenPrincipal" alt="{{ s.animal?.nombre }}" class="w-24 h-24 object-cover rounded-md border" />
+                  </div>
+                </div>
+                <div class="flex gap-3 md:justify-end" *ngIf="s.estado === 'pendiente'">
+                  <button type="button" (click)="aceptarSolicitud(s.id)" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm">Aceptar</button>
+                  <button type="button" (click)="rechazarSolicitud(s.id)" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm">Rechazar</button>
+                </div>
+                <div class="text-sm text-gray-500" *ngIf="s.estado === 'actualizando'">Actualizando...</div>
+              </li>
+            </ul>
           </div>
         </ng-container>
 

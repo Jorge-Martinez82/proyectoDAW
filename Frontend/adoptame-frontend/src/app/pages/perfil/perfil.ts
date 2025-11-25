@@ -30,6 +30,7 @@ export class Perfil implements OnInit {
 
   solicitudes: (SolicitudDto & { animal?: AnimalDto })[] = [];
   solicitudesCargando = false;
+  solicitudesError: string | null = null;
 
   constructor(
     private adoptantesService: AdoptantesService,
@@ -118,38 +119,89 @@ export class Perfil implements OnInit {
         }
       });
     } else {
-      console.warn('[Perfil] Rol desconocido, no se llama a servicios.');
+      console.warn('[Perfil] Rol desconocido.');
       this.error = 'Rol de usuario desconocido.';
       this.cargando = false;
     }
   }
 
   cargarSolicitudes() {
-    if (this.rol !== 'Adoptante') return;
+    this.solicitudesError = null;
+    if (this.rol === 'Adoptante') {
+      this.cargarSolicitudesAdoptante();
+    } else if (this.rol === 'Protectora') {
+      this.cargarSolicitudesProtectora();
+    }
+  }
+
+  cargarSolicitudesAdoptante() {
     this.solicitudesCargando = true;
     this.solicitudesService.getSolicitudesAdoptante().subscribe({
       next: (res) => {
         const base = (res.data || []) as SolicitudDto[];
-        this.solicitudes = base.map(s => ({ ...s }));
-        const uniqueUuids = [...new Set(base.map(b => b.animalUuid))];
-        if (uniqueUuids.length === 0) {
-          this.solicitudesCargando = false;
-          return;
-        }
-        forkJoin(uniqueUuids.map(u => this.animalesService.getAnimalById(u))).subscribe({
-          next: (animals) => {
-            const map = new Map<string, AnimalDto>(animals.map(a => [a.uuid, a]));
-            this.solicitudes = this.solicitudes.map(s => ({ ...s, animal: map.get(s.animalUuid) }));
-            this.solicitudesCargando = false;
-          },
-          error: () => {
-            this.solicitudesCargando = false;
-          }
-        });
+        this.enriquecerConAnimales(base);
       },
       error: () => {
         this.solicitudes = [];
         this.solicitudesCargando = false;
+        this.solicitudesError = 'No se pudieron cargar las solicitudes.';
+      }
+    });
+  }
+
+  cargarSolicitudesProtectora() {
+    this.solicitudesCargando = true;
+    this.solicitudesService.getSolicitudesProtectora().subscribe({
+      next: (res) => {
+        const base = (res.data || []) as SolicitudDto[];
+        this.enriquecerConAnimales(base);
+      },
+      error: () => {
+        this.solicitudes = [];
+        this.solicitudesCargando = false;
+        this.solicitudesError = 'No se pudieron cargar las solicitudes recibidas.';
+      }
+    });
+  }
+
+  enriquecerConAnimales(base: SolicitudDto[]) {
+    this.solicitudes = base.map(s => ({ ...s }));
+    const uniqueUuids = [...new Set(base.map(b => b.animalUuid))];
+    if (uniqueUuids.length === 0) {
+      this.solicitudesCargando = false;
+      return;
+    }
+    forkJoin(uniqueUuids.map(u => this.animalesService.getAnimalById(u))).subscribe({
+      next: (animals) => {
+        const map = new Map<string, AnimalDto>(animals.map(a => [a.uuid, a]));
+        this.solicitudes = this.solicitudes.map(s => ({ ...s, animal: map.get(s.animalUuid) }));
+        this.solicitudesCargando = false;
+      },
+      error: () => {
+        this.solicitudesCargando = false;
+      }
+    });
+  }
+
+  aceptarSolicitud(id: number) {
+    this.cambiarEstado(id, 'aceptada');
+  }
+
+  rechazarSolicitud(id: number) {
+    this.cambiarEstado(id, 'rechazada');
+  }
+
+  cambiarEstado(id: number, estado: string) {
+    const solicitud = this.solicitudes.find(s => s.id === id);
+    if (!solicitud || solicitud.estado !== 'pendiente') return;
+    solicitud.estado = 'actualizando';
+    this.solicitudesService.actualizarEstado(id, estado).subscribe({
+      next: () => {
+        solicitud.estado = estado;
+      },
+      error: () => {
+        solicitud.estado = 'pendiente';
+        alert('No se pudo actualizar la solicitud');
       }
     });
   }

@@ -15,6 +15,8 @@ public class MappingProfile : Profile
         CreateMap<Solicitud, SolicitudDto>()
             .ForMember(d => d.AnimalUuid, o => o.MapFrom(s => s.Animal.Uuid))
             .ForMember(d => d.UsuarioAdoptanteUuid, o => o.MapFrom(s => s.UsuarioAdoptante.Uuid))
-            .ForMember(d => d.UsuarioProtectoraUuid, o => o.MapFrom(s => s.UsuarioProtectora.Uuid));
+            .ForMember(d => d.UsuarioProtectoraUuid, o => o.MapFrom(s => s.UsuarioProtectora.Uuid))
+            .ForMember(d => d.AdoptanteNombre, o => o.MapFrom(s => s.UsuarioAdoptante.Email)) // fallback si no hay perfil
+            .ForMember(d => d.AdoptanteEmail, o => o.MapFrom(s => s.UsuarioAdoptante.Email));
     }
 }

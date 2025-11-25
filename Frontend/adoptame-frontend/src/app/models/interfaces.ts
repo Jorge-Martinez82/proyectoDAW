@@ -57,6 +57,10 @@ export interface SolicitudDto {
   comentario: string | null;
   estado: string;
   createdAt: string;
+  adoptanteNombre?: string | null;
+  adoptanteApellidos?: string | null;
+  adoptanteTelefono?: string | null;
+  adoptanteEmail?: string | null;
 }
 
 export interface CrearSolicitudRequest {

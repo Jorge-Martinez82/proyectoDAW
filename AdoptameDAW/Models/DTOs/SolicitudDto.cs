@@ -11,5 +11,10 @@ namespace AdoptameDAW.Models.DTOs
         public string? Comentario { get; set; }
         public string Estado { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
+
+        public string? AdoptanteNombre { get; set; }
+        public string? AdoptanteApellidos { get; set; }
+        public string? AdoptanteTelefono { get; set; }
+        public string? AdoptanteEmail { get; set; }
     }
 }
