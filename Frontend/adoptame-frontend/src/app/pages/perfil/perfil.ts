@@ -6,7 +6,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { BotonPrincipal } from '../../components/boton-principal/boton-principal';
 import { AuthService } from '../../services/auth.service';
 import { ProtectorasService } from '../../services/protectoras.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SolicitudesService } from '../../services/solicitudes.service';
 import { AnimalesService } from '../../services/animales.service';
 import { forkJoin } from 'rxjs';
@@ -15,7 +15,7 @@ import { forkJoin } from 'rxjs';
   selector: 'app-perfil',
   templateUrl: './perfil.html',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, BotonPrincipal]
+  imports: [CommonModule, ReactiveFormsModule, BotonPrincipal, RouterLink]
 })
 export class Perfil implements OnInit {
   pestanaSeleccionada: string = 'datosPersonales';
@@ -32,6 +32,10 @@ export class Perfil implements OnInit {
   solicitudesCargando = false;
   solicitudesError: string | null = null;
 
+  animales: AnimalDto[] = [];
+  animalesCargando = false;
+  animalesError: string | null = null;
+
   constructor(
     private adoptantesService: AdoptantesService,
     private protectorasService: ProtectorasService,
@@ -46,18 +50,18 @@ export class Perfil implements OnInit {
     this.rol = this.authService.getUserRole();
     this.inicializarFormulario();
     const tab = this.route.snapshot.queryParamMap.get('tab');
-    if (tab === 'solicitudes') {
-      this.pestanaSeleccionada = 'solicitudes';
+    if (tab) {
+      this.pestanaSeleccionada = tab;
     }
     this.route.queryParamMap.subscribe(params => {
       const t = params.get('tab');
       if (t && t !== this.pestanaSeleccionada) {
         this.pestanaSeleccionada = t;
         if (t === 'solicitudes') this.cargarSolicitudes();
+        if (t === 'animales') this.cargarAnimalesProtectora();
       }
     });
     this.cargarPerfil();
-    if (this.pestanaSeleccionada === 'solicitudes') this.cargarSolicitudes();
   }
 
   inicializarFormulario(): void {
@@ -90,6 +94,7 @@ export class Perfil implements OnInit {
             email: datos.email
           });
           this.cargando = false;
+          if (this.pestanaSeleccionada === 'solicitudes') this.cargarSolicitudes();
         },
         error: () => {
           this.error = 'No se pudo cargar el perfil de adoptante.';
@@ -111,15 +116,15 @@ export class Perfil implements OnInit {
           this.form.get('codigoPostal')?.reset();
           this.form.get('poblacion')?.reset();
           this.cargando = false;
+          if (this.pestanaSeleccionada === 'solicitudes') this.cargarSolicitudes();
+          if (this.pestanaSeleccionada === 'animales') this.cargarAnimalesProtectora();
         },
-        error: (err) => {
-          console.error('[Perfil] Error protectora:', err);
+        error: () => {
           this.error = 'No se pudo cargar el perfil de la protectora.';
           this.cargando = false;
         }
       });
     } else {
-      console.warn('[Perfil] Rol desconocido.');
       this.error = 'Rol de usuario desconocido.';
       this.cargando = false;
     }
@@ -183,6 +188,23 @@ export class Perfil implements OnInit {
     });
   }
 
+  cargarAnimalesProtectora() {
+    if (this.rol !== 'Protectora' || !this.protectora) return;
+    this.animalesCargando = true;
+    this.animalesError = null;
+    this.animalesService.getAnimales(1, 50, undefined, undefined, this.protectora.uuid).subscribe({
+      next: (res) => {
+        this.animales = res.data || [];
+        this.animalesCargando = false;
+      },
+      error: () => {
+        this.animales = [];
+        this.animalesCargando = false;
+        this.animalesError = 'No se pudieron cargar los animales.';
+      }
+    });
+  }
+
   aceptarSolicitud(id: number) {
     this.cambiarEstado(id, 'aceptada');
   }
@@ -214,6 +236,7 @@ export class Perfil implements OnInit {
   seleccionarPestana(pestana: string): void {
     this.pestanaSeleccionada = pestana;
     if (pestana === 'solicitudes') this.cargarSolicitudes();
+    if (pestana === 'animales') this.cargarAnimalesProtectora();
   }
 
   actualizarDatos(): void {
@@ -264,14 +287,12 @@ export class Perfil implements OnInit {
           this.guardando = false;
           alert('Protectora actualizada.');
         },
-        error: (err) => {
-          console.error('[Perfil] Error actualización protectora:', err);
+        error: () => {
           this.guardando = false;
           alert('Error al actualizar protectora.');
         }
       });
     } else {
-      console.warn('[Perfil] Nada que actualizar.');
       this.guardando = false;
       alert('No hay datos que actualizar.');
     }

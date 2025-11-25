@@ -1,7 +1,7 @@
 <main>
   <section id="perfil" class="flex h-auto flex-col items-center justify-center bg-customPurple bg-[url('/assets/img/huellas.png')] bg-cover bg-center px-6 py-24 md:flex-row">
     <div class="w-full max-w-6xl bg-white rounded-lg shadow-lg mx-4">
-      <div class="flex justify-between px-8 pt-8 rounded-lg border-customBlue bg-gray-200">
+      <div class="flex flex-wrap gap-6 px-8 pt-8 rounded-lg border-customBlue bg-gray-200">
         <button (click)="seleccionarPestana('datosPersonales')"
                 class="font-bold text-customBlue text-lg md:text-xl pb-3 transition border-b-4"
                 [class.border-customBlue]="pestanaSeleccionada === 'datosPersonales'">
@@ -12,10 +12,16 @@
                 [class.border-customBlue]="pestanaSeleccionada === 'solicitudes'">
           Solicitudes
         </button>
+        <button *ngIf="rol === 'Protectora'" (click)="seleccionarPestana('animales')"
+                class="font-bold text-lg md:text-xl pb-3 transition border-b-4"
+                [class.border-customBlue]="pestanaSeleccionada === 'animales'">
+          Animales
+        </button>
       </div>
 
       <div class="p-8 min-h-[500px] flex flex-col justify-start">
 
+        <!-- PESTAÑA DATOS PERSONALES -->
         <ng-container *ngIf="pestanaSeleccionada === 'datosPersonales'">
           <form [formGroup]="form" (ngSubmit)="actualizarDatos()" class="grid grid-cols-1 gap-6">
 
@@ -92,12 +98,13 @@
                                    class="w-full sm:w-auto mt-6">
               </app-boton-principal>
             </div>
-
           </form>
         </ng-container>
 
+        <!-- PESTAÑA SOLICITUDES -->
         <ng-container *ngIf="pestanaSeleccionada === 'solicitudes'">
-          <div *ngIf="rol === 'Adoptante'" class="flex flex-col">
+          <!-- solicitudes adoptante -->
+          <div *ngIf="rol === 'Adoptante'" class="flex flex-col mb-8">
             <h3 class="text-2xl font-semibold mb-4">Mis solicitudes de adopción</h3>
             <div *ngIf="solicitudesCargando" class="text-gray-600">Cargando solicitudes...</div>
             <div *ngIf="solicitudesError" class="text-red-600">{{ solicitudesError }}</div>
@@ -126,6 +133,7 @@
             </ul>
           </div>
 
+          <!-- solicitudes protectora -->
           <div *ngIf="rol === 'Protectora'" class="flex flex-col">
             <h3 class="text-2xl font-semibold mb-4">Solicitudes recibidas</h3>
             <div *ngIf="solicitudesCargando" class="text-gray-600">Cargando solicitudes...</div>
@@ -164,6 +172,34 @@
               </li>
             </ul>
           </div>
+        </ng-container>
+
+        <!-- animales protectora  -->
+        <ng-container *ngIf="pestanaSeleccionada === 'animales' && rol === 'Protectora'">
+          <h3 class="text-2xl font-semibold mb-4">Mis animales en adopción</h3>
+          <div *ngIf="animalesCargando" class="text-gray-600">Cargando animales...</div>
+          <div *ngIf="animalesError" class="text-red-600">{{ animalesError }}</div>
+          <div *ngIf="!animalesCargando && animales.length === 0 && !animalesError" class="text-gray-600">No tienes animales publicados.</div>
+          <ul *ngIf="!animalesCargando && animales.length > 0" class="space-y-3">
+            <li *ngFor="let a of animales" class="p-4 border rounded-lg shadow-sm bg-gray-50 flex flex-col gap-4">
+              <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="flex-1 min-w-0">
+                  <p class="font-semibold truncate">{{ a.nombre }}</p>
+                  <p class="text-sm text-gray-600">Tipo: {{ a.tipo }} | Edad: {{ a.edad || 'N/D' }}</p>
+                  <p class="text-sm text-gray-600" *ngIf="a.raza">Raza: {{ a.raza }}</p>
+                  <p class="text-sm text-gray-600" *ngIf="a.genero">Género: {{ a.genero }}</p>
+                  <p class="text-xs text-gray-400 mt-1">Publicación: {{ a.createdAt | date:'short' }}</p>
+                  <p class="text-sm mt-2" *ngIf="a.descripcion"><span class="font-semibold">Descripción:</span> {{ a.descripcion }}</p>
+                  <div class="mt-3 flex gap-3">
+                    <button type="button" disabled class="px-4 py-2 bg-red-200 text-red-600 rounded text-sm cursor-not-allowed">Eliminar</button>
+                  </div>
+                </div>
+                <div class="flex-shrink-0 flex justify-center md:justify-end">
+                  <img *ngIf="a.imagenPrincipal" [src]="a.imagenPrincipal" [alt]="a.nombre" class="w-24 h-24 object-cover rounded-md border" />
+                </div>
+              </div>
+            </li>
+          </ul>
         </ng-container>
 
         <div *ngIf="cargando" class="text-center mt-6">Cargando...</div>
