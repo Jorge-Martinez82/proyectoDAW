@@ -49,4 +49,9 @@ public class AnimalesService
             totalPages = (int)Math.Ceiling(total / (double)pageSize)
         };
     }
+
+    public async Task<bool> AnimalesServiceDelete(Guid uuid)
+    {
+        return await _repository.AnimalesRepositoryDelete(uuid);
+    }
 }

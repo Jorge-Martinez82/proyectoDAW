@@ -9,4 +9,5 @@ public interface IAnimalesRepository
         Guid? protectoraUuid = null,
         string? tipo = null,
         string? provincia = null);
+    Task<bool> AnimalesRepositoryDelete(Guid uuid);
 }

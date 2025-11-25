@@ -52,4 +52,12 @@ public class AnimalesRepository : IAnimalesRepository
 
         return (animales, total);
     }
+
+    public async Task<bool> AnimalesRepositoryDelete(Guid uuid)
+    {
+        var entity = await _context.Animales.FirstOrDefaultAsync(a => a.Uuid == uuid);
+        if (entity == null) return false;
+        _context.Animales.Remove(entity);
+        return await _context.SaveChangesAsync() > 0;
+    }
 }

@@ -36,6 +36,8 @@ export class Perfil implements OnInit {
   animalesCargando = false;
   animalesError: string | null = null;
 
+  eliminandoAnimalUuid: string | null = null;
+
   constructor(
     private adoptantesService: AdoptantesService,
     private protectorasService: ProtectorasService,
@@ -296,5 +298,21 @@ export class Perfil implements OnInit {
       this.guardando = false;
       alert('No hay datos que actualizar.');
     }
+  }
+
+  eliminarAnimal(uuid: string) {
+    if (this.eliminandoAnimalUuid) return;
+    this.eliminandoAnimalUuid = uuid;
+    this.animalesService.deleteAnimal(uuid).subscribe({
+      next: () => {
+        this.animales = this.animales.filter(a => a.uuid !== uuid);
+        this.eliminandoAnimalUuid = null;
+        alert('Animal eliminado correctamente');
+      },
+      error: () => {
+        alert('No se pudo eliminar el animal');
+        this.eliminandoAnimalUuid = null;
+      }
+    });
   }
 }

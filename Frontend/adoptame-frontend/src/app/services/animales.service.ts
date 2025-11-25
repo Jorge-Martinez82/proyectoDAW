@@ -40,4 +40,8 @@ export class AnimalesService {
   getAnimalById(uuid: string): Observable<AnimalDto> {
     return this.http.get<AnimalDto>(`${this.apiUrl}/${uuid}`);
   }
+
+  deleteAnimal(uuid: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${uuid}`);
+  }
 }

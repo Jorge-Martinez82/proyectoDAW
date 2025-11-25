@@ -38,4 +38,12 @@ public class AnimalesController : ControllerBase
         return Ok(animal);
     }
 
+    [HttpDelete("{id:guid}")]
+    public async Task<ActionResult> AnimalesControllerDelete(Guid id)
+    {
+        var ok = await _service.AnimalesServiceDelete(id);
+        if (!ok)
+            return NotFound(new { mensaje = "Animal no encontrado" });
+        return NoContent();
+    }
 }
