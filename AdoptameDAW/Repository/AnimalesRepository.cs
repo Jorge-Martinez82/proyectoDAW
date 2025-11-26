@@ -60,4 +60,12 @@ public class AnimalesRepository : IAnimalesRepository
         _context.Animales.Remove(entity);
         return await _context.SaveChangesAsync() > 0;
     }
+
+    public async Task<Animal> AnimalesRepositoryCreate(Animal animal)
+    {
+        animal.CreatedAt = DateTime.UtcNow;
+        await _context.Animales.AddAsync(animal);
+        await _context.SaveChangesAsync();
+        return await _context.Animales.Include(a => a.Protectora).FirstAsync(a => a.Id == animal.Id);
+    }
 }

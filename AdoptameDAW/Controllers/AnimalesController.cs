@@ -46,4 +46,13 @@ public class AnimalesController : ControllerBase
             return NotFound(new { mensaje = "Animal no encontrado" });
         return NoContent();
     }
+
+    [HttpPost]
+    public async Task<ActionResult<AnimalDto>> AnimalesControllerCreate([FromBody] AnimalDto request)
+    {
+        var creado = await _service.AnimalesServiceCreate(request);
+        if (creado == null)
+            return BadRequest(new { mensaje = "Datos inválidos" });
+        return Created(string.Empty, creado);
+    }
 }

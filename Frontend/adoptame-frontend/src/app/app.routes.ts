@@ -9,6 +9,7 @@ import { Login } from './pages/login/login';
 import { Registro } from './pages/registro/registro';
 import { authGuard } from './guards/auth-guard';
 import { Perfil } from './pages/perfil/perfil';
+import { FormularioCrearAnimal } from './pages/formulario-crear-animal/formulario-crear-animal';
 
 
 export const routes: Routes = [
@@ -26,6 +27,12 @@ export const routes: Routes = [
   { 
     path: 'formulario-adopcion', 
     component: FormularioAdopcion,
+    canActivate: [authGuard]
+  },
+  
+  { 
+    path: 'formulario-crear-animal', 
+    component: FormularioCrearAnimal,
     canActivate: [authGuard]
   },
   

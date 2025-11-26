@@ -176,7 +176,10 @@
 
         <!-- animales protectora  -->
         <ng-container *ngIf="pestanaSeleccionada === 'animales' && rol === 'Protectora'">
-          <h3 class="text-2xl font-semibold mb-4">Mis animales en adopción</h3>
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-2xl font-semibold">Mis animales en adopción</h3>
+            <a [routerLink]="['/formulario-crear-animal']" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm">Añadir animal</a>
+          </div>
           <div *ngIf="animalesCargando" class="text-gray-600">Cargando animales...</div>
           <div *ngIf="animalesError" class="text-red-600">{{ animalesError }}</div>
           <div *ngIf="!animalesCargando && animales.length === 0 && !animalesError" class="text-gray-600">No tienes animales publicados.</div>

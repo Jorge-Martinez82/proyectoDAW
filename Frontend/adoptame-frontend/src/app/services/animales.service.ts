@@ -44,4 +44,8 @@ export class AnimalesService {
   deleteAnimal(uuid: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${uuid}`);
   }
+
+  createAnimal(dto: AnimalDto): Observable<AnimalDto> {
+    return this.http.post<AnimalDto>(this.apiUrl, dto);
+  }
 }
