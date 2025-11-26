@@ -122,6 +122,8 @@
                         'text-gray-600': s.estado === 'actualizando'
                       }">{{ s.estado }}</span>
                     </p>
+                    <p class="text-xs text-green-700 mt-1" *ngIf="s.estado === 'aceptada'">Su solicitud ha sido aceptada, en breve se pondrán en contacto con usted.</p>
+
                     <p class="text-sm mt-1" *ngIf="s.comentario">Comentario: {{ s.comentario }}</p>
                     <p class="text-xs text-gray-400 mt-1">Fecha: {{ s.createdAt | date:'short' }}</p>
                   </div>

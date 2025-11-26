@@ -1,5 +1,6 @@
 ﻿using AdoptameDAW.Models.DTOs;
 using AdoptameDAW.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdoptameDAW.Controllers;
@@ -38,6 +39,7 @@ public class AnimalesController : ControllerBase
         return Ok(animal);
     }
 
+    [Authorize]
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult> AnimalesControllerDelete(Guid id)
     {
@@ -47,6 +49,7 @@ public class AnimalesController : ControllerBase
         return NoContent();
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<AnimalDto>> AnimalesControllerCreate([FromBody] AnimalDto request)
     {
