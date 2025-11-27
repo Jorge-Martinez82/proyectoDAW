@@ -12,8 +12,22 @@ import { AuthService } from '../../services/auth.service';
 export class Navbar {
   authService = inject(AuthService);
 
-  // cierra sesion del usuario
+  // estado del menú móvil
+  isMenuOpen = false;
+
+  // alterna el menú móvil
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  // cierra el menú móvil
+  closeMenu(): void {
+    this.isMenuOpen = false;
+  }
+
+  // cierra sesión del usuario
   logout(): void {
     this.authService.logout();
+    this.closeMenu();
   }
 }

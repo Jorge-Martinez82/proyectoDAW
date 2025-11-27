@@ -1,19 +1,19 @@
 <main>
-  <section class="relative flex h-svh flex-col items-center justify-center bg-[url('/assets/img/fondo_login.webp')] bg-cover bg-center">
+  <section class="relative flex min-h-screen flex-col items-center justify-start lg:justify-center bg-[url('/assets/img/fondo_login.webp')] bg-cover bg-center pt-16 pb-16 sm:pt-20 sm:pb-20">
     <div class="absolute inset-0 bg-white/40"></div>
-    <div class="relative flex flex-col items-center justify-center p-10 w-full max-w-lg">
-
+    <div class="relative flex flex-col items-center justify-center w-full max-w-lg">
       <form [formGroup]="registroForm"
             (ngSubmit)="onSubmit()"
-            class="mx-2 flex flex-col items-center justify-around rounded-3xl bg-black bg-opacity-75 p-8 py-4 font-roboto text-white w-full min-w-[320px]">
+            class="mx-2 flex flex-col items-center justify-around rounded-lg bg-black bg-opacity-75 p-8 py-4 font-roboto text-white min-w-[320px]">
         <h2 class="text-2xl font-bold mb-4">Registro</h2>
 
         <div *ngIf="errorMessage" class="w-full mb-3 p-3 bg-red-500 text-white rounded-lg text-sm">
           {{ errorMessage }}
         </div>
 
-        <div class="flex gap-4 w-full mb-2">
-          <div class="flex-1">
+        <!-- Email / Password -->
+        <div class="flex flex-col sm:flex-row gap-4 w-full mb-2">
+          <div class="w-full sm:flex-1">
             <label for="email" class="text-sm font-medium text-white">Correo electrónico</label>
             <input type="email"
                    id="email"
@@ -25,7 +25,7 @@
               Correo inválido
             </small>
           </div>
-          <div class="flex-1">
+          <div class="w-full sm:flex-1">
             <label for="password" class="text-sm font-medium text-white">Contraseña</label>
             <input type="password"
                    id="password"
@@ -40,7 +40,7 @@
         </div>
 
         <div class="w-full mt-2 mb-4">
-          <div class="flex gap-4 justify-center">
+          <div class="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center">
             <label class="flex items-center cursor-pointer">
               <input type="radio"
                      formControlName="tipoUsuario"
@@ -62,8 +62,8 @@
         </div>
 
         <ng-container *ngIf="esAdoptante">
-          <div class="flex gap-4 w-full mb-2">
-            <div class="flex-1">
+          <div class="flex flex-col sm:flex-row gap-4 w-full mb-2">
+            <div class="w-full sm:flex-1">
               <label for="nombre" class="text-sm font-medium text-white">Nombre *</label>
               <input type="text"
                      id="nombre"
@@ -75,7 +75,7 @@
                 Nombre inválido
               </small>
             </div>
-            <div class="flex-1">
+            <div class="w-full sm:flex-1">
               <label for="apellidos" class="text-sm font-medium text-white">Apellidos *</label>
               <input type="text"
                      id="apellidos"
@@ -105,8 +105,8 @@
           </div>
         </ng-container>
 
-        <div class="flex gap-4 w-full mb-2">
-          <div class="flex-1">
+        <div class="flex flex-col sm:flex-row gap-4 w-full mb-2">
+          <div class="w-full sm:flex-1">
             <label for="direccion" class="text-sm font-medium text-white">Dirección</label>
             <input type="text"
                    id="direccion"
@@ -114,7 +114,7 @@
                    class="w-full rounded-lg bg-white py-2 px-4 text-gray-800 mt-1"
                    placeholder="Dirección" />
           </div>
-          <div class="flex-1">
+          <div class="w-full sm:flex-1">
             <label for="provincia" class="text-sm font-medium text-white">Provincia</label>
             <input type="text"
                    id="provincia"
@@ -124,8 +124,8 @@
           </div>
         </div>
 
-        <div class="flex gap-4 w-full mb-2" *ngIf="esAdoptante">
-          <div class="flex-1">
+        <div class="flex flex-col sm:flex-row gap-4 w-full mb-2" *ngIf="esAdoptante">
+          <div class="w-full sm:flex-1">
             <label for="codigoPostal" class="text-sm font-medium text-white">Código postal</label>
             <input type="text"
                    id="codigoPostal"
@@ -133,7 +133,7 @@
                    class="w-full rounded-lg bg-white py-2 px-4 text-gray-800 mt-1"
                    placeholder="Código postal" />
           </div>
-          <div class="flex-1">
+          <div class="w-full sm:flex-1">
             <label for="poblacion" class="text-sm font-medium text-white">Población</label>
             <input type="text"
                    id="poblacion"

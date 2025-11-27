@@ -1,13 +1,14 @@
 <main>
   <!-- PORTADA -->
-  <section class="relative flex h-[600px] flex-col items-center justify-center bg-[url('/assets/img/portada.webp')] bg-cover bg-center">
+  <section class="relative flex h-[600px] flex-col items-center justify-center bg-[url('/assets/img/portada.webp')] bg-cover bg-center px-2 sm:px-0">
     <div class="absolute inset-0 bg-white/40"></div>
     <div class="relative flex flex-col items-center justify-center">
       <h1 class="mb-4 text-center font-montserrat text-4xl font-bold text-black">
         Adopta y transforma vidas
       </h1>
-      <app-formulario-busqueda [modo]="'home'" (busquedaRealizada)="buscar($event)">
-      </app-formulario-busqueda>
+      <div class="w-full mx-2 sm:mx-0 flex justify-center">
+        <app-formulario-busqueda [modo]="'home'" (busquedaRealizada)="buscar($event)"></app-formulario-busqueda>
+      </div>
 
     </div>
   </section>
