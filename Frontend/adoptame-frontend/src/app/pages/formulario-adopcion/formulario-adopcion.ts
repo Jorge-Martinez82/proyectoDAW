@@ -32,6 +32,7 @@ export class FormularioAdopcion implements OnInit {
     private solicitudesService: SolicitudesService
   ) { }
 
+  // inicializa formulario y carga el animal
   ngOnInit(): void {
     this.inicializarFormulario();
     const uuidAnimal = this.route.snapshot.queryParamMap.get('uuid');
@@ -56,12 +57,14 @@ export class FormularioAdopcion implements OnInit {
     }
   }
 
+  // crea la estructura del formulario
   inicializarFormulario(): void {
     this.formulario = this.fb.group({
       comentario: ['', [Validators.required, Validators.maxLength(500)]],
     });
   }
 
+  // envia la solicitud de adopcion si es valido
   onSubmit(): void {
     if (this.formulario.invalid || !this.animal) {
       this.formulario.markAllAsTouched();
@@ -90,6 +93,7 @@ export class FormularioAdopcion implements OnInit {
     });
   }
 
+  // indica si un campo del formulario es invalido
   campoInvalido(campo: string): boolean {
     const control = this.formulario.get(campo);
     return !!(control && control.invalid && control.touched);

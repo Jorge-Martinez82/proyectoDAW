@@ -27,6 +27,7 @@ export class FormularioBusqueda {
   provincias = ['Álava', 'Guipúzcoa', 'Vizcaya', 'Navarra'];
   tipos = ['Perro', 'Gato', 'Roedor', 'Reptil'];
 
+  // metodo de busqueda con los filtros seleccionados
   buscar(): void {
     const resultado: FiltrosBusqueda = {
       provincia: this.filtros.provincia

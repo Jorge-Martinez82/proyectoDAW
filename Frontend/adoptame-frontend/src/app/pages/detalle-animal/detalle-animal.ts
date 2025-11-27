@@ -20,13 +20,13 @@ export class DetalleAnimal implements OnInit {
   animal: AnimalDto | null = null;
   animalNoEncontrado = false;
   loading = true;
-  menuAbierto = false;
 
   constructor(
     private route: ActivatedRoute,
     private animalService: AnimalesService
   ) { }
 
+  // carga datos del animal usando el uuid de la url
   ngOnInit(): void {
 
     const uuidAnimal = this.route.snapshot.paramMap.get('uuid');
@@ -53,7 +53,4 @@ export class DetalleAnimal implements OnInit {
     }
   }
 
-  toggleMenu(): void {
-    this.menuAbierto = !this.menuAbierto;
-  }
 }

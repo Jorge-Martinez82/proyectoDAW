@@ -48,19 +48,23 @@ export class Registro {
     });
   }
 
+  // indica si el formulario es para adoptante
   get esAdoptante(): boolean {
     return this.registroForm.get('tipoUsuario')?.value === 'Adoptante';
   }
+  // indica si el formulario es para protectora
   get esProtectora(): boolean {
     return this.registroForm.get('tipoUsuario')?.value === 'Protectora';
   }
 
+  // asigna validadores a un control
   private setValidators(ctrl: AbstractControl | null, validators: any[] = []): void {
     if (!ctrl) return;
     ctrl.setValidators(validators);
     ctrl.updateValueAndValidity({ emitEvent: false });
   }
 
+  // limpia campos que no aplican segun el rol seleccionado
   private limpiarCamposNoAplicables(): void {
     if (this.esProtectora) {
       ['nombre', 'apellidos', 'codigoPostal', 'poblacion'].forEach(c => {
@@ -81,6 +85,7 @@ export class Registro {
     }
   }
 
+  // actualiza validaciones dinamicas segun el tipo de usuario
   actualizarValidaciones(tipo: string): void {
 
     this.setValidators(this.registroForm.get('direccion'), [Validators.required]);
@@ -105,6 +110,7 @@ export class Registro {
     this.limpiarCamposNoAplicables();
   }
 
+  // envia los datos de registro si son validos
   onSubmit(): void {
     if (this.registroForm.invalid) {
       this.registroForm.markAllAsTouched();
@@ -144,6 +150,7 @@ export class Registro {
     });
   }
 
+  // indica si el campo del registro es invalido
   campoInvalido(campo: string): boolean {
     const control = this.registroForm.get(campo);
     return !!(control && control.invalid && control.touched);

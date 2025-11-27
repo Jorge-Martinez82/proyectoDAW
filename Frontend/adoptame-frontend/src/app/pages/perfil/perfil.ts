@@ -48,6 +48,7 @@ export class Perfil implements OnInit {
     private animalesService: AnimalesService
   ) { }
 
+  // inicializa pestaña activa y carga perfil
   ngOnInit(): void {
     this.rol = this.authService.getUserRole();
     this.inicializarFormulario();
@@ -66,6 +67,7 @@ export class Perfil implements OnInit {
     this.cargarPerfil();
   }
 
+  // crea el formulario base del perfil
   inicializarFormulario(): void {
     this.form = this.fb.group({
       nombre: ['', [Validators.required, Validators.maxLength(80)]],
@@ -79,6 +81,7 @@ export class Perfil implements OnInit {
     });
   }
 
+  // carga datos del perfil segun rol
   cargarPerfil() {
     this.cargando = true;
     if (this.rol === 'Adoptante') {
@@ -132,6 +135,7 @@ export class Perfil implements OnInit {
     }
   }
 
+  // carga las solicitudes dependiendo del rol
   cargarSolicitudes() {
     this.solicitudesError = null;
     if (this.rol === 'Adoptante') {
@@ -141,12 +145,13 @@ export class Perfil implements OnInit {
     }
   }
 
+  // carga solicitudes hechas por el adoptante
   cargarSolicitudesAdoptante() {
     this.solicitudesCargando = true;
     this.solicitudesService.getSolicitudesAdoptante().subscribe({
       next: (res) => {
         const base = (res.data || []) as SolicitudDto[];
-        this.enriquecerConAnimales(base);
+        this.datosAnimales(base);
       },
       error: () => {
         this.solicitudes = [];
@@ -156,12 +161,13 @@ export class Perfil implements OnInit {
     });
   }
 
+  // carga solicitudes recibidas por la protectora
   cargarSolicitudesProtectora() {
     this.solicitudesCargando = true;
     this.solicitudesService.getSolicitudesProtectora().subscribe({
       next: (res) => {
         const base = (res.data || []) as SolicitudDto[];
-        this.enriquecerConAnimales(base);
+        this.datosAnimales(base);
       },
       error: () => {
         this.solicitudes = [];
@@ -171,7 +177,8 @@ export class Perfil implements OnInit {
     });
   }
 
-  enriquecerConAnimales(base: SolicitudDto[]) {
+  // agrega datos del animal a cada solicitud
+  datosAnimales(base: SolicitudDto[]) {
     this.solicitudes = base.map(s => ({ ...s }));
     const uniqueUuids = [...new Set(base.map(b => b.animalUuid))];
     if (uniqueUuids.length === 0) {
@@ -190,6 +197,7 @@ export class Perfil implements OnInit {
     });
   }
 
+  // carga animales de la protectora si aplica
   cargarAnimalesProtectora() {
     if (this.rol !== 'Protectora' || !this.protectora) return;
     this.animalesCargando = true;
@@ -207,14 +215,17 @@ export class Perfil implements OnInit {
     });
   }
 
+  // marca solicitud como aceptada
   aceptarSolicitud(id: number) {
     this.cambiarEstado(id, 'aceptada');
   }
 
+  // marca solicitud como rechazada
   rechazarSolicitud(id: number) {
     this.cambiarEstado(id, 'rechazada');
   }
 
+  // actualiza estado de una solicitud
   cambiarEstado(id: number, estado: string) {
     const solicitud = this.solicitudes.find(s => s.id === id);
     if (!solicitud || solicitud.estado !== 'pendiente') return;
@@ -230,17 +241,20 @@ export class Perfil implements OnInit {
     });
   }
 
+  // indica si el campo del perfil es invalido
   campoInvalido(campo: string): boolean {
     const c = this.form.get(campo);
     return !!(c && c.invalid && (c.dirty || c.touched));
   }
 
+  // cambia pestaña activa y carga datos relacionados
   seleccionarPestana(pestana: string): void {
     this.pestanaSeleccionada = pestana;
     if (pestana === 'solicitudes') this.cargarSolicitudes();
     if (pestana === 'animales') this.cargarAnimalesProtectora();
   }
 
+  // guarda actualizaciones del perfil segun rol
   actualizarDatos(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -300,6 +314,7 @@ export class Perfil implements OnInit {
     }
   }
 
+  // elimina un animal de la lista de la protectora
   eliminarAnimal(uuid: string) {
     if (this.eliminandoAnimalUuid) return;
     this.eliminandoAnimalUuid = uuid;

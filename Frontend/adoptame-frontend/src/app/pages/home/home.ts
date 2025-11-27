@@ -12,6 +12,7 @@ import { FormularioBusqueda, FiltrosBusqueda } from '../../components/formulario
 export class Home {
   constructor(private router: Router) { }
 
+  // metodo para navegar a la pagina de animales con filtros
   buscar(filtros: FiltrosBusqueda): void {
     this.router.navigate(['/animales'], {
       queryParams: {

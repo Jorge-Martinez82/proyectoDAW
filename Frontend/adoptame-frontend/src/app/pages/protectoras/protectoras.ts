@@ -31,6 +31,7 @@ export class Protectoras implements OnInit {
     private router: Router
   ) { }
 
+  // inicializa la suscripcion para provincia y pagina
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
       const provincia = params['provincia'] || 'todos';
@@ -40,6 +41,7 @@ export class Protectoras implements OnInit {
     });
   }
 
+  // carga las protectoras segun la provincia y la pagina
   cargarProtectoras(provincia: string = 'todos') {
     this.loading = true;
 
@@ -65,6 +67,7 @@ export class Protectoras implements OnInit {
       });
   }
 
+  // cambia la pagina y actualiza la url
   onPageChange(page: number) {
     this.currentPage = page;
 
@@ -82,6 +85,7 @@ export class Protectoras implements OnInit {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  // aplica el filtro de provincia y vuelve a la primera pagina
   buscar(filtros: FiltrosBusqueda) {
     this.router.navigate([], {
       relativeTo: this.route,

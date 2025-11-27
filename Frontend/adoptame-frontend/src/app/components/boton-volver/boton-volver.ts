@@ -16,6 +16,7 @@ export class BotonVolver {
 
   constructor(private location: Location, private router: Router) { }
 
+  // navega a la ruta dada o vuelve atras
   volver(): void {
     if (this.ruta) {
       this.router.navigateByUrl(this.ruta);

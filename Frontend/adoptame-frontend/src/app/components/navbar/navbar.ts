@@ -12,6 +12,7 @@ import { AuthService } from '../../services/auth.service';
 export class Navbar {
   authService = inject(AuthService);
 
+  // cierra sesion del usuario
   logout(): void {
     this.authService.logout();
   }

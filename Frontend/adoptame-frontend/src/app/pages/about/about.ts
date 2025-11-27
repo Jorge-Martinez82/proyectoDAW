@@ -10,6 +10,7 @@ import { BotonPrincipal } from '../../components/boton-principal/boton-principal
 })
 export class About {
 
+  // gestiona envio del formulario de contacto simple
   onContactSubmit(event: any) {
     event.preventDefault();
     alert('Mensaje enviado');

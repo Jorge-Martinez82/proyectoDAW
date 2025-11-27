@@ -28,6 +28,7 @@ export class Login {
     });
   }
 
+  // inicia sesion con credenciales
   onSubmit(): void {
     if (this.loginForm.valid) {
       this.loading = true;
@@ -58,6 +59,7 @@ export class Login {
     }
   }
 
+  // indica si el campo del formulario es invalido
   campoInvalido(campo: string): boolean {
     const control = this.loginForm.get(campo);
     return !!(control && control.invalid && control.touched);

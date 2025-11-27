@@ -29,6 +29,7 @@ export class FormularioCrearAnimal implements OnInit {
     private protectorasService: ProtectorasService
   ) {}
 
+  // crea el formulario y obtiene uuid de protectora
   ngOnInit(): void {
     this.form = this.fb.group({
       nombre: ['', [Validators.required, Validators.maxLength(80)]],
@@ -50,6 +51,7 @@ export class FormularioCrearAnimal implements OnInit {
     });
   }
 
+  // valida y envia datos para crear animal
   onSubmit(): void {
     if (this.form.invalid || !this.protectoraUuid) {
       this.form.markAllAsTouched();

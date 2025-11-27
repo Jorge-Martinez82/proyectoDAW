@@ -31,6 +31,7 @@ export class Animales implements OnInit {
     private router: Router
   ) { }
 
+  // inicializa suscripcion a cambios en query params
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
       const tipo = params['tipo'] || 'todos';
@@ -42,6 +43,7 @@ export class Animales implements OnInit {
     });
   }
 
+  // obtiene animales segun filtros y pagina
   cargarAnimales(
     tipo: string = 'todos',
     provincia: string = 'todos',
@@ -71,6 +73,7 @@ export class Animales implements OnInit {
       });
   }
 
+  // cambia de pagina y actualiza filtros en la url
   onPageChange(page: number) {
     this.currentPage = page;
     const currentFilters = this.route.snapshot.queryParams;
@@ -94,6 +97,7 @@ export class Animales implements OnInit {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  // aplica nuevos filtros de busqueda y reinicia pagina
   buscar(filtros: FiltrosBusqueda) {
     const currentFilters = this.route.snapshot.queryParams;
 
