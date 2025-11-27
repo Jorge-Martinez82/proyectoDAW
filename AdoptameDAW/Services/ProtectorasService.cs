@@ -16,12 +16,14 @@ public class ProtectorasService
         _mapper = mapper;
     }
 
+    // metodo que obtiene una protectora por su uuid
     public async Task<ProtectoraDto?> GetByUuidAsync(Guid uuid)
     {
         var protectora = await _repository.GetByUuidAsync(uuid);
         return protectora == null ? null : _mapper.Map<ProtectoraDto>(protectora);
     }
 
+    // metodo que devuelve protectorass con paginacion y filtro de provincia
     public async Task<object> GetAllAsync(int pageNumber, int pageSize, string? provincia = null)
     {
         pageSize = pageSize > 12 ? 12 : pageSize;
@@ -40,18 +42,20 @@ public class ProtectorasService
         };
     }
 
+    // metodo que obtiene la protectora por uuid de usuario
     public async Task<ProtectoraDto?> GetByUsuarioUuidAsync(Guid usuarioUuid)
     {
         var protectora = await _repository.GetByUsuarioUuidAsync(usuarioUuid);
         return protectora == null ? null : _mapper.Map<ProtectoraDto>(protectora);
     }
 
+    // metodo que actualiza una protectora
     public async Task<bool> UpdateAsync(Guid protectoraUuid, ProtectoraDto dto)
     {
-        var entidad = await _repository.GetByUuidAsync(protectoraUuid);
-        if (entidad == null) return false;
+        var protectora = await _repository.GetByUuidAsync(protectoraUuid);
+        if (protectora == null) return false;
 
-        _mapper.Map(dto, entidad);
-        return await _repository.UpdateAsync(entidad);
+        _mapper.Map(dto, protectora);
+        return await _repository.UpdateAsync(protectora);
     }
 }

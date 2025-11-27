@@ -30,6 +30,7 @@ public class SolicitudesController : ControllerBase
         public string Estado { get; set; } = string.Empty;
     }
 
+    // metodo que crea una solicitud de adopcion
     [Authorize]
     [HttpPost]
     public async Task<ActionResult<SolicitudDto>> Crear([FromBody] CrearSolicitudRequest request)
@@ -46,6 +47,7 @@ public class SolicitudesController : ControllerBase
         return Created(string.Empty, creada);
     }
 
+    // metodo que devuelve las solicitudes del adoptante autenticado
     [Authorize]
     [HttpGet("adoptante")]
     public async Task<ActionResult> GetMisSolicitudesAdoptante([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
@@ -59,6 +61,7 @@ public class SolicitudesController : ControllerBase
         return Ok(resultado);
     }
 
+    // metodo que devuelve las solicitudes recibidas por la protectora autenticada
     [Authorize]
     [HttpGet("protectora")]
     public async Task<ActionResult> GetSolicitudesProtectora([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
@@ -72,6 +75,7 @@ public class SolicitudesController : ControllerBase
         return Ok(resultado);
     }
 
+    // metodo que actualiza el estado de una solicitud
     [Authorize]
     [HttpPut("{id:int}/estado")]
     public async Task<ActionResult> ActualizarEstado(int id, [FromBody] ActualizarEstadoRequest request)
@@ -88,6 +92,7 @@ public class SolicitudesController : ControllerBase
         return NoContent();
     }
 
+    // metodo que devuelve el usuario desde el token
     private Guid? GetUserUuid()
     {
         var claim = User.FindFirst(ClaimTypes.NameIdentifier) ?? User.FindFirst("sub");
@@ -95,6 +100,7 @@ public class SolicitudesController : ControllerBase
         return Guid.TryParse(claim.Value, out var guid) ? guid : null;
     }
 
+    // metodo que devuelve el rol del usuario desde el token
     private string? GetUserRole()
     {
         var claim = User.FindFirst(ClaimTypes.Role);

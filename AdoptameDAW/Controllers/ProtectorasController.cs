@@ -17,6 +17,7 @@ public class ProtectorasController : ControllerBase
         _service = service;
     }
 
+    // metodo que llama al servicio para traer protectoras con paginacion y filtros
     [HttpGet]
     public async Task<ActionResult> GetAll(
         [FromQuery] int pageNumber = 1,
@@ -27,6 +28,7 @@ public class ProtectorasController : ControllerBase
         return Ok(result);
     }
 
+    // metodo que llama al servicio para traer una protectora por su uuid
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<ProtectoraDto>> GetByUuid(Guid id)
     {
@@ -37,6 +39,7 @@ public class ProtectorasController : ControllerBase
         return Ok(protectora);
     }
 
+    // metodo que devuelve el perfil de la protectora autenticada
     [Authorize]
     [HttpGet("me")]
     public async Task<ActionResult<ProtectoraDto>> GetMe()
@@ -52,6 +55,7 @@ public class ProtectorasController : ControllerBase
         return Ok(protectora);
     }
 
+    // metodo que actualiza el perfil de la protectora autenticada
     [Authorize]
     [HttpPut("me")]
     public async Task<ActionResult> UpdateMe([FromBody] ProtectoraDto dto)

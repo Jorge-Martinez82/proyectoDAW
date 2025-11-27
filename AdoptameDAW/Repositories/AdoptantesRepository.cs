@@ -13,6 +13,7 @@ namespace AdoptameDAW.Repositories
             _context = context;
         }
 
+        // metodo que obtiene un adoptante por uuid
         public async Task<Adoptante?> GetByUuidAsync(Guid adoptanteUuid)
         {
             return await _context.Adoptantes
@@ -21,6 +22,7 @@ namespace AdoptameDAW.Repositories
                 .FirstOrDefaultAsync(a => a.Uuid == adoptanteUuid);
         }
 
+        // metodo que obtiene un adoptante por id
         public async Task<Adoptante?> GetByIdAsync(int id)
         {
             return await _context.Adoptantes
@@ -29,6 +31,7 @@ namespace AdoptameDAW.Repositories
                 .FirstOrDefaultAsync(a => a.Id == id);
         }
 
+        // metodo que obtiene el perfil de adoptante por uuid de usuario
         public async Task<Adoptante?> GetByUsuarioUuidAsync(Guid usuarioUuid)
         {
             var usuario = await _context.Usuarios
@@ -42,6 +45,7 @@ namespace AdoptameDAW.Repositories
                 .FirstOrDefaultAsync(a => a.UserId == usuario.Id);
         }
 
+        // metodo que devuelve adoptantes con paginacion
         public async Task<(IEnumerable<Adoptante> adoptantes, int total)> GetAllAsync(int pageNumber, int pageSize)
         {
             var query = _context.Adoptantes
@@ -59,6 +63,7 @@ namespace AdoptameDAW.Repositories
             return (adoptantes, total);
         }
 
+        // metodo que crea un nuevo adoptante
         public async Task<Adoptante> CreateAsync(Adoptante adoptante)
         {
             adoptante.Uuid = Guid.NewGuid();
@@ -68,6 +73,7 @@ namespace AdoptameDAW.Repositories
             return adoptante;
         }
 
+        // metodo que actualiza un adoptante
         public async Task<bool> UpdateAsync(Adoptante adoptante)
         {
             var entidad = await _context.Adoptantes.FirstOrDefaultAsync(a => a.Uuid == adoptante.Uuid);

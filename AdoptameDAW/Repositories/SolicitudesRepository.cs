@@ -17,6 +17,7 @@ namespace AdoptameDAW.Repositories
             _context = context;
         }
 
+        // metodo que crea una nueva solicitud
         public async Task<Solicitud> CreateAsync(Solicitud solicitud)
         {
             solicitud.CreatedAt = DateTime.UtcNow;
@@ -29,6 +30,7 @@ namespace AdoptameDAW.Repositories
                 .FirstAsync(s => s.Id == solicitud.Id);
         }
 
+        // metodo que obtiene una solicitud por id
         public async Task<Solicitud?> GetByIdAsync(int id)
         {
             return await _context.Solicitudes
@@ -39,6 +41,7 @@ namespace AdoptameDAW.Repositories
                 .FirstOrDefaultAsync(s => s.Id == id);
         }
 
+        // metodo que obtiene solicitudes por adoptante con paginacion
         public async Task<(IEnumerable<Solicitud> solicitudes, int total)> GetByAdoptanteAsync(Guid usuarioAdoptanteUuid, int pageNumber, int pageSize)
         {
             var usuario = await _context.Usuarios.AsNoTracking().FirstOrDefaultAsync(u => u.Uuid == usuarioAdoptanteUuid);
@@ -62,6 +65,7 @@ namespace AdoptameDAW.Repositories
             return (solicitudes, total);
         }
 
+        // metodo que obtiene solicitudes por protectora con paginacion
         public async Task<(IEnumerable<Solicitud> solicitudes, int total)> GetByProtectoraAsync(Guid usuarioProtectoraUuid, int pageNumber, int pageSize)
         {
             var usuario = await _context.Usuarios.AsNoTracking().FirstOrDefaultAsync(u => u.Uuid == usuarioProtectoraUuid);
@@ -85,6 +89,7 @@ namespace AdoptameDAW.Repositories
             return (solicitudes, total);
         }
 
+        // metodo que actualiza el estado de una solicitud
         public async Task<bool> UpdateEstadoAsync(int solicitudId, string nuevoEstado, int usuarioProtectoraId)
         {
             var entidad = await _context.Solicitudes.FirstOrDefaultAsync(s => s.Id == solicitudId && s.UsuarioProtectoraId == usuarioProtectoraId);

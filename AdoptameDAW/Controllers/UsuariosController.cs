@@ -16,6 +16,7 @@ public class UsuariosController : ControllerBase
         _service = service;
     }
 
+    // metodo que realiza login y devuelve token y usuario
     [HttpPost("login")]
     public async Task<ActionResult<LoginResponseDto>> Login([FromBody] LoginRequest request)
     {
@@ -29,6 +30,7 @@ public class UsuariosController : ControllerBase
         return Ok(result);
     }
 
+    // metodo que registra un nuevo usuario segun su rol
     [HttpPost("register")]
     public async Task<ActionResult<object>> Register([FromBody] RegistroRequestDto request)
     {

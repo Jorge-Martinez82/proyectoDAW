@@ -13,6 +13,7 @@ public class AnimalesRepository : IAnimalesRepository
         _context = context;
     }
 
+    // metodo que obtiene un animal por uuid
     public async Task<Animal?> GetByUuidAsync(Guid id)
     {
         return await _context.Animales
@@ -20,6 +21,7 @@ public class AnimalesRepository : IAnimalesRepository
             .FirstOrDefaultAsync(a => a.Uuid == id);
     }
 
+    // metodo que obtiene animales con filtros y paginacion
     public async Task<(IEnumerable<Animal> animales, int total)> GetAllAsync(
         int pageNumber,
         int pageSize,
@@ -53,14 +55,16 @@ public class AnimalesRepository : IAnimalesRepository
         return (animales, total);
     }
 
+    // metodo que elimina un animal por uuid
     public async Task<bool> DeleteAsync(Guid uuid)
     {
-        var entity = await _context.Animales.FirstOrDefaultAsync(a => a.Uuid == uuid);
-        if (entity == null) return false;
-        _context.Animales.Remove(entity);
+        var animal = await _context.Animales.FirstOrDefaultAsync(a => a.Uuid == uuid);
+        if (animal == null) return false;
+        _context.Animales.Remove(animal);
         return await _context.SaveChangesAsync() > 0;
     }
 
+    // metodo que crea un nuevo animal
     public async Task<Animal> CreateAsync(Animal animal)
     {
         animal.CreatedAt = DateTime.UtcNow;

@@ -18,12 +18,14 @@ public class AnimalesService
         _protectorasRepository = protectorasRepository;
     }
 
+    // metodo que obtiene un animal por su uuid desde el repositorio
     public async Task<AnimalDto?> GetByIdAsync(Guid id)
     {
         var animal = await _repository.GetByUuidAsync(id);
         return animal == null ? null : _mapper.Map<AnimalDto>(animal);
     }
 
+    // metodo que obtiene animales con filtros y paginacion desde el repositorio
     public async Task<object> GetAllAsync(
         int pageNumber,
         int pageSize,
@@ -54,30 +56,28 @@ public class AnimalesService
         };
     }
 
+    // metodo que elimina un animal por su uuid
     public async Task<bool> DeleteAsync(Guid uuid)
     {
         return await _repository.DeleteAsync(uuid);
     }
 
+    // metodo que crea un nuevo animal en el repositorio
     public async Task<AnimalDto?> CreateAsync(AnimalDto dto)
     {
         var protectora = await _protectorasRepository.GetByUuidAsync(dto.Uuid == Guid.Empty ? Guid.Empty : dto.Uuid);
         if (protectora == null && dto.ProtectoraId == 0) return null;
 
-        var entity = new Animal
-        {
-            Uuid = Guid.NewGuid(),
-            Nombre = dto.Nombre ?? string.Empty,
-            Tipo = dto.Tipo ?? string.Empty,
-            Raza = dto.Raza,
-            Edad = dto.Edad,
-            Genero = dto.Genero,
-            Descripcion = dto.Descripcion,
-            ProtectoraId = dto.ProtectoraId != 0 ? dto.ProtectoraId : (protectora?.Id ?? 0),
-            ImagenPrincipal = dto.ImagenPrincipal
-        };
+        var animal = _mapper.Map<Animal>(dto);
 
-        var creado = await _repository.CreateAsync(entity);
+        animal.Uuid = Guid.NewGuid();
+        animal.ProtectoraId = dto.ProtectoraId != 0 ? dto.ProtectoraId : (protectora?.Id ?? 0);
+
+        animal.Nombre = string.IsNullOrWhiteSpace(animal.Nombre) ? string.Empty : animal.Nombre;
+        animal.Tipo = string.IsNullOrWhiteSpace(animal.Tipo) ? string.Empty : animal.Tipo;
+
+
+        var creado = await _repository.CreateAsync(animal);
         return _mapper.Map<AnimalDto>(creado);
     }
 }

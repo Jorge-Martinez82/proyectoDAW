@@ -13,6 +13,7 @@ public class ProtectorasRepository : IProtectorasRepository
         _context = context;
     }
 
+    // metodo que obtiene una protectora por uuid
     public async Task<Protectora?> GetByUuidAsync(Guid uuid)
     {
         return await _context.Protectoras
@@ -22,6 +23,7 @@ public class ProtectorasRepository : IProtectorasRepository
             .FirstOrDefaultAsync(p => p.Uuid == uuid);
     }
 
+    // metodo que obtiene protectorass con paginacion y filtro de provincia
     public async Task<(IEnumerable<Protectora> protectoras, int total)> GetAllAsync(int pageNumber, int pageSize, string? provincia = null)
     {
         var query = _context.Protectoras
@@ -44,6 +46,7 @@ public class ProtectorasRepository : IProtectorasRepository
         return (protectoras, total);
     }
 
+    // metodo que crea una nueva protectora
     public async Task<Protectora> CreateAsync(Protectora protectora)
     {
         protectora.Uuid = Guid.NewGuid();
@@ -53,6 +56,7 @@ public class ProtectorasRepository : IProtectorasRepository
         return protectora;
     }
 
+    // metodo que obtiene la protectora por uuid de usuario
     public async Task<Protectora?> GetByUsuarioUuidAsync(Guid usuarioUuid)
     {
         var usuario = await _context.Usuarios
@@ -67,6 +71,7 @@ public class ProtectorasRepository : IProtectorasRepository
             .FirstOrDefaultAsync(p => p.UserId == usuario.Id);
     }
 
+    // metodo que actualiza una protectora
     public async Task<bool> UpdateAsync(Protectora protectora)
     {
         var entidad = await _context.Protectoras.FirstOrDefaultAsync(p => p.Uuid == protectora.Uuid);

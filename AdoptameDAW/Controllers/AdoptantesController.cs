@@ -17,6 +17,7 @@ public class AdoptantesController : ControllerBase
         _service = service;
     }
 
+    // metodo que llama al servicio para traer adoptantes con paginacion
     [HttpGet]
     public async Task<ActionResult> GetAll(
         [FromQuery] int pageNumber = 1,
@@ -26,6 +27,7 @@ public class AdoptantesController : ControllerBase
         return Ok(result);
     }
 
+    // metodo que llama al servicio para traer un adoptante por su uuid
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<AdoptanteDto>> GetByAdoptanteUuid(Guid id)
     {
@@ -35,30 +37,32 @@ public class AdoptantesController : ControllerBase
         return Ok(adoptante);
     }
 
+    // metodo que devuelve el perfil del adoptante autenticado
     [Authorize]
     [HttpGet("me")]
     public async Task<ActionResult<AdoptanteDto>> GetMe()
     {
-        var userUuid = GetUserUuidFromToken();
-        if (userUuid == null)
+        var adoptanteUuid = GetUserUuidFromToken();
+        if (adoptanteUuid == null)
             return Unauthorized();
 
-        var adoptante = await _service.GetByUsuarioUuidAsync(userUuid.Value);
+        var adoptante = await _service.GetByUsuarioUuidAsync(adoptanteUuid.Value);
         if (adoptante == null)
             return NotFound(new { mensaje = "Adoptante no encontrado" });
 
         return Ok(adoptante);
     }
 
+    // metodo que actualiza el perfil del adoptante autenticado
     [Authorize]
     [HttpPut("me")]
     public async Task<ActionResult> UpdateMe([FromBody] AdoptanteDto dto)
     {
-        var userUuid = GetUserUuidFromToken();
-        if (userUuid == null)
+        var adoptanteUuid = GetUserUuidFromToken();
+        if (adoptanteUuid == null)
             return Unauthorized();
 
-        var existing = await _service.GetByUsuarioUuidAsync(userUuid.Value);
+        var existing = await _service.GetByUsuarioUuidAsync(adoptanteUuid.Value);
         if (existing == null)
             return NotFound(new { mensaje = "Adoptante no encontrado" });
 

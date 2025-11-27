@@ -32,6 +32,7 @@ public class UsuariosService
         _configuration = configuration;
     }
 
+    // metodo que valida credenciales y genera un token jwt
     public async Task<LoginResponseDto?> LoginAsync(LoginRequest request)
     {
         var usuario = await _usuariosRepository.GetByEmailAsync(request.Email);
@@ -48,10 +49,11 @@ public class UsuariosService
         };
     }
 
+    // metodo que registra un nuevo usuario y su perfil asociado
     public async Task<object?> RegisterAsync(RegistroRequestDto request)
     {
-        var existingUser = await _usuariosRepository.GetByEmailAsync(request.Email);
-        if (existingUser != null) return null;
+        var existeUsuario = await _usuariosRepository.GetByEmailAsync(request.Email);
+        if (existeUsuario != null) return null;
 
         if (request.TipoUsuario != "Protectora" && request.TipoUsuario != "Adoptante")
             throw new ArgumentException("Tipo de usuario inválido");
@@ -97,6 +99,7 @@ public class UsuariosService
         }
     }
 
+    // metodo que genera el token para el ususario
     private string GenerateJwtToken(Usuario usuario)
     {
         var tokenHandler = new JwtSecurityTokenHandler();

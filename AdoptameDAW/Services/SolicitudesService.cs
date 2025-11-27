@@ -2,10 +2,7 @@ using AdoptameDAW.Models;
 using AdoptameDAW.Models.DTOs;
 using AdoptameDAW.Repositories;
 using AutoMapper;
-using System;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Linq;
+
 
 namespace AdoptameDAW.Services
 {
@@ -34,6 +31,7 @@ namespace AdoptameDAW.Services
             _mapper = mapper;
         }
 
+        // metodo que crea una nueva solicitud de adopcion
         public async Task<SolicitudDto?> CreateAsync(Guid usuarioAdoptanteUuid, Guid animalUuid, string comentario)
         {
             var usuarioAdoptante = await _usuariosRepository.GetByUuidAsync(usuarioAdoptanteUuid);
@@ -47,7 +45,7 @@ namespace AdoptameDAW.Services
             var usuarioProtectora = await _usuariosRepository.GetByUuidAsync(protectora.User.Uuid);
             if (usuarioProtectora == null) return null;
 
-            var entidad = new Solicitud
+            var solicitud = new Solicitud
             {
                 Comentario = comentario,
                 Estado = "pendiente",
@@ -56,7 +54,7 @@ namespace AdoptameDAW.Services
                 UsuarioProtectoraId = usuarioProtectora.Id
             };
 
-            var creada = await _solicitudesRepository.CreateAsync(entidad);
+            var creada = await _solicitudesRepository.CreateAsync(solicitud);
             var dto = _mapper.Map<SolicitudDto>(creada);
             var adoptantePerfil = await _adoptantesRepository.GetByUsuarioUuidAsync(usuarioAdoptanteUuid);
             if (adoptantePerfil != null)
@@ -69,6 +67,7 @@ namespace AdoptameDAW.Services
             return dto;
         }
 
+        // metodo que obtiene solicitudes del adoptante con paginacion
         public async Task<object> GetByAdoptanteAsync(Guid usuarioUuid, int pageNumber, int pageSize)
         {
             pageSize = pageSize > 12 ? 12 : pageSize;
@@ -99,6 +98,7 @@ namespace AdoptameDAW.Services
             };
         }
 
+        // metodo que obtiene solicitudes recibidas por la protectora con paginacion
         public async Task<object> GetByProtectoraAsync(Guid usuarioUuid, int pageNumber, int pageSize)
         {
             pageSize = pageSize > 12 ? 12 : pageSize;
@@ -135,6 +135,7 @@ namespace AdoptameDAW.Services
             };
         }
 
+        // metodo que actualiza el estado de una solicitud de adopcion
         public async Task<bool> UpdateEstadoAsync(Guid usuarioProtectoraUuid, int solicitudId, string nuevoEstado)
         {
             if (nuevoEstado != "aceptada" && nuevoEstado != "rechazada")

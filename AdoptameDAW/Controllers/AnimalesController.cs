@@ -16,6 +16,7 @@ public class AnimalesController : ControllerBase
         _service = service;
     }
 
+    // metodo que llama al servicio para traer animales con filtros y paginacion
     [HttpGet]
     public async Task<ActionResult> GetAll(
         [FromQuery] int pageNumber = 1,
@@ -28,7 +29,7 @@ public class AnimalesController : ControllerBase
         return Ok(result);
     }
 
-
+    // metodo que llama al servicio para traer un animal por su uuid
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<AnimalDto>> GetById(Guid id)
     {
@@ -39,6 +40,7 @@ public class AnimalesController : ControllerBase
         return Ok(animal);
     }
 
+    // metodo que llama al servicio para eliminar un animal por su uuid
     [Authorize]
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult> Delete(Guid id)
@@ -49,6 +51,7 @@ public class AnimalesController : ControllerBase
         return NoContent();
     }
 
+    // metodo que llama al servicio para crear un nuevo animal
     [Authorize]
     [HttpPost]
     public async Task<ActionResult<AnimalDto>> Create([FromBody] AnimalDto request)
