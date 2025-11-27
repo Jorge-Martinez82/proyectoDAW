@@ -18,6 +18,7 @@ public class AnimalesRepository : IAnimalesRepository
     {
         return await _context.Animales
             .Include(a => a.Protectora)
+            .AsNoTracking()
             .FirstOrDefaultAsync(a => a.Uuid == id);
     }
 

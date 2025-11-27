@@ -73,10 +73,12 @@ namespace AdoptameDAW.Repositories
             return adoptante;
         }
 
-        // metodo que actualiza un adoptante
+        // metodo que actualiza un adoptante y su usuario asociado
         public async Task<bool> UpdateAsync(Adoptante adoptante)
         {
-            var entidad = await _context.Adoptantes.FirstOrDefaultAsync(a => a.Uuid == adoptante.Uuid);
+            var entidad = await _context.Adoptantes
+                .Include(a => a.Usuario)
+                .FirstOrDefaultAsync(a => a.Uuid == adoptante.Uuid);
             if (entidad == null) return false;
 
             entidad.Nombre = adoptante.Nombre;
@@ -87,6 +89,12 @@ namespace AdoptameDAW.Repositories
             entidad.Provincia = adoptante.Provincia;
             entidad.Telefono = adoptante.Telefono;
             entidad.Email = adoptante.Email;
+
+            if (entidad.Usuario != null && entidad.Usuario.Email != adoptante.Email)
+            {
+                entidad.Usuario.Email = adoptante.Email;
+                _context.Usuarios.Update(entidad.Usuario);
+            }
 
             _context.Adoptantes.Update(entidad);
             var cambios = await _context.SaveChangesAsync();

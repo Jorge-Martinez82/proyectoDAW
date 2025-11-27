@@ -6,11 +6,13 @@ import { AnimalesService } from '../../services/animales.service';
 import { BotonPrincipal } from '../../components/boton-principal/boton-principal';
 import { AuthService } from '../../services/auth.service';
 import { ProtectorasService } from '../../services/protectoras.service';
+import { BotonVolver } from '../../components/boton-volver/boton-volver';
+
 
 @Component({
   selector: 'app-formulario-crear-animal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, BotonPrincipal],
+  imports: [CommonModule, ReactiveFormsModule, BotonPrincipal, BotonVolver],
   templateUrl: './formulario-crear-animal.html',
   styleUrl: './formulario-crear-animal.css'
 })

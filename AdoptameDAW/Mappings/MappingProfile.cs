@@ -8,7 +8,12 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<Animal, AnimalDto>().ReverseMap();
+        CreateMap<Animal, AnimalDto>()
+            .ForMember(d => d.ProtectoraNombre, o => o.MapFrom(s => s.Protectora.Nombre))
+            .ForMember(d => d.ProtectoraEmail, o => o.MapFrom(s => s.Protectora.Email))
+            .ForMember(d => d.ProtectoraProvincia, o => o.MapFrom(s => s.Protectora.Provincia))
+            .ReverseMap();
+        
         CreateMap<Protectora, ProtectoraDto>().ReverseMap();
         CreateMap<Usuario, UsuarioDto>().ReverseMap();
         CreateMap<Adoptante, AdoptanteDto>().ReverseMap();

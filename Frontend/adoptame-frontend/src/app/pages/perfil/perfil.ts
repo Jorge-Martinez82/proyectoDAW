@@ -314,9 +314,13 @@ export class Perfil implements OnInit {
     }
   }
 
-  // elimina un animal de la lista de la protectora
+  // elimina un animal de la lista de la protectora con confirmación
   eliminarAnimal(uuid: string) {
     if (this.eliminandoAnimalUuid) return;
+    const confirmacion = window.confirm('¿Estás seguro de que deseas eliminar este animal? Esta acción no se puede deshacer.');
+    if (!confirmacion) {
+      return;
+    }
     this.eliminandoAnimalUuid = uuid;
     this.animalesService.deleteAnimal(uuid).subscribe({
       next: () => {

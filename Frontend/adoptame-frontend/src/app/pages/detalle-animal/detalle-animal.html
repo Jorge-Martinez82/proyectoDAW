@@ -1,5 +1,5 @@
-<main class="flex flex-grow items-center justify-center bg-customPurple bg-[url('assets/img/huellas.png')]">
-  <section id="seccion-principal" class="flex flex-col flex-grow items-center justify-center py-20">
+<main>
+  <section class="flex h-auto flex-col items-center justify-center bg-customPurple bg-[url('/assets/img/huellas.png')] bg-cover bg-center px-6 py-16 md:flex-row">
 
     <app-spinner *ngIf="loading"></app-spinner>
 
@@ -20,7 +20,7 @@
       <div class="container flex flex-col sm:flex-row items-center justify-center w-full rounded-lg bg-white shadow-lg">
 
         <div class="flex h-auto w-[80%] sm:w-2/5 items-center justify-center m-5 p-4">
-          <img [src]=" animal.imagenPrincipal "
+          <img [src]="animal.imagenPrincipal"
                [alt]="'Foto de ' + animal.nombre"
                class="h-auto w-[100%] rounded-lg object-cover shadow-lg" />
         </div>
@@ -30,7 +30,7 @@
             <h2 class="text-5xl font-bold">{{ animal.nombre }}</h2>
           </div>
 
-          <div class="sm:grid sm:grid-cols-2 p-5">
+          <div class="sm:grid sm:grid-cols-2 p-5 w-full">
             <p class="text-lg mb-2" *ngIf="animal.edad">
               <span class="font-semibold text-xl">Edad: </span>{{ animal.edad }} año(s)
             </p>
@@ -50,6 +50,23 @@
               <span class="font-semibold text-xl">Descripción: </span>
               <span class="normal-case">{{ animal.descripcion }}</span>
             </p>
+
+            <!-- Datos de la protectora -->
+            <div class="sm:col-span-2 mt-4 pt-4 border-t border-gray-200">
+              <h3 class="text-xl font-bold mb-3">Protectora</h3>
+              <p class="text-lg mb-2" *ngIf="animal.protectoraNombre">
+                <span class="font-semibold">Nombre: </span>{{ animal.protectoraNombre }}
+              </p>
+              <p class="text-lg mb-2" *ngIf="animal.protectoraEmail">
+                <span class="font-semibold">Email: </span>
+                <a [href]="'mailto:' + animal.protectoraEmail" class="text-customBlue hover:underline">
+                  {{ animal.protectoraEmail }}
+                </a>
+              </p>
+              <p class="text-lg mb-2" *ngIf="animal.protectoraProvincia">
+                <span class="font-semibold">Provincia: </span>{{ animal.protectoraProvincia }}
+              </p>
+            </div>
           </div>
 
           <div class="mb-2 flex items-center justify-center">

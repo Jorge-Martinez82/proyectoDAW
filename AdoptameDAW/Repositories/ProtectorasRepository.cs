@@ -71,10 +71,12 @@ public class ProtectorasRepository : IProtectorasRepository
             .FirstOrDefaultAsync(p => p.UserId == usuario.Id);
     }
 
-    // metodo que actualiza una protectora
+    // metodo que actualiza una protectora y su usuario asociado
     public async Task<bool> UpdateAsync(Protectora protectora)
     {
-        var entidad = await _context.Protectoras.FirstOrDefaultAsync(p => p.Uuid == protectora.Uuid);
+        var entidad = await _context.Protectoras
+            .Include(p => p.User)
+            .FirstOrDefaultAsync(p => p.Uuid == protectora.Uuid);
         if (entidad == null) return false;
 
         entidad.Nombre = protectora.Nombre;
@@ -83,6 +85,12 @@ public class ProtectorasRepository : IProtectorasRepository
         entidad.Provincia = protectora.Provincia;
         entidad.Email = protectora.Email;
         entidad.Imagen = protectora.Imagen;
+
+        if (entidad.User != null && entidad.User.Email != protectora.Email)
+        {
+            entidad.User.Email = protectora.Email;
+            _context.Usuarios.Update(entidad.User);
+        }
 
         _context.Protectoras.Update(entidad);
         var cambios = await _context.SaveChangesAsync();

@@ -9,6 +9,9 @@ export interface AnimalDto {
   protectoraId: number;
   imagenPrincipal: string | null;
   createdAt: Date;
+  protectoraNombre?: string | null;
+  protectoraEmail?: string | null;
+  protectoraProvincia?: string | null;
 }
 
 export interface AnimalesResponse {

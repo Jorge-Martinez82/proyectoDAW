@@ -22,4 +22,8 @@ public class AnimalDto
     public string? ImagenPrincipal { get; set; }
 
     public DateTime CreatedAt { get; set; }
+
+    public string? ProtectoraNombre { get; set; }
+    public string? ProtectoraEmail { get; set; }
+    public string? ProtectoraProvincia { get; set; }
 }

@@ -99,19 +99,11 @@ export class Animales implements OnInit {
 
   // aplica nuevos filtros de busqueda y reinicia pagina
   buscar(filtros: FiltrosBusqueda) {
-    const currentFilters = this.route.snapshot.queryParams;
-
     const queryParams: any = {
       tipo: filtros.tipo !== 'todos' ? filtros.tipo : null,
       provincia: filtros.provincia !== 'todos' ? filtros.provincia : null,
       page: 1
     };
-
-    const isGlobalSearch = filtros.tipo === 'todos' && filtros.provincia === 'todos';
-    if (!isGlobalSearch && currentFilters['protectoraUuid']) {
-      queryParams.protectoraUuid = currentFilters['protectoraUuid'];
-    }
-
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams
