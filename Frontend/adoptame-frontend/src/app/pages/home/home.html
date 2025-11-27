@@ -86,9 +86,25 @@
     </div>
   </section>
 
-  <!-- SOBRE NOSOTROS Y CONTACTO -->
-  <section id="about" class="flex h-auto flex-col items-center justify-center bg-customPurple bg-[url('/assets/img/huellas.png')] bg-cover bg-center px-6 py-24 md:flex-row">
-
+  <!-- VIDEO -->
+  <section class="contenedor_video flex w-full flex-col items-center justify-center bg-customPurple bg-[url('/assets/img/huellas.png')] bg-cover bg-center px-6 py-24">
+    <header class="flex items-center justify-center pb-5 text-center">
+      <h2 class="font-roboto text-2xl font-bold">Conoce más sobre Adóptame</h2>
+    </header>
+    <article class="articulo w-full max-w-5xl flex flex-col items-center text-center">
+      <video class="w-full max-w-4xl rounded-xl shadow-xl ring-2 ring-white/30 bg-black"
+             controls
+             preload="metadata"
+             playsinline
+             aria-label="Video explicativo sobre la plataforma Adóptame"
+             poster="assets/img/portada.webp">
+        <source src="assets/video/presentacion%20adoptame%20(720).mp4" type="video/mp4" />
+        <track src="assets/video/presentacion-adoptame.vtt" kind="subtitles" srclang="es" label="Español" default />
+      </video>
+      <p class="mt-4 font-roboto  text-base md:text-lg max-w-3xl">
+        Descubre como conectamos refugios y personas para facilitar adopciones responsables.
+      </p>
+    </article>
   </section>
 </main>
 
