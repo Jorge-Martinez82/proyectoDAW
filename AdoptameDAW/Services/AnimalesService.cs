@@ -18,13 +18,13 @@ public class AnimalesService
         _protectorasRepository = protectorasRepository;
     }
 
-    public async Task<AnimalDto?> AnimalesServiceGetById(Guid id)
+    public async Task<AnimalDto?> GetByIdAsync(Guid id)
     {
-        var animal = await _repository.AnimalesRepositoryGetById(id);
+        var animal = await _repository.GetByUuidAsync(id);
         return animal == null ? null : _mapper.Map<AnimalDto>(animal);
     }
 
-    public async Task<object> AnimalesServiceGetAll(
+    public async Task<object> GetAllAsync(
         int pageNumber,
         int pageSize,
         Guid? protectoraUuid = null,
@@ -35,7 +35,7 @@ public class AnimalesService
         pageSize = pageSize > 12 ? 12 : pageSize;
         pageNumber = pageNumber < 1 ? 1 : pageNumber;
 
-        var (animales, total) = await _repository.AnimalesRepositoryGetAll(
+        var (animales, total) = await _repository.GetAllAsync(
             pageNumber,
             pageSize,
             protectoraUuid,
@@ -54,12 +54,12 @@ public class AnimalesService
         };
     }
 
-    public async Task<bool> AnimalesServiceDelete(Guid uuid)
+    public async Task<bool> DeleteAsync(Guid uuid)
     {
-        return await _repository.AnimalesRepositoryDelete(uuid);
+        return await _repository.DeleteAsync(uuid);
     }
 
-    public async Task<AnimalDto?> AnimalesServiceCreate(AnimalDto dto)
+    public async Task<AnimalDto?> CreateAsync(AnimalDto dto)
     {
         var protectora = await _protectorasRepository.GetByUuidAsync(dto.Uuid == Guid.Empty ? Guid.Empty : dto.Uuid);
         if (protectora == null && dto.ProtectoraId == 0) return null;
@@ -77,7 +77,7 @@ public class AnimalesService
             ImagenPrincipal = dto.ImagenPrincipal
         };
 
-        var creado = await _repository.AnimalesRepositoryCreate(entity);
+        var creado = await _repository.CreateAsync(entity);
         return _mapper.Map<AnimalDto>(creado);
     }
 }

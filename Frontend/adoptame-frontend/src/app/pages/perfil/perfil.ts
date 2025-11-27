@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AdoptantesService } from '../../services/perfil.service';
+import { PerfilService } from '../../services/perfil.service';
 import { AdoptanteDto, ProtectoraDto, SolicitudDto, AnimalDto } from '../../models/interfaces';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -39,7 +39,7 @@ export class Perfil implements OnInit {
   eliminandoAnimalUuid: string | null = null;
 
   constructor(
-    private adoptantesService: AdoptantesService,
+    private adoptantesService: PerfilService,
     private protectorasService: ProtectorasService,
     private authService: AuthService,
     private fb: FormBuilder,

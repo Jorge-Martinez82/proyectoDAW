@@ -17,22 +17,22 @@ public class AnimalesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult> AnimalesControllerGetAll(
+    public async Task<ActionResult> GetAll(
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10,
         [FromQuery] Guid? protectoraUuid = null,
         [FromQuery] string? tipo = null,
         [FromQuery] string? provincia = null)
     {
-        var result = await _service.AnimalesServiceGetAll(pageNumber, pageSize, protectoraUuid, tipo, provincia);
+        var result = await _service.GetAllAsync(pageNumber, pageSize, protectoraUuid, tipo, provincia);
         return Ok(result);
     }
 
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<AnimalDto>> AnimalesControllerGetById(Guid id)
+    public async Task<ActionResult<AnimalDto>> GetById(Guid id)
     {
-        var animal = await _service.AnimalesServiceGetById(id);
+        var animal = await _service.GetByIdAsync(id);
         if (animal == null)
             return NotFound(new { mensaje = "Animal no encontrado" });
 
@@ -41,9 +41,9 @@ public class AnimalesController : ControllerBase
 
     [Authorize]
     [HttpDelete("{id:guid}")]
-    public async Task<ActionResult> AnimalesControllerDelete(Guid id)
+    public async Task<ActionResult> Delete(Guid id)
     {
-        var ok = await _service.AnimalesServiceDelete(id);
+        var ok = await _service.DeleteAsync(id);
         if (!ok)
             return NotFound(new { mensaje = "Animal no encontrado" });
         return NoContent();
@@ -51,9 +51,9 @@ public class AnimalesController : ControllerBase
 
     [Authorize]
     [HttpPost]
-    public async Task<ActionResult<AnimalDto>> AnimalesControllerCreate([FromBody] AnimalDto request)
+    public async Task<ActionResult<AnimalDto>> Create([FromBody] AnimalDto request)
     {
-        var creado = await _service.AnimalesServiceCreate(request);
+        var creado = await _service.CreateAsync(request);
         if (creado == null)
             return BadRequest(new { mensaje = "Datos inválidos" });
         return Created(string.Empty, creado);

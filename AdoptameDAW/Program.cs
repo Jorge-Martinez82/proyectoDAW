@@ -1,6 +1,6 @@
 ﻿using AdoptameDAW.Data;
 using AdoptameDAW.Repositories;
-using AdoptameDAW.Repository;
+using AdoptameDAW.Repositories;
 using AdoptameDAW.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

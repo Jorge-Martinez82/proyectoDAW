@@ -34,12 +34,12 @@ namespace AdoptameDAW.Services
             _mapper = mapper;
         }
 
-        public async Task<SolicitudDto?> CrearAsync(Guid usuarioAdoptanteUuid, Guid animalUuid, string comentario)
+        public async Task<SolicitudDto?> CreateAsync(Guid usuarioAdoptanteUuid, Guid animalUuid, string comentario)
         {
             var usuarioAdoptante = await _usuariosRepository.GetByUuidAsync(usuarioAdoptanteUuid);
             if (usuarioAdoptante == null) return null;
 
-            var animal = await _animalesRepository.AnimalesRepositoryGetById(animalUuid);
+            var animal = await _animalesRepository.GetByUuidAsync(animalUuid);
             if (animal == null) return null;
 
             var protectora = await _protectorasRepository.GetByUuidAsync(animal.Protectora.Uuid);
@@ -135,7 +135,7 @@ namespace AdoptameDAW.Services
             };
         }
 
-        public async Task<bool> ActualizarEstadoAsync(Guid usuarioProtectoraUuid, int solicitudId, string nuevoEstado)
+        public async Task<bool> UpdateEstadoAsync(Guid usuarioProtectoraUuid, int solicitudId, string nuevoEstado)
         {
             if (nuevoEstado != "aceptada" && nuevoEstado != "rechazada")
                 return false;

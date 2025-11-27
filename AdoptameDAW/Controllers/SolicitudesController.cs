@@ -39,7 +39,7 @@ public class SolicitudesController : ControllerBase
         if (userUuid == null) return Unauthorized();
         if (rol != "Adoptante") return Forbid();
 
-        var creada = await _service.CrearAsync(userUuid.Value, request.AnimalUuid, request.Comentario);
+        var creada = await _service.CreateAsync(userUuid.Value, request.AnimalUuid, request.Comentario);
         if (creada == null)
             return BadRequest(new { mensaje = "Datos inválidos para crear la solicitud." });
 
@@ -81,7 +81,7 @@ public class SolicitudesController : ControllerBase
         if (userUuid == null) return Unauthorized();
         if (rol != "Protectora") return Forbid();
 
-        var ok = await _service.ActualizarEstadoAsync(userUuid.Value, id, request.Estado.ToLower());
+        var ok = await _service.UpdateEstadoAsync(userUuid.Value, id, request.Estado.ToLower());
         if (!ok)
             return BadRequest(new { mensaje = "No se pudo actualizar el estado (verifique solicitud, permisos o valor)." });
 
