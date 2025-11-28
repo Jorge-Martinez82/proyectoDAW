@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using AdoptameDAW.Mappings;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,10 +25,10 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 // DbContext (PostgreSQL en Render)
 var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING")
-                     ?? builder.Configuration.GetConnectionString("DefaultConnection");
+?? builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(connectionString)
+options.UseNpgsql(connectionString)
 );
 
 // Add services to the container.
