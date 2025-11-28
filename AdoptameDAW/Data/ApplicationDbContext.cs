@@ -86,6 +86,11 @@ public class ApplicationDbContext : DbContext
             .ToTable("Solicitudes")
             .HasKey(s => s.Id);
 
+        // Mapeo explícito de la columna id
+        modelBuilder.Entity<Solicitud>()
+            .Property(s => s.Id)
+            .HasColumnName("id");
+
         modelBuilder.Entity<Solicitud>()
             .Property(s => s.UsuarioAdoptanteId)
             .HasColumnName("usuario_adoptante_id")
