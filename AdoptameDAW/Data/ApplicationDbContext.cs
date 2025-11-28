@@ -86,7 +86,6 @@ public class ApplicationDbContext : DbContext
             .ToTable("Solicitudes")
             .HasKey(s => s.Id);
 
-        // Mapeo explícito de la columna id
         modelBuilder.Entity<Solicitud>()
             .Property(s => s.Id)
             .HasColumnName("id");
@@ -115,6 +114,7 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<Solicitud>()
             .Property(s => s.CreatedAt)
             .HasColumnName("CreatedAt")
+            .HasColumnType("timestamp without time zone")
             .IsRequired();
 
         modelBuilder.Entity<Solicitud>()
