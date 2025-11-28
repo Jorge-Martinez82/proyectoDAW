@@ -38,7 +38,6 @@ public class ApplicationDbContext : DbContext
             .Property(a => a.ImagenPrincipal)
             .HasColumnName("ImagenPrincipal");
 
-        // Ajuste: guardar DateTime sin zona horaria (como en Solicitud)
         modelBuilder.Entity<Animal>()
             .Property(a => a.CreatedAt)
             .HasColumnName("CreatedAt")
@@ -57,7 +56,12 @@ public class ApplicationDbContext : DbContext
             .Property(u => u.TipoUsuario)
             .HasColumnName("TipoUsuario")
             .IsRequired()
-            .HasMaxLength(50); 
+            .HasMaxLength(50);
+
+        modelBuilder.Entity<Usuario>()
+            .Property(u => u.CreatedAt)
+            .HasColumnName("CreatedAt")
+            .HasColumnType("timestamp without time zone");
 
         modelBuilder.Entity<Protectora>()
             .ToTable("Protectoras")
@@ -68,9 +72,15 @@ public class ApplicationDbContext : DbContext
             .HasColumnName("UserId");
 
         modelBuilder.Entity<Protectora>()
+            .Property(p => p.CreatedAt)
+            .HasColumnName("CreatedAt")
+            .HasColumnType("timestamp without time zone");
+
+        modelBuilder.Entity<Protectora>()
             .HasOne(p => p.User)
             .WithMany(u => u.Protectoras)
             .HasForeignKey(p => p.UserId);
+
         modelBuilder.Entity<Adoptante>()
             .ToTable("Adoptantes")
             .HasKey(a => a.Id);
@@ -88,7 +98,6 @@ public class ApplicationDbContext : DbContext
             .ToTable("Solicitudes")
             .HasKey(s => s.Id);
 
-        // Mapeo explícito de la columna id
         modelBuilder.Entity<Solicitud>()
             .Property(s => s.Id)
             .HasColumnName("id");
@@ -114,7 +123,6 @@ public class ApplicationDbContext : DbContext
             .IsRequired()
             .HasMaxLength(15);
 
-        // Igual que en Animal: sin zona horaria
         modelBuilder.Entity<Solicitud>()
             .Property(s => s.CreatedAt)
             .HasColumnName("CreatedAt")
@@ -128,13 +136,13 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Solicitud>()
             .HasOne(s => s.UsuarioAdoptante)
-            .WithMany() // sin colección en Usuario
+            .WithMany()
             .HasForeignKey(s => s.UsuarioAdoptanteId)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Solicitud>()
             .HasOne(s => s.UsuarioProtectora)
-            .WithMany() // sin colección en Usuario
+            .WithMany()
             .HasForeignKey(s => s.UsuarioProtectoraId)
             .OnDelete(DeleteBehavior.Restrict);
 
