@@ -69,6 +69,26 @@ public class AnimalesRepository : IAnimalesRepository
     public async Task<Animal> CreateAsync(Animal animal)
     {
         animal.CreatedAt = DateTime.UtcNow;
+
+        if (animal.Protectora != null)
+        {
+            var existingProtectora = await _context.Protectoras.FirstOrDefaultAsync(p => p.Id == animal.ProtectoraId);
+            if (existingProtectora == null)
+            {
+                throw new InvalidOperationException("Protectora no encontrada para el ProtectoraId especificado.");
+            }
+            _context.Attach(existingProtectora);
+            animal.Protectora = null; 
+        }
+        else
+        {
+            var exists = await _context.Protectoras.AnyAsync(p => p.Id == animal.ProtectoraId);
+            if (!exists)
+            {
+                throw new InvalidOperationException("ProtectoraId no válido. La protectora no existe.");
+            }
+        }
+
         await _context.Animales.AddAsync(animal);
         await _context.SaveChangesAsync();
         return await _context.Animales.Include(a => a.Protectora).FirstAsync(a => a.Id == animal.Id);
