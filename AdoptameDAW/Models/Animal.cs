@@ -4,9 +4,9 @@ public partial class Animal
 {
     public int Id { get; set; }
 
-    public Guid Uuid { get; set; }
+    public Guid Uuid { get; set; } = Guid.NewGuid();
 
-    public string Nombre { get; set; } = null!;
+    public string Nombre { get; set; } = string.Empty;
 
     public string Tipo { get; set; } = string.Empty;
 
@@ -22,7 +22,7 @@ public partial class Animal
 
     public string? ImagenPrincipal { get; set; }
 
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    public Protectora Protectora { get; set; } = null!;
+    public Protectora? Protectora { get; set; }
 }

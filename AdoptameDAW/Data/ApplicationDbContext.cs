@@ -40,8 +40,7 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Animal>()
             .Property(a => a.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .HasColumnType("timestamp without time zone");
+            .HasColumnName("CreatedAt");
 
         modelBuilder.Entity<Animal>()
             .HasOne(a => a.Protectora)
@@ -60,8 +59,7 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Usuario>()
             .Property(u => u.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .HasColumnType("timestamp without time zone");
+            .HasColumnName("CreatedAt");
 
         modelBuilder.Entity<Protectora>()
             .ToTable("Protectoras")
@@ -73,8 +71,7 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Protectora>()
             .Property(p => p.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .HasColumnType("timestamp without time zone");
+            .HasColumnName("CreatedAt");
 
         modelBuilder.Entity<Protectora>()
             .HasOne(p => p.User)
@@ -126,7 +123,6 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<Solicitud>()
             .Property(s => s.CreatedAt)
             .HasColumnName("CreatedAt")
-            .HasColumnType("timestamp without time zone")
             .IsRequired();
 
         modelBuilder.Entity<Solicitud>()

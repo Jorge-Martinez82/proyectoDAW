@@ -4,9 +4,9 @@ public partial class Protectora
 {
     public int Id { get; set; }
 
-    public Guid Uuid { get; set; }
+    public Guid Uuid { get; set; } = Guid.NewGuid();
 
-    public string Nombre { get; set; } = null!;
+    public string Nombre { get; set; } = string.Empty;
 
     public string? Direccion { get; set; }
 
@@ -20,9 +20,9 @@ public partial class Protectora
 
     public int UserId { get; set; }
 
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    public Usuario User { get; set; } = null!;
+    public Usuario? User { get; set; }
 
     public ICollection<Animal> Animales { get; set; } = new List<Animal>();
 }
