@@ -38,9 +38,11 @@ public class ApplicationDbContext : DbContext
             .Property(a => a.ImagenPrincipal)
             .HasColumnName("ImagenPrincipal");
 
+        // Ajuste: guardar DateTime sin zona horaria (como en Solicitud)
         modelBuilder.Entity<Animal>()
             .Property(a => a.CreatedAt)
-            .HasColumnName("CreatedAt");
+            .HasColumnName("CreatedAt")
+            .HasColumnType("timestamp without time zone");
 
         modelBuilder.Entity<Animal>()
             .HasOne(a => a.Protectora)
@@ -86,6 +88,7 @@ public class ApplicationDbContext : DbContext
             .ToTable("Solicitudes")
             .HasKey(s => s.Id);
 
+        // Mapeo explícito de la columna id
         modelBuilder.Entity<Solicitud>()
             .Property(s => s.Id)
             .HasColumnName("id");
@@ -111,6 +114,7 @@ public class ApplicationDbContext : DbContext
             .IsRequired()
             .HasMaxLength(15);
 
+        // Igual que en Animal: sin zona horaria
         modelBuilder.Entity<Solicitud>()
             .Property(s => s.CreatedAt)
             .HasColumnName("CreatedAt")
