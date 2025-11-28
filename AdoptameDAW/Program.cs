@@ -16,10 +16,18 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 
 
-// DbContext
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+//// DbContext
+//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+//builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//    options.UseSqlServer(connectionString)
+//);
+
+// DbContext (PostgreSQL en Render)
+var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING")
+                     ?? builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString)
+    options.UseNpgsql(connectionString)
 );
 
 // Add services to the container.
