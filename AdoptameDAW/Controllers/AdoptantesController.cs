@@ -17,15 +17,6 @@ public class AdoptantesController : ControllerBase
         _service = service;
     }
 
-    // metodo que llama al servicio para traer adoptantes con paginacion
-    [HttpGet]
-    public async Task<ActionResult> GetAll(
-        [FromQuery] int pageNumber = 1,
-        [FromQuery] int pageSize = 10)
-    {
-        var result = await _service.GetAllAsync(pageNumber, pageSize);
-        return Ok(result);
-    }
 
     // metodo que llama al servicio para traer un adoptante por su uuid
     [HttpGet("{id:guid}")]
