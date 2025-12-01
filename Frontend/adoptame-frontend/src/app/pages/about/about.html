@@ -5,33 +5,37 @@
     <div class="absolute inset-0 bg-[url('assets/img/fondo_about.webp')] bg-cover bg-center opacity-30"></div>
   </section>
 
+
+
   <section id="about" class="flex h-auto flex-col items-center justify-center bg-customPurple bg-[url('/assets/img/huellas.png')] bg-cover bg-center px-6 py-12 md:flex-row">
-    <article class="flex w-full flex-col items-center p-6 md:w-1/2">
-      <h2 class="text-center font-roboto text-2xl font-bold">Sobre nosotros</h2>
-      <ul class="list-disc space-y-6 pl-10 pt-6 font-roboto font-bold">
-        <li>Promovemos la adopcion como un acto de responsabilidad y empatía.</li>
-        <li>Nuestra plataforma existe para dar voz a los animales que esperan una oportunidad de ser parte de una familia.</li>
-        <li>Colaboramos con refugios y protectoras para maximizar las oportunidades de adopción y asegurar que cada animal encuentre un hogar responsable.</li>
-        <li>Juntos, trabajamos por un futuro donde ningún animal se quede sin amor.</li>
-      </ul>
-    </article>
+    <div class="flex relative w-full lg:w-3/4 mx-auto">
+      <article class="flex w-full flex-col items-center p-6 md:w-1/2">
+        <h2 class="text-center font-roboto text-2xl font-bold">Sobre nosotros</h2>
+        <ul class="list-disc space-y-6 pl-10 pt-6 font-roboto font-bold">
+          <li>Promovemos la adopcion como un acto de responsabilidad y empatía.</li>
+          <li>Nuestra plataforma existe para dar voz a los animales que esperan una oportunidad de ser parte de una familia.</li>
+          <li>Colaboramos con refugios y protectoras para maximizar las oportunidades de adopción y asegurar que cada animal encuentre un hogar responsable.</li>
+          <li>Juntos, trabajamos por un futuro donde ningún animal se quede sin amor.</li>
+        </ul>
+      </article>
 
-    <article class="flex w-full flex-col items-center p-6 md:w-1/2">
-      <h2 class="text-center font-roboto text-2xl font-bold">Contáctanos</h2>
-      <form (ngSubmit)="onContactSubmit($event)" class="mx-auto flex h-64 w-full flex-col justify-around rounded-3xl font-roboto md:w-96">
-        <label class="font-bold" for="nombre">Nombre</label>
-        <input type="text" class="w-full rounded-lg p-2 text-black" id="nombre" name="nombre" placeholder="Introduce tu nombre" maxlength="50" required />
+      <article class="flex w-full flex-col items-center p-6 md:w-1/2">
+        <h2 class="text-center font-roboto text-2xl font-bold">Contáctanos</h2>
+        <form (ngSubmit)="onContactSubmit($event)" class="mx-auto flex h-64 w-full flex-col justify-around rounded-3xl font-roboto md:w-96">
+          <label class="font-bold" for="nombre">Nombre</label>
+          <input type="text" class="w-full rounded-lg p-2 text-black" id="nombre" name="nombre" placeholder="Introduce tu nombre" maxlength="50" required />
 
-        <label class="font-bold" for="mensaje">Mensaje</label>
-        <textarea class="w-full rounded-lg p-2 text-black h-15" id="mensaje" name="mensaje" placeholder="Escribe tu mensaje" maxlength="500" required></textarea>
+          <label class="font-bold" for="mensaje">Mensaje</label>
+          <textarea class="w-full rounded-lg p-2 text-black h-15" id="mensaje" name="mensaje" placeholder="Escribe tu mensaje" maxlength="500" required></textarea>
 
-        <app-boton-principal [tipo]="'button'"
-                             [texto]="'Enviar'"
-                             [disabled]="false"
-                             class="text-center">
-        </app-boton-principal>
-      </form>
-    </article>
+          <app-boton-principal [tipo]="'button'"
+                               [texto]="'Enviar'"
+                               [disabled]="false"
+                               class="text-center">
+          </app-boton-principal>
+        </form>
+      </article>
+    </div>
   </section>
 </main>
 
