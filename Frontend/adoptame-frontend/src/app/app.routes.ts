@@ -21,7 +21,11 @@ export const routes: Routes = [
   { path: 'about', component: About },
   { path: 'login', component: Login },
   { path: 'registro', component: Registro },
-  { path: 'perfil', component: Perfil },
+  { 
+    path: 'perfil', 
+    component: Perfil,
+    canActivate: [authGuard]
+  },
 
   
   { 
