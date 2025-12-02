@@ -27,7 +27,9 @@ export class Navbar {
 
   // cierra sesión del usuario
   logout(): void {
-    this.authService.logout();
-    this.closeMenu();
+    if (window.confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+      this.authService.logout();
+      this.closeMenu();
+    }
   }
 }
